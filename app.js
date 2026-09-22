@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ],
       kunci: `
         <strong>Kunci & Poin Penilaian Pos 1:</strong><br>
-        • <strong>Email Phishing:</strong> Email ke-2 ("🚨 KEMENDIKBUD PUSAT: BEASISWA 10 JUTA SEGERA HANGUS!").<br>
+        • <strong>Email Phishing:</strong> Email ke-2 ("[URGENT] KEMENDIKBUD PUSAT: BEASISWA 10 JUTA SEGERA HANGUS!").<br>
         • <strong>Kejanggalan Logis:</strong><br>
           1. <em>Domain Pengirim Palsu:</em> Menggunakan domain liar <code>xyz-domain.com</code>, bukan domain resmi kementerian (<code>.go.id</code>) atau kampus (<code>.ac.id</code>).<br>
           2. <em>Tautan Tidak Sinkron:</em> Tombol mengarah ke alamat berbahaya <code>http://beasiswa-cair-10jt.xyz/login-akun</code> untuk mencuri password.<br>
@@ -133,9 +133,9 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       id: 2,
-      sender: "🚨 KEMENDIKBUD PUSAT <beasiswa-ubhi-pasti-cair@xyz-domain.com>",
+      sender: "[URGENT] KEMENDIKBUD PUSAT <beasiswa-ubhi-pasti-cair@xyz-domain.com>",
       subject: "PENTING: Dana Beasiswa Rp 10 Juta Segera Hangus!",
-      security: "⚠️ TIDAK TERVERIFIKASI (Domain Mencurigakan)",
+      security: "[UNVERIFIED] Domain Mencurigakan",
       securityColor: "var(--mecha-red-bright)",
       body: `SELAMAT KEPADA MAHASISWA BARU!\n\nAnda terpilih menerima BANTUAN BEASISWA DIGITAL FRONTIER KEMENDIKBUD sebesar Rp 10.000.000 (Sepuluh Juta Rupiah).\n\nPERHATIAN: Anda wajib mengklaim dana beasiswa ini dalam kurun waktu 59 MENIT sejak email ini diterima. Jika tidak diklaim sekarang, dana Anda akan dialihkan ke mahasiswa lain!\n\nKlik tombol tautan darurat di bawah ini dan masukkan username serta password akun kampus Anda untuk validasi pencairan dana ke rekening!`,
       isPhishing: true
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
           isRunning = false;
           btnPauseTimer.style.display = "none";
           sfx.phaseAlert();
-          alert("⏱️ Waktu Pos Habis! Segera submit jawaban peserta.");
+          alert("WAKTU POS HABIS! Segera submit jawaban peserta.");
         }
       }
     }, 1000);
@@ -771,9 +771,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  const ICON_SPEAKER = `<svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.21-1.61.572-2.327.234-.847 1.058-1.354 1.938-1.354h2.24Z" /></svg>`;
+  const ICON_SPEAKER_MUTED = `<svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6 4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.21-1.61.572-2.327.234-.847 1.058-1.354 1.938-1.354h2.24Z" /></svg>`;
+
   btnAudioToggle.addEventListener("click", () => {
     sfx.enabled = !sfx.enabled;
-    audioIcon.textContent = sfx.enabled ? "♫" : "✕";
+    audioIcon.innerHTML = sfx.enabled ? ICON_SPEAKER : ICON_SPEAKER_MUTED;
     btnAudioToggle.style.color = sfx.enabled ? "#fff" : "#ff758f";
     if (sfx.enabled) sfx.blip();
   });
@@ -889,40 +892,45 @@ document.addEventListener("DOMContentLoaded", () => {
     let isSuccess = true;
     let errorLog = "";
 
+    const ICON_ROBOT_CHIP = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 16.5V21m3.75-18v1.5m0 16.5V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V5.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 19.5Z" /></svg>`;
+    const ICON_ROBOT_SUCCESS = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`;
+    const ICON_ROBOT_CRASH = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`;
+
     if (posTaruhCangkir > posBubuk || posTaruhCangkir > posTuangAir) {
       isSuccess = false;
-      errorLog = "💥 FATAL_CRASH: Robot menuangkan bubuk/air panas saat cangkir BELUM ada di tatakan! Lantai basah kuyup!";
+      errorLog = "[FATAL_CRASH]: Robot menuangkan bubuk/air panas saat cangkir BELUM ada di tatakan! Lantai basah kuyup!";
     } else if (posNyalakanAir > posTuangAir) {
       isSuccess = false;
-      errorLog = "❄️ LOGICAL_GLITCH: Air dituangkan sebelum pemanas air dinyalakan! Kopi disajikan dengan air mentah dingin!";
+      errorLog = "[LOGICAL_GLITCH]: Air dituangkan sebelum pemanas air dinyalakan! Kopi disajikan dengan air mentah dingin!";
     } else if (posAduk > posSajikan && posSajikan !== 5) {
       isSuccess = false;
-      errorLog = "⚠️ SEQUENCE_ERR: Cangkir disajikan ke pelanggan sebelum kopi diaduk!";
+      errorLog = "[SEQUENCE_ERR]: Cangkir disajikan ke pelanggan sebelum kopi diaduk!";
     } else if (posSajikan !== 5) {
       isSuccess = false;
-      errorLog = "⚠️ SEQUENCE_ERR: Menyajikan cangkir harus menjadi langkah paling terakhir!";
+      errorLog = "[SEQUENCE_ERR]: Menyajikan cangkir harus menjadi langkah paling terakhir!";
     }
 
     if (isSuccess && posTaruhCangkir < posBubuk && posBubuk < posTuangAir && posTuangAir < posAduk && posAduk < posSajikan) {
       sfx.victoryFanfare();
-      robotAvatar.textContent = "☕";
+      robotAvatar.innerHTML = ICON_ROBOT_SUCCESS;
       robotStatusText.textContent = "SUCCESS_200_OK";
       robotStatusText.style.color = "var(--pixel-green)";
       robotConsole.innerHTML = `> [STATUS 200]: Algoritma dieksekusi sempurna! Kopi nikmat siap disajikan. Skor logika 100%!`;
     } else {
       sfx.glitchBoom();
-      robotAvatar.textContent = "💥";
+      robotAvatar.innerHTML = ICON_ROBOT_CRASH;
       robotStatusText.textContent = "CRASH_FAIL";
       robotStatusText.style.color = "var(--mecha-red-bright)";
-      robotConsole.innerHTML = `> ${errorLog || "❌ URUTAN TIDAK MASUK AKAL: Periksa kembali alur sebab-akibat proses pembuatan kopi!"}`;
+      robotConsole.innerHTML = `> ${errorLog || "[ERROR]: Urutan tidak masuk akal! Periksa kembali alur sebab-akibat proses pembuatan kopi!"}`;
     }
   }
 
   btnRunRobot.addEventListener("click", simulateRobotRun);
   btnResetSteps.addEventListener("click", () => {
     sfx.blip();
+    const ICON_ROBOT_CHIP = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 16.5V21m3.75-18v1.5m0 16.5V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V5.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 19.5Z" /></svg>`;
     robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
-    robotAvatar.textContent = "🤖";
+    robotAvatar.innerHTML = ICON_ROBOT_CHIP;
     robotStatusText.textContent = "WAITING_SEQUENCE";
     robotStatusText.style.color = "var(--pixel-yellow)";
     robotConsole.textContent = "> Sistem di-reset. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.";
@@ -935,13 +943,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const vaultsGrid = document.getElementById("vaultsGrid");
   const btnResetVaults = document.getElementById("btnResetVaults");
 
+  const ICON_ARCHIVE = `<svg class="h-icon h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" /></svg>`;
+
   function renderVaults() {
     vaultsGrid.innerHTML = VAULTS_DATA.map(v => {
       const isEliminated = eliminatedVaults.has(v.id);
       return `
         <div class="pixel-vault-cell ${isEliminated ? "eliminated" : ""}" data-id="${v.id}">
           <div class="vault-cell-title">
-            <span>🗄️ ${v.label}</span>
+            <span style="display: inline-flex; align-items: center; gap: 4px;">${ICON_ARCHIVE} ${v.label}</span>
             <span style="font-size: 0.7rem; color: ${isEliminated ? '#ff758f' : 'var(--pixel-green)'};">
               ${isEliminated ? '[OFF]' : '[LOCKED]'}
             </span>
@@ -979,7 +989,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = e.target.closest(".pixel-vault-cell");
         const id = parseInt(card.dataset.id);
         const vault = VAULTS_DATA.find(v => v.id === id);
-        alert(`📂 ARSIP [${vault.label}]:\n- Ukuran File: ${vault.size} MB\n- Hari Pembuatan: ${vault.day}\n- Format: ${vault.type}\n- Keterangan: ${vault.desc}`);
+        alert(`ARSIP METADATA [${vault.label}]:\n- Ukuran File: ${vault.size} MB\n- Hari Pembuatan: ${vault.day}\n- Format: ${vault.type}\n- Keterangan: ${vault.desc}`);
       });
     });
   }
@@ -1019,9 +1029,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     leaderboardTbody.innerHTML = teamStats.map((st, idx) => {
       let badge = `<span class="rank-badge">${idx + 1}</span>`;
-      if (idx === 0) badge = `<span class="rank-badge rank-1">🥇</span>`;
-      if (idx === 1) badge = `<span class="rank-badge rank-2">🥈</span>`;
-      if (idx === 2) badge = `<span class="rank-badge rank-3">🥉</span>`;
+      if (idx === 0) badge = `<span class="rank-badge rank-1">#1</span>`;
+      if (idx === 1) badge = `<span class="rank-badge rank-2">#2</span>`;
+      if (idx === 2) badge = `<span class="rank-badge rank-3">#3</span>`;
 
       return `
         <tr>
@@ -1083,7 +1093,7 @@ document.addEventListener("DOMContentLoaded", () => {
           target.totalScore = target.webScore + (newScore * 5);
           saveSubmissions(subs);
           sfx.coinStart();
-          alert(`✓ Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil diperbarui!`);
+          alert(`SUKSES: Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil diperbarui!`);
         }
       });
     });
@@ -1116,7 +1126,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnResetAllData.addEventListener("click", () => {
     sfx.glitchBoom();
-    if (confirm("⚠️ PERINGATAN: Apakah Anda yakin ingin mereset SEMUA data penilaian dan leaderboard? Data yang dihapus tidak dapat dikembalikan!")) {
+    if (confirm("PERINGATAN: Apakah Anda yakin ingin mereset SEMUA data penilaian dan leaderboard? Data yang dihapus tidak dapat dikembalikan!")) {
       localStorage.removeItem("adhigana_submissions");
       saveSubmissions([]);
       alert("Seluruh data telah di-reset.");
