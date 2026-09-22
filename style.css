@@ -598,7 +598,8 @@ body::after {
 .energy-segmented-bar {
   display: flex;
   gap: 5px;
-  width: 250px;
+  width: 100%;
+  max-width: 250px;
   height: 16px;
   background: #04070c;
   padding: 2px;
@@ -1567,17 +1568,202 @@ body::after {
 .rank-2 { background: #cbd5e1; color: #000; }
 .rank-3 { background: #d97706; color: #fff; }
 
-/* Responsive */
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+
+/* --- Tablet Landscape: ≤ 1024px --- */
 @media (max-width: 1024px) {
-  .energy-timer-console { grid-template-columns: 1fr; text-align: center; }
+  .app-container { padding: 10px 14px 32px; gap: 12px; }
+
+  /* Header */
+  .official-banner-wrapper { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .header-toolbar { width: 100%; flex-wrap: wrap; }
+  .team-selector-card { flex: 1 1 auto; min-width: 0; }
+
+  /* Timer Console */
+  .energy-timer-console { grid-template-columns: 1fr; text-align: center; gap: 14px; }
   .hud-gauge-center { order: -1; }
-  .timer-control-cluster { justify-content: center; }
+  .timer-control-cluster { justify-content: center; flex-wrap: wrap; gap: 8px; }
+  .energy-segmented-bar { width: 100%; max-width: 340px; }
+  .timer-control-cluster .pixel-btn { flex: 1 1 auto; }
+
+  /* Hub & Game Arena */
   .game-arena-grid { grid-template-columns: 1fr; }
-  .hub-portal-grid { grid-template-columns: 1fr; }
+  .hub-portal-grid { grid-template-columns: repeat(2, 1fr); }
+  .hub-hero-card { flex-direction: column; text-align: center; }
+
+  /* Intro cutscene */
+  .intro-cutscene-card { padding: 20px 18px; }
+  .intro-title-text h2 { font-size: 1.25rem; }
+  .intro-actions-bar { justify-content: center; }
+
+  /* Vaults */
+  .vaults-matrix-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* Single pos station bar */
+  .single-pos-station-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+  /* Candidates deck */
+  .candidates-hud-deck { grid-template-columns: repeat(2, 1fr); }
+
+  /* Modal */
+  .modal-content-card { max-width: 98vw; }
+  .leaderboard-table { font-size: 0.75rem; }
+  .leaderboard-table th, .leaderboard-table td { padding: 7px 6px; }
 }
 
-@media (max-width: 640px) {
+/* --- Tablet Portrait: ≤ 768px --- */
+@media (max-width: 768px) {
+  .app-container { padding: 8px 10px 24px; }
+
+  /* Header */
+  .swirl-emblem-core { width: 52px; height: 52px; }
+  .header-titles h1 { font-size: 1.1rem; }
+  .header-slogan { font-size: 0.75rem; }
+  .header-tag-pill { font-size: 0.68rem; }
+  .badge-frontier-mecha { display: none; }
+
+  /* Toolbar: Stack to wrap */
+  .header-toolbar { gap: 8px; }
+  .team-selector-card { flex: 1 1 100%; }
+  .btn-open-rubrik-text, .btn-open-admin-text { display: none; }
+
+  /* Timer */
+  .pixel-clock-display { font-size: 2.4rem; }
+  .phase-headline { font-size: 0.95rem; }
+
+  /* Glitch banner */
+  .glitch-alert-banner { flex-direction: column; gap: 8px; }
+
+  /* Hub */
+  .hub-portal-grid { grid-template-columns: 1fr; }
+  .portal-pos-card { padding: 14px; }
+
+  /* Intro cutscene */
+  .intro-title-area { flex-direction: column; text-align: center; gap: 10px; }
+  .intro-reactor-icon { width: 56px; height: 56px; }
+  .intro-title-text h2 { font-size: 1.1rem; }
+  .intro-terminal-console { font-size: 0.76rem; min-height: 80px; }
+
+  /* Game arena */
+  .crt-screen-surface { padding: 14px; min-height: unset; }
+
+  /* Webmail (Pos 1) */
   .terminal-webmail { grid-template-columns: 1fr; }
+  .webmail-sidebar { border-right: none; border-bottom: 2px solid #1a2a40; max-height: 200px; overflow-y: auto; }
+
+  /* Robot sim (Pos 2) */
+  .robot-display-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .pixel-robot-avatar { width: 54px; height: 54px; font-size: 2rem; }
+
+  /* Vaults (Pos 3) */
   .vaults-matrix-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* Candidates (Pos 4) */
+  .candidates-hud-deck { grid-template-columns: repeat(2, 1fr); }
+
+  /* Answer panel */
+  .answer-input-panel { padding: 12px; }
+  .unique-code-stamp { font-size: 1.8rem; letter-spacing: 2px; padding: 6px 14px; }
+
+  /* Station bar */
+  .station-title-main { font-size: 0.9rem; }
+
+  /* Leaderboard table in modal: horizontal scroll */
+  .modal-body-pixel { padding: 12px; }
+  .modal-body-pixel .leaderboard-table { display: block; overflow-x: auto; white-space: nowrap; }
+
+  /* Energy bar */
+  .energy-segmented-bar { width: 100%; max-width: 280px; margin: 0 auto; }
+}
+
+/* --- Mobile: ≤ 480px --- */
+@media (max-width: 480px) {
+  .app-container { padding: 6px 8px 20px; gap: 10px; }
+
+  /* Header: ultra compact */
+  .official-banner-wrapper { padding: 10px 12px; }
+  .header-left-cluster { gap: 10px; }
+  .swirl-emblem-core { width: 44px; height: 44px; }
+  .header-titles h1 { font-size: 0.95rem; letter-spacing: 0; flex-wrap: wrap; gap: 6px; }
+  .header-slogan { display: none; }
+  .header-tag-pill span:last-child { display: none; }
+
+  /* Toolbar */
+  .team-selector-card label { display: none; }
+  .team-selector-card { padding: 4px 8px; }
+  .header-toolbar .pixel-btn { font-size: 0.7rem; padding: 6px 10px; }
+
+  /* Timer */
+  .energy-timer-console { padding: 10px 12px; gap: 10px; }
+  .pixel-clock-display { font-size: 2rem; }
+  .hud-percent-badge { font-size: 0.75rem; }
+
+  /* Glitch banner */
+  .glitch-alert-text { font-size: 0.78rem; }
+
+  /* Intro cutscene */
+  .intro-cutscene-card { padding: 16px 14px; gap: 12px; }
+  .intro-mission-tag { font-size: 0.7rem; letter-spacing: 1px; }
+  .intro-route-url { display: none; }
+  .intro-terminal-console { font-size: 0.72rem; min-height: 70px; padding: 10px; }
+  .intro-title-text h2 { font-size: 0.95rem; }
+  .intro-title-text p { font-size: 0.75rem; }
+
+  /* Hub portal */
+  .hub-hero-card { padding: 14px 16px; }
+  .portal-pos-badge { font-size: 0.9rem; }
+  .portal-pos-desc { font-size: 0.8rem; }
+
+  /* Single pos station bar */
+  .single-pos-station-bar { padding: 8px 12px; }
+  .station-badge-lock { font-size: 0.68rem; }
+
+  /* CRT game arena */
+  .crt-screen-surface { padding: 10px; gap: 12px; }
+  .crt-monitor-tab { font-size: 0.68rem; padding: 6px 10px; }
+
+  /* Webmail sidebar: compact */
+  .webmail-sidebar { max-height: 160px; }
+  .mail-entry-sender { font-size: 0.75rem; }
+  .mail-body-content { font-size: 0.76rem; padding: 10px; }
+
+  /* Robot sim */
+  .pixel-robot-avatar { width: 46px; height: 46px; }
+  .pixel-step-card { padding: 6px 10px; gap: 8px; }
+  .pixel-step-text { font-size: 0.78rem; }
+
+  /* Vaults: single column */
+  .vaults-matrix-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .vault-cell-title { font-size: 0.78rem; }
+  .vault-cell-meta { font-size: 0.68rem; }
+  .btn-vault-mini { font-size: 0.62rem; }
+
+  /* Candidates: single column */
   .candidates-hud-deck { grid-template-columns: 1fr; }
+
+  /* Answer panel */
+  .unique-code-stamp { font-size: 1.4rem; letter-spacing: 1px; padding: 6px 10px; }
+
+  /* Buttons in actions bars */
+  .timer-control-cluster .pixel-btn { font-size: 0.72rem; padding: 8px 12px; }
+
+  /* Modal */
+  .modal-content-card { max-height: 95vh; }
+  .modal-header-pixel { font-size: 0.85rem; padding: 10px 14px; }
+  .leaderboard-table { font-size: 0.7rem; }
+  .leaderboard-table th, .leaderboard-table td { padding: 5px 4px; }
+
+  /* h-icon-hero (robot avatar SVG) */
+  .h-icon-hero { width: 40px; height: 40px; }
+
+  /* Reset clip-paths that cause overflow clipping on small screens */
+  .single-pos-station-bar { clip-path: none; }
+  .intro-cutscene-card { clip-path: none; border-radius: 4px; }
+  .portal-pos-card { clip-path: none; border-radius: 4px; }
+  .station-badge-lock { clip-path: none; border-radius: 2px; }
+
+  /* Prevent horizontal overflow on whole app */
+  html, body { overflow-x: hidden; }
 }
