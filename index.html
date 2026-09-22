@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Frontier: The Logic Escape | ADHIGANA 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       CINEMATIC INTRO / CUTSCENE OVERLAY PER POS
+       ======================================================================== -->
+  <div id="introCutsceneOverlay" class="intro-cutscene-overlay">
+    <div class="intro-cutscene-card">
+      <div class="intro-terminal-header">
+        <span id="introMissionTag" class="intro-mission-tag">MISSION INITIATION // POS 01</span>
+        <span id="introRouteUrl" class="intro-route-url">adhigana/pos1</span>
+      </div>
+
+      <div class="intro-title-area">
+        <div class="intro-reactor-icon">
+          <img src="assets/swirl_logo.png" alt="Reactor Core">
+        </div>
+        <div class="intro-title-text">
+          <h2 id="introPosTitle">MISSION 1: PHISHING INVESTIGATION</h2>
+          <p id="introPosSubtitle">SECURITY HYGIENE &amp; DIGITAL FORENSICS</p>
+        </div>
+      </div>
+
+      <div class="intro-terminal-console">
+        <div id="introConsoleLines">
+          <div>> [SYS_BOOT]: INITIALIZING ADHIGANA SECURE MAINFRAME... OK</div>
+          <div>> [NET_STATUS]: CONNECTED TO LOCAL POS ROUTE: <span id="introRouteText" style="color: var(--pixel-yellow);">adhigana/pos1</span></div>
+          <div>> [THREAT_STATUS]: <span style="color: var(--mecha-red-bright); font-weight: 800;">CRITICAL BREACH DETECTED</span></div>
+          <div>> [OBJECTIVE]: <span id="introObjectiveText" style="color: #fff;">Identifikasi serangan phishing dan temukan celah keamanan siber kampus.</span></div>
+          <div>> [READY]: Siapkan kelompok Anda sebelum membuka konsol investigasi.</div>
+        </div>
+      </div>
+
+      <div class="intro-actions-bar">
+        <button id="btnReturnToHub" class="pixel-btn" style="padding: 8px 16px; font-size: 0.75rem; background: #0f1624;">
+          <span>🌐 MENU SEMUA POS</span>
+        </button>
+
+        <button id="btnEnterConsole" class="pixel-btn pixel-btn-red" style="padding: 10px 24px; font-size: 0.88rem;">
+          <span>⚡ BUKA KONSOL POS (START) ▶</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN APPLICATION CONTAINER
+       ======================================================================== -->
+  <div class="app-container">
+
+    <!-- OFFICIAL ADHIGANA MECHA BRAND HEADER -->
+    <header class="official-banner-wrapper">
+      <div class="header-left-cluster">
+        <div id="brandLogoHome" class="swirl-emblem-core" title="Klik untuk kembali ke Menu Utama (Portal Semua Pos)">
+          <img src="assets/swirl_logo.png" alt="Adhigana Swirl Emblem">
+        </div>
+        <div class="header-titles">
+          <div class="header-tag-pill">
+            <span>⚡ FAKULTAS SAINS &amp; TEKNOLOGI</span>
+            <span>•</span>
+            <span>HMP INFORMATIKA UBHI</span>
+          </div>
+          <h1>DIGITAL FRONTIER <span class="badge-frontier-mecha">THE LOGIC ESCAPE</span></h1>
+          <p class="header-slogan">"Bukan Cuma Belajar Teknologi, Tapi Bertumbuh Menghadapi Masa Depan Digital"</p>
+        </div>
+      </div>
+
+      <!-- Header Controls: Team Selector & Pixel Icon Buttons -->
+      <div class="header-toolbar">
+        <div class="team-selector-card">
+          <label for="teamSelect">KELOMPOK:</label>
+          <select id="teamSelect" class="team-selector-select">
+            <option value="meta" data-color="#b05cfb">1. META (UNGU)</option>
+            <option value="gemini" data-color="#00ff88">2. GEMINI (HIJAU)</option>
+            <option value="copilot" data-color="#fcee0a">3. COPILOT (KUNING)</option>
+            <option value="deepseek" data-color="#2cd4e0">4. DEEPSEEK (BIRU)</option>
+            <option value="claude" data-color="#ff758f">5. CLAUDE (ORANGE)</option>
+          </select>
+          <span id="teamBadge" style="font-family: var(--font-pixel); font-size: 0.75rem; font-weight: 800; color: #b05cfb;">[TEAM META]</span>
+        </div>
+
+        <button id="btnAudioToggle" class="pixel-btn-icon" title="Audio (Chiptune Sound FX)">
+          <span id="audioIcon">♫</span>
+        </button>
+
+        <button id="btnFullscreen" class="pixel-btn-icon" title="Layar Penuh (Fullscreen)">
+          <span>⛶</span>
+        </button>
+
+        <a href="lembar_jawaban_peserta.html" target="_blank" class="pixel-btn pixel-btn-icon" title="Cetak Lembar Jawaban Kertas Peserta" style="text-decoration: none;">
+          <span>📄</span>
+        </a>
+
+        <button id="btnOpenRubrik" class="pixel-btn pixel-btn-yellow" style="padding: 6px 12px; font-size: 0.75rem;" title="Kunci Jawaban Pos">
+          <span>🔑 KUNCI POS</span>
+        </button>
+
+        <button id="btnOpenAdmin" class="pixel-btn pixel-btn-red" style="padding: 6px 12px; font-size: 0.75rem;" title="Leaderboard &amp; Rekap Admin">
+          <span>🏆 LEADERBOARD</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ======================================================================
+         MAIN ARCADE HUB (LANDING VIEW: SELECTOR WITH ROUTES)
+         ====================================================================== -->
+    <div id="arcadePortalHub" class="arcade-portal-hub" style="display: none;">
+      <div class="hub-hero-card">
+        <div>
+          <div style="font-family: var(--font-pixel); font-size: 0.8rem; color: var(--pixel-yellow); letter-spacing: 2px;">
+            // ARCADE MISSION PORTAL //
+          </div>
+          <h2 style="font-size: 1.8rem; font-weight: 900; color: #fff; margin: 4px 0 8px;">
+            PILIH POS STUDI KASUS MAHASISWA BARU
+          </h2>
+          <p style="font-size: 0.9rem; color: #cbd5e1; max-width: 750px;">
+            Setiap laptop panitia pos dapat langsung membuka URL route masing-masing di bawah ini (misal: <code>adhigana/pos1</code>, <code>adhigana/pos2</code>, dst) untuk masuk ke misi pos spesifik secara instan.
+          </p>
+        </div>
+        <div style="font-size: 3.5rem;">🎮</div>
+      </div>
+
+      <div class="hub-portal-grid">
+        <!-- Portal Card Pos 1 -->
+        <a href="#/adhigana/pos1" class="portal-pos-card" data-route="pos1">
+          <div class="portal-pos-header">
+            <span class="portal-pos-badge">POS 01 // INVESTIGASI EMAIL PALSU</span>
+            <span class="portal-pos-route">adhigana/pos1</span>
+          </div>
+          <div class="portal-pos-desc">
+            Detektif Keamanan Siber: Analisis email masuk dan temukan kejahatan phishing berhadiah beasiswa palsu yang mengancam kredensial kampus.
+          </div>
+          <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1a2a40; padding-top: 10px;">
+            <span style="font-family: var(--font-pixel); font-size: 0.75rem; color: var(--pixel-cyan);">FOKUS: CYBERSECURITY</span>
+            <span class="pixel-btn" style="padding: 4px 12px; font-size: 0.72rem;">BUKA POS 1 ▶</span>
+          </div>
+        </a>
+
+        <!-- Portal Card Pos 2 -->
+        <a href="#/adhigana/pos2" class="portal-pos-card" data-route="pos2">
+          <div class="portal-pos-header">
+            <span class="portal-pos-badge">POS 02 // ROBOT BARISTA GLITCH</span>
+            <span class="portal-pos-route">adhigana/pos2</span>
+          </div>
+          <div class="portal-pos-desc">
+            Algoritma &amp; Logika Sekuensial: Perbaiki 6 instruksi langkah robot peracik kopi yang terbalik sebelum cairan panas tumpah ke meja pembeli.
+          </div>
+          <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1a2a40; padding-top: 10px;">
+            <span style="font-family: var(--font-pixel); font-size: 0.75rem; color: var(--pixel-yellow);">FOKUS: ALGORITHMIC THINKING</span>
+            <span class="pixel-btn pixel-btn-yellow" style="padding: 4px 12px; font-size: 0.72rem;">BUKA POS 2 ▶</span>
+          </div>
+        </a>
+
+        <!-- Portal Card Pos 3 -->
+        <a href="#/adhigana/pos3" class="portal-pos-card" data-route="pos3">
+          <div class="portal-pos-header">
+            <span class="portal-pos-badge">POS 03 // BRANKAS DATA HILANG</span>
+            <span class="portal-pos-route">adhigana/pos3</span>
+          </div>
+          <div class="portal-pos-desc">
+            Logika Pola &amp; Eliminasi: Pecahkan 3 petunjuk logika untuk menyaring 8 brankas digital dan menemukan arsip rahasia kampus tercepat.
+          </div>
+          <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1a2a40; padding-top: 10px;">
+            <span style="font-family: var(--font-pixel); font-size: 0.75rem; color: var(--pixel-green);">FOKUS: DATA ELIMINATION</span>
+            <span class="pixel-btn" style="padding: 4px 12px; font-size: 0.72rem; border-color: var(--pixel-green);">BUKA POS 3 ▶</span>
+          </div>
+        </a>
+
+        <!-- Portal Card Pos 4 -->
+        <a href="#/adhigana/pos4" class="portal-pos-card" data-route="pos4">
+          <div class="portal-pos-header">
+            <span class="portal-pos-badge">POS 04 // DILEMA SELEKSI AI</span>
+            <span class="portal-pos-route">adhigana/pos4</span>
+          </div>
+          <div class="portal-pos-desc">
+            Etika Teknologi &amp; Critical Thinking: Telusuri mengapa sistem AI mendiskualifikasi kandidat mahasiswa terbaik hanya karena format berkas .docx.
+          </div>
+          <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1a2a40; padding-top: 10px;">
+            <span style="font-family: var(--font-pixel); font-size: 0.75rem; color: var(--mecha-red-bright);">FOKUS: AI ETHICS</span>
+            <span class="pixel-btn pixel-btn-red" style="padding: 4px 12px; font-size: 0.72rem;">BUKA POS 4 ▶</span>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- ======================================================================
+         POS WORKSPACE SCREEN (ACTIVE WHEN A POS ROUTE IS LOADED)
+         ====================================================================== -->
+    <div id="activePosWorkArea">
+
+      <!-- DEDICATED SINGLE-POS LOCKED STATION BAR (Pos lain disembunyikan total) -->
+      <div id="singlePosStationBar" class="single-pos-station-bar">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span class="station-badge-lock">🔒 KONSOL POS AKTIF - TERKUNCI</span>
+          <span id="stationTitleMain" class="station-title-main">POS 1: INVESTIGASI EMAIL PALSU (CYBER PHISHING)</span>
+          <span id="stationRoutePill" class="station-route-pill">adhigana/pos1</span>
+        </div>
+        <div>
+          <a href="#/adhigana" class="pixel-btn" style="padding: 5px 14px; font-size: 0.72rem; text-decoration: none;" title="Kembali ke Menu Utama / Ganti Pos">
+            🌐 GANTI POS (PORTAL)
+          </a>
+        </div>
+      </div>
+
+
+      <!-- SERVER DOWN / GLITCH ALERT BANNER -->
+      <div id="glitchAlertBanner" class="glitch-alert-banner" style="display: none; margin-top: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-size: 1.8rem;">🚨</span>
+          <div class="glitch-alert-text">
+            <strong>[SERVER DOWN! SYSTEM COMPROMISED]:</strong> Temukan kertas petunjuk fisik yang disembunyikan di sekitar pos untuk memperbaiki sistem! Dilarang membuka HP!
+          </div>
+        </div>
+        <button id="btnDismissGlitch" class="pixel-btn pixel-btn-red" style="padding: 4px 12px; font-size: 0.72rem;">
+          MENGERTI
+        </button>
+      </div>
+
+      <!-- ENERGY GAUGE & DUAL-TIMER CONSOLE (Image 2 Style) -->
+      <section class="energy-timer-console" style="margin-top: 14px;">
+        <!-- Left: Phase info -->
+        <div class="energy-phase-info">
+          <div id="phaseBadge" class="pixel-tag-phase">
+            <span>●</span>
+            <span id="phaseBadgeText">PHASE 01: EKSPLORASI (5 MIN)</span>
+          </div>
+          <h3 id="phaseTitle" class="phase-headline">Pencarian Petunjuk Fisik</h3>
+          <p id="phaseInstruction" class="phase-subtext">Peserta mencari petunjuk tersembunyi di sekitar pos. Panitia mengawasi waktu.</p>
+        </div>
+
+        <!-- Center: Giant Pixel Clock & 10-Block Energy Gauge -->
+        <div class="hud-gauge-center">
+          <div class="hud-timer-numbers">
+            <div id="timerClock" class="pixel-clock-display">05:00</div>
+            <div id="hudPercentBadge" class="hud-percent-badge">100%</div>
+          </div>
+
+          <!-- 10 Segmented Energy Blocks (from Image 2 HUD) -->
+          <div id="energySegmentedBar" class="energy-segmented-bar" title="Energy Segment Timer">
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+          </div>
+        </div>
+
+        <!-- Right: Pixel Actions Toolbar (Image 1 Style) -->
+        <div class="timer-control-cluster">
+          <button id="btnStartTimer" class="pixel-btn" title="Mulai Misi (Fase Eksplorasi 5 Menit)">
+            <span>▶ MULAI MISI</span>
+          </button>
+
+          <button id="btnFinishExploration" class="pixel-btn pixel-btn-yellow" style="display: none; padding: 10px 16px;" title="Lanjut ke Input Jawaban">
+            <span>⚡ JAWAB KASUS</span>
+          </button>
+
+          <button id="btnPauseTimer" class="pixel-btn-icon" style="display: none;" title="Jeda Waktu">
+            <span>||</span>
+          </button>
+
+          <button id="btnResetTimer" class="pixel-btn-icon" title="Reset Waktu Pos">
+            <span>↺</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- MAIN GAME ARENA (CRT 1 & CRT 2 LAYOUT) -->
+      <main class="game-arena-grid" style="margin-top: 16px;">
+
+        <!-- LEFT: CRT 1 (INVESTIGATION FEED & INTERACTION) -->
+        <section class="crt-monitor-frame">
+          <div class="crt-monitor-tab">
+            <span id="crtMonitorTag">...CRT 1: CASE INVESTIGATION FEED</span>
+            <span id="casePosTag" style="color: var(--pixel-yellow);">POS 01 / 04</span>
+          </div>
+
+          <div class="crt-screen-surface">
+            <!-- Case Header & Story -->
+            <div>
+              <h2 id="caseHeading" style="font-family: var(--font-pixel); font-size: 1.15rem; color: #fff; margin-bottom: 6px;">
+                Pos 1: Investigasi Email Palsu (Cyber Phishing)
+              </h2>
+              <div id="caseStory" class="case-brief-pixel">
+                Insiden keamanan siber melanda kampus! Salah satu mahasiswa baru menerima pesan mendesak. Sebagai agen penyelidik digital, teliti 3 email di bawah dan temukan ancaman siber yang sedang berlangsung!
+              </div>
+            </div>
+
+            <!-- POS 1 CONTAINER: WEBMAIL TERMINAL -->
+            <div id="pos1Container" class="pos-container">
+              <div class="terminal-webmail">
+                <div class="webmail-sidebar">
+                  <div class="webmail-header-bar">INBOX_TERMINAL (3)</div>
+                  <div class="mail-entry-item active" data-email-id="1">
+                    <div class="mail-entry-sender">Akademik UBHI</div>
+                    <div class="mail-entry-subject">Jadwal Pengisian KRS</div>
+                  </div>
+                  <div class="mail-entry-item" data-email-id="2">
+                    <div class="mail-entry-sender" style="color: var(--mecha-red-bright);">🚨 KEMENDIKBUD PUSAT</div>
+                    <div class="mail-entry-subject">BEASISWA 10 JUTA SEGERA HANGUS!</div>
+                  </div>
+                  <div class="mail-entry-item" data-email-id="3">
+                    <div class="mail-entry-sender">Perpustakaan UBHI</div>
+                    <div class="mail-entry-subject">Kartu Anggota Digital</div>
+                  </div>
+                </div>
+
+                <div class="mail-view-pane">
+                  <div class="mail-meta-grid">
+                    <div><strong style="color: var(--pixel-cyan);">FROM:</strong> <span id="mailSender">akademik@ubhi.ac.id</span></div>
+                    <div><strong style="color: var(--pixel-cyan);">SUBJECT:</strong> <span id="mailSubject">Jadwal Pengisian KRS</span></div>
+                    <div><strong style="color: var(--pixel-cyan);">STATUS:</strong> <span id="mailSecurityBadge" style="color: var(--pixel-green);">Terverifikasi</span></div>
+                  </div>
+
+                  <div id="mailBody" class="mail-body-content">
+                    Yth. Mahasiswa Baru Prodi Informatika...
+                  </div>
+
+                  <div id="mailActionCard" class="pixel-phishing-trap" style="display: none;">
+                    <div style="font-family: var(--font-pixel); font-size: 0.8rem; color: var(--mecha-red-bright); font-weight: 800;">
+                      ⚠️ TARGET DETECTED: PERIKSA TAUTAN DI BAWAH INI
+                    </div>
+                    <button class="pixel-btn pixel-btn-red" style="font-size: 0.75rem; padding: 8px 16px;">
+                      KLIK DI SINI KLAIM 10 JUTA (SISA WAKTU: 59 MENIT)
+                    </button>
+                    <small style="color: #94a3b8; font-family: var(--font-pixel); font-size: 0.72rem;">
+                      [INFO]: Tautan ini mengarah ke: <code style="color: #fca5a5;">http://beasiswa-cair-10jt.xyz/login-akun</code>
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- POS 2 CONTAINER: ROBOT BARISTA SIMULATOR -->
+            <div id="pos2Container" class="pos-container" style="display: none;">
+              <div class="robot-sim-arena">
+                <div class="robot-display-head">
+                  <div id="robotAvatar" class="pixel-robot-avatar">🤖</div>
+                  <div class="robot-head-text">
+                    <div style="font-family: var(--font-pixel); font-size: 0.88rem; font-weight: 800; color: #fff;">
+                      BARISTA_BOT v1.0 STATUS: <span id="robotStatusText" style="color: var(--pixel-yellow);">WAITING_SEQUENCE</span>
+                    </div>
+                    <div id="robotConsole" class="robot-console-box">> Sistem siap. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.</div>
+                  </div>
+                </div>
+
+                <div id="robotStepsList" class="robot-steps-container">
+                  <!-- Populated via JS -->
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                  <button id="btnResetSteps" class="pixel-btn-icon" title="Acak / Reset Urutan">↺</button>
+                  <button id="btnRunRobot" class="pixel-btn pixel-btn-red">⚡ UJI EKSEKUSI ROBOT</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- POS 3 CONTAINER: DIGITAL VAULTS MATRIX -->
+            <div id="pos3Container" class="pos-container" style="display: none;">
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div style="background: #0d1726; border-left: 3px solid var(--pixel-cyan); padding: 6px 12px; font-family: var(--font-pixel); font-size: 0.78rem;">
+                    <strong style="color: var(--pixel-cyan);">[CLUE 1]:</strong> Dokumen rahasia <strong>TIDAK BERADA</strong> di brankas bernomor genap.
+                  </div>
+                  <div style="background: #0d1726; border-left: 3px solid var(--pixel-yellow); padding: 6px 12px; font-family: var(--font-pixel); font-size: 0.78rem;">
+                    <strong style="color: var(--pixel-yellow);">[CLUE 2]:</strong> Ukuran berkas dokumen rahasia <strong>LEBIH BESAR DARI 50 MB</strong>.
+                  </div>
+                  <div style="background: #0d1726; border-left: 3px solid var(--mecha-red-bright); padding: 6px 12px; font-family: var(--font-pixel); font-size: 0.78rem;">
+                    <strong style="color: var(--mecha-red-bright);">[CLUE 3]:</strong> Dokumen diarsipkan pada hari libur akhir pekan (<strong>SABTU / MINGGU</strong>).
+                  </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-pixel); font-size: 0.72rem; color: #94a3b8;">
+                  <span>Klik 'INSPEK' untuk cek metadata, atau 'ELIMINASI' untuk mencoret:</span>
+                  <button id="btnResetVaults" class="pixel-btn-icon" style="width: 32px; height: 32px; font-size: 0.9rem;" title="Reset Eliminasi">↺</button>
+                </div>
+
+                <div id="vaultsGrid" class="vaults-matrix-grid">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- POS 4 CONTAINER: AI SELECTION DILEMMA -->
+            <div id="pos4Container" class="pos-container" style="display: none;">
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div style="font-family: var(--font-pixel); font-size: 0.78rem; background: #060a12; border: 1px solid #162438; padding: 8px 12px; color: #cbd5e1;">
+                  [ALGORITMA SELEKSI AI]: Sistem memproses 3 berkas kandidat dengan kriteria: IPK &amp; Prestasi Tertinggi.
+                </div>
+
+                <div class="candidates-hud-deck">
+                  <div class="candidate-hud-panel rejected-panel">
+                    <div class="hud-stamp-badge stamp-fail">DISKUALIFIKASI</div>
+                    <div class="candidate-hud-name">Budi Santoso</div>
+                    <div class="candidate-hud-stats">
+                      <div><strong>IPK:</strong> 3.92 (Tertinggi)</div>
+                      <div><strong>Prestasi:</strong> Juara 1 Hackathon</div>
+                      <div><strong>Format File:</strong> <code>cv_budi.docx</code></div>
+                    </div>
+                    <div class="hud-error-terminal">
+                      <strong>[PARSER ERROR 415]:</strong><br>
+                      Regex engine hanya diprogram membaca format .PDF. Format .DOCX gagal diekstrak -> Skor diisi 0 otomatis -> Ditolak.
+                    </div>
+                  </div>
+
+                  <div class="candidate-hud-panel">
+                    <div class="hud-stamp-badge stamp-pass">LOLOS</div>
+                    <div class="candidate-hud-name">Siti Rahma</div>
+                    <div class="candidate-hud-stats">
+                      <div><strong>IPK:</strong> 3.45</div>
+                      <div><strong>Prestasi:</strong> Peserta Webinar</div>
+                      <div><strong>Format File:</strong> <code>berkas.pdf</code></div>
+                    </div>
+                    <div class="hud-error-terminal" style="border-color: rgba(0,255,136,0.3); color: #86efac;">
+                      <strong>[AI SCORE: 85%]:</strong><br>
+                      Format .PDF terverifikasi. Seluruh data terekstrak normal -> Dinyatakan Lolos otomatis.
+                    </div>
+                  </div>
+
+                  <div class="candidate-hud-panel">
+                    <div class="hud-stamp-badge stamp-pass">LOLOS</div>
+                    <div class="candidate-hud-name">Dimas Pratama</div>
+                    <div class="candidate-hud-stats">
+                      <div><strong>IPK:</strong> 3.50</div>
+                      <div><strong>Prestasi:</strong> Panitia Divisi</div>
+                      <div><strong>Format File:</strong> <code>cv_dimas.pdf</code></div>
+                    </div>
+                    <div class="hud-error-terminal" style="border-color: rgba(0,255,136,0.3); color: #86efac;">
+                      <strong>[AI SCORE: 88%]:</strong><br>
+                      Format .PDF terverifikasi. Seluruh data terekstrak normal -> Dinyatakan Lolos otomatis.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PHASE 2: OPERATOR ANSWER INPUT FORM -->
+            <div id="operatorInputSection" class="answer-input-panel" style="display: none;">
+              <div class="answer-input-title">
+                📋 FORM INPUT JAWABAN PESERTA (OPERATOR POS)
+              </div>
+
+              <div id="dynamicInputFields" style="display: flex; flex-direction: column; gap: 10px;">
+                <!-- Rendered via JS -->
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                <span style="font-family: var(--font-pixel); font-size: 0.72rem; color: #94a3b8;">
+                  *Pastikan jawaban peserta sudah tertulis di lembar kertas.
+                </span>
+                <button id="btnSubmitOperatorAnswer" class="pixel-btn pixel-btn-yellow" style="padding: 8px 18px; font-size: 0.8rem;">
+                  ⚡ SUBMIT JAWABAN RESMI
+                </button>
+              </div>
+            </div>
+
+            <!-- PHASE 3: DATA TERKUNCI & KODE UNIK CARD -->
+            <div id="lockedCodeSection" class="unique-code-card" style="display: none;">
+              <div style="font-family: var(--font-pixel); font-size: 1.1rem; font-weight: 900; color: var(--pixel-green);">
+                🔐 DATA TERKUNCI &amp; TERSIMPAN KE DATABASE!
+              </div>
+              <div class="unique-code-stamp" id="displayGeneratedCode">
+                META-P1-0922
+              </div>
+              <div class="unique-code-instruction">
+                ⚠️ <strong>INSTRUKSI PANITIA POS:</strong><br>
+                Tuliskan kode unik di atas pada <strong>pojok kanan atas lembar kertas jawaban peserta</strong> sebelum mereka meninggalkan pos!
+              </div>
+              <div style="margin-top: 10px; display: flex; gap: 12px;">
+                <button id="btnCompletePos" class="pixel-btn" style="padding: 10px 24px;">
+                  ✔ POS SELESAI / ROTASI KELOMPOK
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- RIGHT: CRT 2 (MISSION CHALLENGES & RULES) -->
+        <aside class="crt-monitor-frame">
+          <div class="crt-monitor-tab" style="background: #181204; border-color: #3b2c05; color: var(--pixel-yellow);">
+            <span>...CRT 2: MISSION CHALLENGES</span>
+            <span id="challengePosLabel">TANTANGAN POS 01</span>
+          </div>
+
+          <div class="crt-screen-surface">
+            <div id="challengeBox" class="challenge-crt-box">
+              <div style="border-bottom: 1px solid #1a2a40; padding-bottom: 8px; font-family: var(--font-pixel); font-size: 0.78rem; color: var(--pixel-cyan);">
+                TARGET STUDI KASUS UNTUK KELOMPOK
+              </div>
+
+              <!-- Dynamic Questions Rendered via JS -->
+              <div id="questionsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Populated by JS -->
+              </div>
+
+              <!-- Student Rules Note -->
+              <div class="pixel-rules-memo">
+                <div>📋 <strong>SOP PENILAIAN LISAN &amp; KERTAS:</strong></div>
+                <div>1. Peserta mencari petunjuk fisik di area pos (5 menit).</div>
+                <div>2. Tulis jawaban dan alur logika di <strong>Lembar Jawaban Kertas</strong>.</div>
+                <div>3. Sampaikan jawaban ke panitia pos untuk diinput ke web.</div>
+                <div>4. Pastikan <strong>Kode Unik</strong> tersalin di lembar jawaban kertas.</div>
+                <div>5. Serahkan kertas ke panitia pos sebelum berpindah.</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+      </main>
+
+    </div>
+
+    <!-- MODAL 1: KUNCI JAWABAN & RUBRIK POS -->
+    <div id="rubrikModal" class="modal-overlay">
+      <div class="modal-content-card">
+        <div class="modal-header-pixel" style="border-color: var(--pixel-yellow); color: var(--pixel-yellow);">
+          <span>🔑 KUNCI JAWABAN &amp; RUBRIK PENILAIAN PANITIA POS</span>
+          <button id="btnCloseRubrik" class="pixel-btn-icon" style="width: 32px; height: 32px;">✕</button>
+        </div>
+
+        <div class="modal-body-pixel">
+          <div style="background: #040810; border: 2px solid var(--pixel-green); padding: 14px;">
+            <div style="font-family: var(--font-pixel); font-size: 0.85rem; font-weight: 800; color: var(--pixel-green); margin-bottom: 6px;">
+              [KUNCI JAWABAN &amp; ANALISIS LOGIS]
+            </div>
+            <div id="modalKunciJawaban" style="font-size: 0.82rem; line-height: 1.6; color: #e2e8f0;">
+              <!-- Dynamic based on active Pos -->
+            </div>
+          </div>
+
+          <div style="background: #060c18; border: 2px solid var(--pixel-cyan); padding: 14px;">
+            <div style="font-family: var(--font-pixel); font-size: 0.85rem; font-weight: 800; color: var(--pixel-cyan); margin-bottom: 6px;">
+              [LOKASI &amp; TEKS PETUNJUK FISIK POS INI]
+            </div>
+            <div id="modalPhysicalClues" style="font-family: var(--font-pixel); font-size: 0.78rem; line-height: 1.5; color: #cbd5e1;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: ADMIN PUSAT & LIVE LEADERBOARD -->
+    <div id="adminModal" class="modal-overlay">
+      <div class="modal-content-card" style="max-width: 960px;">
+        <div class="modal-header-pixel" style="border-color: var(--mecha-red-bright); color: var(--mecha-red-bright);">
+          <span>🏆 PUSAT KONTROL ADMIN &amp; LIVE LEADERBOARD</span>
+          <button id="btnCloseAdmin" class="pixel-btn-icon" style="width: 32px; height: 32px;">✕</button>
+        </div>
+
+        <div class="modal-body-pixel">
+          <!-- Live Leaderboard Table -->
+          <div>
+            <div style="font-family: var(--font-pixel); font-size: 0.9rem; font-weight: 900; color: var(--pixel-yellow); margin-bottom: 8px;">
+              📊 KLASEMEN SEMENTARA (WEB + KERTAS)
+            </div>
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th style="width: 10%;">RANK</th>
+                  <th style="width: 25%;">KELOMPOK</th>
+                  <th style="width: 15%;">SKOR WEB</th>
+                  <th style="width: 18%;">LOGIKA KERTAS</th>
+                  <th style="width: 17%;">TOTAL POIN</th>
+                  <th style="width: 15%;">PROGRESS</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardTbody">
+                <!-- Populated via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Verifikasi Kode Unik & Input Nilai Kertas -->
+          <div style="background: #060c18; border: 2px solid var(--pixel-cyan); padding: 14px;">
+            <div style="font-family: var(--font-pixel); font-size: 0.85rem; font-weight: 800; color: var(--pixel-cyan); margin-bottom: 8px;">
+              🔍 VERIFIKASI KODE UNIK &amp; SKOR KERTAS (JURI PUSAT)
+            </div>
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-family: var(--font-pixel); font-size: 0.74rem; text-align: left;">
+                <thead>
+                  <tr style="background: #111d2e; border: 1px solid #1f334d; color: var(--pixel-cyan);">
+                    <th style="padding: 6px;">WAKTU</th>
+                    <th style="padding: 6px;">KELOMPOK</th>
+                    <th style="padding: 6px;">POS</th>
+                    <th style="padding: 6px;">KODE UNIK</th>
+                    <th style="padding: 6px;">SKOR WEB</th>
+                    <th style="padding: 6px;">NILAI KERTAS (1-5)</th>
+                    <th style="padding: 6px;">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody id="verifikasiTbody">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Export & Management Buttons -->
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid #1f334d; padding-top: 12px;">
+            <div style="display: flex; gap: 8px;">
+              <button id="btnExportCSV" class="pixel-btn pixel-btn-yellow" style="padding: 6px 14px; font-size: 0.75rem;">
+                📥 EKSPOR CSV (EXCEL)
+              </button>
+              <a href="lembar_jawaban_peserta.html" target="_blank" class="pixel-btn" style="padding: 6px 14px; font-size: 0.75rem; text-decoration: none;">
+                📄 CETAK LEMBAR KERTAS
+              </a>
+            </div>
+            <button id="btnResetAllData" class="pixel-btn pixel-btn-red" style="padding: 6px 14px; font-size: 0.72rem;">
+              ⚠️ RESET SEMUA DATA
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

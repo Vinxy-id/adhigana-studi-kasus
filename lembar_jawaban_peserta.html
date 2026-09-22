@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lembar Jawaban Studi Kasus - ADHIGANA 2026</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 12mm 15mm;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      color: #111;
+      line-height: 1.4;
+      background: #fff;
+      font-size: 11pt;
+    }
+    .sheet-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      border: 2px solid #990000;
+      padding: 16px 20px;
+      position: relative;
+    }
+    .header-table {
+      width: 100%;
+      border-bottom: 2px solid #990000;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+    .header-logo-text h1 {
+      font-size: 14pt;
+      font-weight: 900;
+      color: #990000;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .header-logo-text h2 {
+      font-size: 10pt;
+      font-weight: 700;
+      color: #333;
+    }
+    .header-logo-text p {
+      font-size: 8.5pt;
+      color: #666;
+    }
+    .unique-code-box {
+      border: 2px dashed #990000;
+      background: #fff5f5;
+      padding: 6px 12px;
+      text-align: center;
+      width: 220px;
+      float: right;
+    }
+    .unique-code-box .label {
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #990000;
+      text-transform: uppercase;
+    }
+    .unique-code-box .box-fill {
+      height: 32px;
+      border-bottom: 1px solid #990000;
+      margin-top: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13pt;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111;
+      letter-spacing: 2px;
+    }
+    .clear { clear: both; }
+
+    .identity-table {
+      width: 100%;
+      margin-bottom: 14px;
+      border-collapse: collapse;
+      font-size: 9.5pt;
+    }
+    .identity-table td {
+      padding: 4px 6px;
+      vertical-align: middle;
+    }
+    .field-line {
+      border-bottom: 1px dotted #333;
+      display: inline-block;
+      width: 95%;
+      height: 18px;
+    }
+
+    .section-box {
+      border: 1px solid #666;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .section-title {
+      background: #f0f0f0;
+      border-bottom: 1px solid #666;
+      padding: 6px 10px;
+      font-size: 9.5pt;
+      font-weight: 700;
+      color: #990000;
+      text-transform: uppercase;
+    }
+    .section-content {
+      padding: 10px 12px;
+      min-height: 120px;
+    }
+    .ruled-lines {
+      background-image: repeating-linear-gradient(to bottom, transparent, transparent 24px, #e5e5e5 25px);
+      line-height: 25px;
+      min-height: 150px;
+    }
+
+    .jury-score-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      margin-top: 8px;
+    }
+    .jury-score-table th, .jury-score-table td {
+      border: 1px solid #888;
+      padding: 5px 8px;
+      text-align: center;
+    }
+    .jury-score-table th {
+      background: #f7f7f7;
+      font-weight: 700;
+    }
+
+    .print-btn-bar {
+      text-align: center;
+      margin: 15px 0;
+    }
+    .btn-print {
+      background: #990000;
+      color: #fff;
+      border: none;
+      padding: 8px 24px;
+      font-size: 11pt;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    @media print {
+      .print-btn-bar { display: none; }
+      body { background: transparent; }
+      .sheet-wrapper { border: 2px solid #000; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-btn-bar">
+    <button class="btn-print" onclick="window.print()">🖨️ Cetak Lembar Jawaban (A4)</button>
+  </div>
+
+  <div class="sheet-wrapper">
+    <!-- Header -->
+    <table class="header-table">
+      <tr>
+        <td style="width: 70%;">
+          <div class="header-logo-text">
+            <p>HMP INFORMATIKA • UNIVERSITAS BHINNEKA PGRI TULUNGAGUNG</p>
+            <h1>ADHIGANA INFORMATIKA 2026</h1>
+            <h2>LEMBAR KERJA STUDI KASUS: DIGITAL FRONTIER</h2>
+          </div>
+        </td>
+        <td style="width: 30%; text-align: right; vertical-align: top;">
+          <div class="unique-code-box">
+            <div class="label">KODE UNIK WEB (DIISI PANITIA)</div>
+            <div class="box-fill"></div>
+            <small style="font-size: 6.5pt; color: #666;">Salin dari layar web setelah tombol submit</small>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Identity Fields -->
+    <table class="identity-table">
+      <tr>
+        <td style="width: 18%;"><strong>Nama Kelompok:</strong></td>
+        <td style="width: 35%;"><span class="field-line"></span></td>
+        <td style="width: 15%;"><strong>Pos Ke:</strong></td>
+        <td style="width: 32%;">[ ] 1 &nbsp; [ ] 2 &nbsp; [ ] 3 &nbsp; [ ] 4</td>
+      </tr>
+      <tr>
+        <td><strong>Nama Anggota:</strong></td>
+        <td colspan="3"><span class="field-line" style="width: 98%;"></span></td>
+      </tr>
+      <tr>
+        <td><strong>Waktu Mulai:</strong></td>
+        <td>..... : ..... WIB</td>
+        <td><strong>Waktu Selesai:</strong></td>
+        <td>..... : ..... WIB</td>
+      </tr>
+    </table>
+
+    <!-- Section 1: Clues Found -->
+    <div class="section-box">
+      <div class="section-title">Bagian 1: Catatan Petunjuk Fisik yang Ditemukan (Fase Eksplorasi 5 Menit)</div>
+      <div class="section-content ruled-lines" style="min-height: 90px; height: 90px;">
+        <!-- Area catatan peserta -->
+      </div>
+    </div>
+
+    <!-- Section 2: Logic Solutions -->
+    <div class="section-box">
+      <div class="section-title">Bagian 2: Alur Pemikiran &amp; Solusi Logika Studi Kasus (Fase Diskusi 5 Menit)</div>
+      <div class="section-content ruled-lines" style="min-height: 220px; height: 220px;">
+        <!-- Area jawaban peserta -->
+      </div>
+    </div>
+
+    <!-- Section 3: Scoring & Validation Box -->
+    <div class="section-box" style="margin-bottom: 0;">
+      <div class="section-title">Bagian 3: Kolom Penilaian &amp; Verifikasi (Khusus Panitia Pos &amp; Juri)</div>
+      <div style="padding: 8px 12px;">
+        <table class="jury-score-table">
+          <thead>
+            <tr>
+              <th style="width: 25%;">Skor Input Web</th>
+              <th style="width: 30%;">Kelogisan Jawaban Kertas (Skala 1 - 5)</th>
+              <th style="width: 20%;">Total Pos</th>
+              <th style="width: 25%;">Paraf Panitia Pos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="height: 48px;">
+              <td style="font-size: 12pt; font-weight: 700;">..... / 100</td>
+              <td>
+                <span style="font-size: 11pt; font-weight: 700;">[ 1 ] [ 2 ] [ 3 ] [ 4 ] [ 5 ]</span><br>
+                <small style="font-size: 7.5pt; color: #555;">(5: Sangat Logis | 1: Asal-asalan)</small>
+              </td>
+              <td style="font-size: 12pt; font-weight: 700;">..... Poin</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
