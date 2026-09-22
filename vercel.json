@@ -1,18 +1,7 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/adhigana/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/pos/:path*",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/lembar-jawaban",
-      "destination": "/lembar_jawaban_peserta.html"
-    }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/lembar-jawaban", "dest": "/lembar_jawaban_peserta.html" },
+    { "src": "/.*", "dest": "/index.html" }
   ]
 }

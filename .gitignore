@@ -34,3 +34,5 @@ yarn-error.log*
 # Utility / Scratch Scripts & Raw Upload Media
 crop_assets.ps1
 assets/media_*
+
+.vercel
