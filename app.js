@@ -379,16 +379,124 @@ document.addEventListener("DOMContentLoaded", () => {
   const terminalBudi = document.getElementById("terminalBudi");
   const budiFileTag = document.getElementById("budiFileTag");
 
-  // Storage Helpers
+  // ==========================================================================
+  // CLOUD DATABASE (FIREBASE FIRESTORE) & HYBRID OFFLINE ENGINE
+  // ==========================================================================
+  const cloudStatusBadge = document.getElementById("cloudStatusBadge");
+  const cloudStatusText = document.getElementById("cloudStatusText");
+
+  function updateCloudStatus(status) {
+    if (!cloudStatusBadge || !cloudStatusText) return;
+    cloudStatusBadge.className = `cloud-status-badge ${status}`;
+    if (status === "online") {
+      cloudStatusText.textContent = "CLOUD LIVE";
+    } else if (status === "syncing") {
+      cloudStatusText.textContent = "SYNCING...";
+    } else {
+      cloudStatusText.textContent = "LOCAL / CACHED";
+    }
+  }
+
+  // Firebase Configuration
+  // Masukkan API Key dari Firebase Console Anda di bawah ini untuk mengaktifkan sinkronisasi cloud real-time
+  const firebaseConfig = {
+    apiKey: "AIzaSy_GANTI_DENGAN_FIREBASE_APIKEY_ANDA",
+    authDomain: "adhigana-studi-kasus.firebaseapp.com",
+    projectId: "adhigana-studi-kasus",
+    storageBucket: "adhigana-studi-kasus.appspot.com",
+    messagingSenderId: "100000000000",
+    appId: "1:100000000000:web:abcdef1234567890"
+  };
+
+  let db = null;
+  let isCloudActive = false;
+
+  function initFirebaseDatabase() {
+    try {
+      if (typeof firebase !== "undefined" && firebaseConfig.apiKey && !firebaseConfig.apiKey.includes("GANTI_DENGAN")) {
+        if (!firebase.apps || !firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.firestore();
+
+        // Aktifkan Offline Persistence (IndexedDB Cache Browser)
+        db.enablePersistence({ synchronizeTabs: true }).catch(err => {
+          console.warn("[FIRESTORE] Offline persistence note:", err.code);
+        });
+
+        isCloudActive = true;
+        updateCloudStatus("online");
+        console.log(">> [FIRESTORE]: Connected & Offline Persistence Enabled.");
+        initRealtimeCloudListener();
+      } else {
+        updateCloudStatus("offline");
+        console.log(">> [HYBRID STORAGE]: LocalStorage aktif (Offline Mode). Isi firebaseConfig di app.js untuk mengaktifkan Cloud Sync.");
+      }
+    } catch (e) {
+      console.warn(">> [FIREBASE INIT ERROR]:", e);
+      updateCloudStatus("offline");
+    }
+  }
+
+  // Real-time listener for live sync across laptops
+  function initRealtimeCloudListener() {
+    if (!db || !isCloudActive) return;
+
+    db.collection("submissions").onSnapshot((snapshot) => {
+      const incoming = [];
+      snapshot.forEach(doc => incoming.push(doc.data()));
+
+      if (incoming.length > 0) {
+        // Gabungkan data cloud dengan local storage
+        const current = getSubmissions();
+        const mergedMap = new Map();
+        current.forEach(item => mergedMap.set(item.id, item));
+        incoming.forEach(item => mergedMap.set(item.id, item)); // Cloud data menjadi acuan
+
+        const mergedList = Array.from(mergedMap.values());
+        localStorage.setItem("adhigana_submissions", JSON.stringify(mergedList));
+        renderLeaderboard();
+        renderVerifikasiTable();
+        updateCloudStatus("online");
+      }
+    }, (err) => {
+      console.warn("[FIRESTORE SNAPSHOT ERROR]:", err);
+      updateCloudStatus("offline");
+    });
+  }
+
+  // Storage Helpers (Hybrid Dual-Write: LocalStorage + Cloud Firestore)
   function getSubmissions() {
     const raw = localStorage.getItem("adhigana_submissions");
     return raw ? JSON.parse(raw) : [];
   }
 
-  function saveSubmissions(list) {
+  async function saveSubmissions(list, targetSub = null) {
+    // 1. Simpan Lokal Instan (Zero Latency & 100% Offline-Safe)
     localStorage.setItem("adhigana_submissions", JSON.stringify(list));
     renderLeaderboard();
     renderVerifikasiTable();
+
+    // 2. Sinkronkan ke Cloud Firestore jika aktif
+    if (isCloudActive && db) {
+      try {
+        updateCloudStatus("syncing");
+        if (targetSub) {
+          await db.collection("submissions").doc(targetSub.id).set(targetSub, { merge: true });
+        } else {
+          const batch = db.batch();
+          list.forEach(item => {
+            const docRef = db.collection("submissions").doc(item.id);
+            batch.set(docRef, item, { merge: true });
+          });
+          await batch.commit();
+        }
+        updateCloudStatus("online");
+      } catch (err) {
+        console.warn("[CLOUD SYNC PUSH ERROR]:", err);
+        updateCloudStatus("offline");
+      }
+    }
   }
 
   function generateUniqueCode(teamId, posId) {
@@ -900,7 +1008,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const subs = getSubmissions().filter(s => s.id !== newSub.id);
     subs.push(newSub);
-    saveSubmissions(subs);
+    saveSubmissions(subs, newSub);
 
     setPhase(3);
     sfx.victoryFanfare();
@@ -1313,7 +1421,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (target) {
           target.paperScore = newScore;
           target.totalScore = target.webScore + (newScore * 5);
-          saveSubmissions(subs);
+          saveSubmissions(subs, target);
           sfx.coinStart();
           alert(`SUKSES: Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil disimpan!`);
         }
@@ -1632,6 +1740,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderRobotSteps();
   renderVaults();
   renderLeaderboard();
+  initFirebaseDatabase();
 
   // Route Handling without overriding existing URL pathname
   const currentPath = window.location.pathname.toLowerCase();
