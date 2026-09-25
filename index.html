@@ -10,6 +10,55 @@
 <body>
 
   <!-- ========================================================================
+       TEAM SELECTION SCREEN (Tampil pertama saat mahasiswa buka pos)
+       ======================================================================== -->
+  <div id="teamSelectOverlay" class="team-select-overlay hidden">
+    <div class="team-select-card">
+      <div class="team-select-header">
+        <div class="team-select-logo">
+          <img src="assets/swirl_logo.png" alt="Adhigana">
+        </div>
+        <div>
+          <div class="team-select-event-label">ADHIGANA 2026 // DIGITAL FRONTIER</div>
+          <h2 class="team-select-title">PILIH KELOMPOKMU</h2>
+          <div id="teamSelectPosLabel" class="team-select-pos-label">POS 01: INVESTIGASI SIBER</div>
+        </div>
+      </div>
+      <div class="team-select-prompt">
+        <span class="team-select-prompt-cursor">&gt;_</span>
+        Kelompok mana yang sedang berada di pos ini?
+      </div>
+      <div class="team-select-grid" id="teamSelectGrid">
+        <!-- Populated by JS -->
+      </div>
+      <div class="team-select-footer">
+        <span class="team-select-footer-txt">[ADHIGANA INFORMATIKA 2026] // SISTEM PENILAIAN DIGITAL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       BOOT LOADING SCREEN (Animasi terminal setelah pilih kelompok)
+       ======================================================================== -->
+  <div id="bootLoadingOverlay" class="boot-loading-overlay hidden">
+    <div class="boot-terminal">
+      <div class="boot-terminal-header">
+        <span class="boot-blink">&gt;</span> ADHIGANA SECURE MAINFRAME // AUTHENTICATING...
+      </div>
+      <div id="bootLines" class="boot-lines"></div>
+      <div class="boot-progress-wrap">
+        <div class="boot-progress-label" id="bootProgressLabel">LOADING... 0%</div>
+        <div class="boot-progress-track">
+          <div class="boot-progress-bar" id="bootProgressBar" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="boot-team-confirm" id="bootTeamConfirm">
+        KELOMPOK: <span id="bootTeamName" style="color: #fff; font-weight: 900;">---</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
        CINEMATIC INTRO / CUTSCENE OVERLAY PER POS
        ======================================================================== -->
   <div id="introCutsceneOverlay" class="intro-cutscene-overlay">

@@ -376,9 +376,135 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ==========================================================================
-  // 4. ROUTING ENGINE & INTRO CUTSCENE MANAGER
+  // 4. ROUTING ENGINE, TEAM SELECTION, BOOT LOADER & INTRO CUTSCENE
   // ==========================================================================
 
+  // DOM Elements — Team Selection Overlay
+  const teamSelectOverlay = document.getElementById("teamSelectOverlay");
+  const teamSelectGrid = document.getElementById("teamSelectGrid");
+  const teamSelectPosLabel = document.getElementById("teamSelectPosLabel");
+
+  // DOM Elements — Boot Loading Overlay
+  const bootLoadingOverlay = document.getElementById("bootLoadingOverlay");
+  const bootLines = document.getElementById("bootLines");
+  const bootProgressBar = document.getElementById("bootProgressBar");
+  const bootProgressLabel = document.getElementById("bootProgressLabel");
+  const bootTeamName = document.getElementById("bootTeamName");
+
+  // Build team selection buttons
+  function renderTeamSelectGrid(posNum) {
+    const config = POS_CONFIG[posNum];
+    teamSelectPosLabel.textContent = `POS 0${posNum}: ${config.subTitle}`;
+    teamSelectGrid.innerHTML = TEAMS.map((t, i) => `
+      <button class="team-select-btn" data-team-id="${t.id}"
+        style="border-color: ${t.color}30; --team-color: ${t.color};"
+        onmouseover="this.style.borderColor='${t.color}'; this.style.background='${t.color}12';"
+        onmouseout="this.style.borderColor='${t.color}30'; this.style.background='';">
+        <span class="team-select-btn::before" style="background:${t.color};"></span>
+        <span class="team-select-btn-num">KELOMPOK ${i + 1}</span>
+        <span class="team-select-btn-name" style="color: ${t.color};">${t.name.toUpperCase()}</span>
+        <span class="team-select-btn-ip">IP: ${t.ip}</span>
+      </button>
+    `).join("");
+
+    // Bind button clicks
+    teamSelectGrid.querySelectorAll(".team-select-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const chosenId = btn.dataset.teamId;
+        const chosenTeam = TEAMS.find(t => t.id === chosenId);
+        sfx.coinStart();
+        selectTeamAndBoot(chosenTeam, posNum);
+      });
+    });
+  }
+
+  function showTeamSelectScreen(posNum) {
+    renderTeamSelectGrid(posNum);
+    teamSelectOverlay.classList.remove("hidden");
+    // Hide boot & cutscene
+    bootLoadingOverlay.classList.add("hidden");
+    introCutsceneOverlay.classList.add("hidden");
+  }
+
+  function hideTeamSelectScreen() {
+    teamSelectOverlay.classList.add("hidden");
+  }
+
+  // Boot sequence lines for cinematic terminal loading
+  function getBootLines(teamName, posNum) {
+    const config = POS_CONFIG[posNum];
+    return [
+      { t: ">> [BOOT_INIT]: ADHIGANA SECURE MAINFRAME v2.026 ...", cls: "cyan", delay: 0 },
+      { t: `>> [AUTH]: VALIDATING KELOMPOK — ${teamName.toUpperCase()} ...`, cls: "", delay: 180 },
+      { t: ">> [AUTH]: IDENTITY CONFIRMED. ACCESS GRANTED.", cls: "ok", delay: 380 },
+      { t: `>> [ROUTE]: LOADING MODULE // ${config.route.toUpperCase()} ...`, cls: "", delay: 580 },
+      { t: `>> [THREAT]: ${config.threat}`, cls: "err", delay: 760 },
+      { t: `>> [OBJECTIVE]: ${config.objective.substring(0, 60)}...`, cls: "warn", delay: 980 },
+      { t: ">> [NET_STATUS]: POS TERMINAL ONLINE. SECURE CHANNEL ESTABLISHED.", cls: "ok", delay: 1200 },
+      { t: ">> [BRIEFING]: STUDI KASUS LOADED. SIAP UNTUK INVESTIGASI.", cls: "ok", delay: 1450 },
+      { t: ">> [SYSTEM]: RENDERING MISSION CONSOLE ...", cls: "cyan", delay: 1680 },
+    ];
+  }
+
+  function runBootSequence(team, posNum, onComplete) {
+    bootLines.innerHTML = "";
+    bootProgressBar.style.width = "0%";
+    bootProgressLabel.textContent = "LOADING... 0%";
+    bootTeamName.textContent = team.name.toUpperCase();
+    bootTeamName.style.color = team.color;
+
+    const lines = getBootLines(team.name, posNum);
+    const totalDuration = 2200; // ms total
+    let startTime = null;
+
+    // Append lines at staggered delays
+    lines.forEach(l => {
+      setTimeout(() => {
+        const div = document.createElement("div");
+        div.className = `boot-line ${l.cls}`;
+        div.textContent = l.t;
+        bootLines.appendChild(div);
+        bootLines.scrollTop = bootLines.scrollHeight;
+        sfx.blip();
+      }, l.delay);
+    });
+
+    // Animate progress bar
+    function animateProgress(ts) {
+      if (!startTime) startTime = ts;
+      const elapsed = ts - startTime;
+      const pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
+      bootProgressBar.style.width = pct + "%";
+      bootProgressLabel.textContent = `LOADING... ${pct}%`;
+      if (pct < 100) {
+        requestAnimationFrame(animateProgress);
+      } else {
+        bootProgressLabel.textContent = "COMPLETE — LAUNCHING MISSION CONSOLE";
+        setTimeout(onComplete, 320);
+      }
+    }
+    requestAnimationFrame(animateProgress);
+  }
+
+  function selectTeamAndBoot(team, posNum) {
+    // Sync team to the operator header selector
+    currentTeam = team.id;
+    teamSelect.value = team.id;
+    teamBadge.textContent = team.label;
+    teamBadge.style.color = team.color;
+
+    // Transition: hide team screen → show boot loader
+    hideTeamSelectScreen();
+    bootLoadingOverlay.classList.remove("hidden");
+
+    runBootSequence(team, posNum, () => {
+      // Boot done → hide boot, show intro cutscene
+      bootLoadingOverlay.classList.add("hidden");
+      showIntroCutscene(posNum);
+    });
+  }
+
+  // Intro cutscene
   function showIntroCutscene(posNum) {
     const config = POS_CONFIG[posNum];
     introMissionTag.textContent = `MISSION INITIATION // POS 0${posNum}`;
@@ -405,6 +531,8 @@ document.addEventListener("DOMContentLoaded", () => {
   btnReturnToHub.addEventListener("click", () => {
     sfx.blip();
     hideIntroCutscene();
+    hideTeamSelectScreen();
+    bootLoadingOverlay.classList.add("hidden");
     window.location.hash = "#/adhigana";
   });
 
@@ -419,7 +547,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const pathname = window.location.pathname.toLowerCase();
     const routeFull = `${hash} ${search} ${pathname}`;
 
-    // Check for specific Pos routes: adhigana/pos1, pos1, etc.
+    // Check for specific Pos routes
     let targetPos = null;
     if (routeFull.includes("pos1") || routeFull.includes("pos=1")) targetPos = 1;
     else if (routeFull.includes("pos2") || routeFull.includes("pos=2")) targetPos = 2;
@@ -433,16 +561,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (targetPos) {
-      // Pos View
+      // Pos View: show main layout, then trigger student team selection flow
       arcadePortalHub.style.display = "none";
       activePosWorkArea.style.display = "block";
       renderPos(targetPos);
-      showIntroCutscene(targetPos);
+      // Show team selection screen first (instead of going directly to cutscene)
+      showTeamSelectScreen(targetPos);
     } else {
-      // Main Arcade Hub View
+      // Hub View (Operator / Main Landing)
       activePosWorkArea.style.display = "none";
       arcadePortalHub.style.display = "flex";
       hideIntroCutscene();
+      hideTeamSelectScreen();
+      bootLoadingOverlay.classList.add("hidden");
     }
   }
 
