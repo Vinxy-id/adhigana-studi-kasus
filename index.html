@@ -277,11 +277,14 @@
           <span id="stationTitleMain" class="station-title-main">POS 1: INVESTIGASI EMAIL PALSU (CYBER PHISHING)</span>
           <span id="stationRoutePill" class="station-route-pill">adhigana/pos1</span>
         </div>
-        <div>
-          <a href="#/adhigana" class="pixel-btn" style="padding: 5px 14px; font-size: 0.72rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="Kembali ke Menu Utama / Ganti Pos">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <button id="btnSwitchTeamBar" class="pixel-btn" style="padding: 5px 12px; font-size: 0.72rem; background: #132238; display: inline-flex; align-items: center; gap: 6px;" title="Pilih Ulang Kelompok untuk Pos Ini">
+            <span>⇄ GANTI KELOMPOK</span>
+          </button>
+          <button id="btnReturnToHubBar" class="pixel-btn" style="padding: 5px 14px; font-size: 0.72rem; background: #0c1524; display: inline-flex; align-items: center; gap: 6px;" title="Kembali ke Menu Utama / Ganti Pos">
             <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" /></svg>
-            <span>GANTI POS (PORTAL)</span>
-          </a>
+            <span>MENU PORTAL</span>
+          </button>
         </div>
       </div>
 
@@ -481,54 +484,84 @@
               </div>
             </div>
 
-            <!-- POS 4 CONTAINER: AI SELECTION DILEMMA -->
+            <!-- POS 4 CONTAINER: AI SELECTION DILEMMA (INTERAKTIF) -->
             <div id="pos4Container" class="pos-container" style="display: none;">
-              <div style="display: flex; flex-direction: column; gap: 12px;">
-                <div style="font-family: var(--font-pixel); font-size: 0.78rem; background: #060a12; border: 1px solid #162438; padding: 8px 12px; color: #cbd5e1;">
-                  [ALGORITMA SELEKSI AI]: Sistem memproses 3 berkas kandidat dengan kriteria: IPK &amp; Prestasi Tertinggi.
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="font-family: var(--font-pixel); font-size: 0.78rem; background: #060a12; border: 1px solid #162438; padding: 10px 14px; color: #cbd5e1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                  <span>[ALGORITMA SELEKSI AI]: Sistem memproses 3 berkas kandidat. Target: Beasiswa Prestasi Tertinggi.</span>
+                  <span style="color: var(--pixel-yellow);">RULE REGEX: <code>/^.*\.pdf$/i</code></span>
                 </div>
 
                 <div class="candidates-hud-deck">
-                  <div class="candidate-hud-panel rejected-panel">
-                    <div class="hud-stamp-badge stamp-fail">DISKUALIFIKASI</div>
+                  <div class="candidate-hud-panel rejected-panel" id="cardBudi">
+                    <div class="hud-stamp-badge stamp-fail" id="stampBudi">DISKUALIFIKASI</div>
                     <div class="candidate-hud-name">Budi Santoso</div>
                     <div class="candidate-hud-stats">
                       <div><strong>IPK:</strong> 3.92 (Tertinggi)</div>
                       <div><strong>Prestasi:</strong> Juara 1 Hackathon</div>
-                      <div><strong>Format File:</strong> <code>cv_budi.docx</code></div>
+                      <div><strong>Berkas:</strong> <code id="budiFileTag">cv_budi.docx</code></div>
                     </div>
-                    <div class="hud-error-terminal">
+                    <div class="hud-error-terminal" id="terminalBudi">
                       <strong>[PARSER ERROR 415]:</strong><br>
-                      Regex engine hanya diprogram membaca format .PDF. Format .DOCX gagal diekstrak -> Skor diisi 0 otomatis -> Ditolak.
+                      Regex engine hanya diprogram membaca format .PDF. Format .DOCX gagal diekstrak -> Skor 0 otomatis -> Ditolak.
                     </div>
+                    <button class="btn-vault-mini btn-test-parse" data-candidate="budi" style="margin-top: 4px; padding: 6px;">
+                      TEST PARSE BERKAS
+                    </button>
                   </div>
 
-                  <div class="candidate-hud-panel">
+                  <div class="candidate-hud-panel" id="cardSiti">
                     <div class="hud-stamp-badge stamp-pass">LOLOS</div>
                     <div class="candidate-hud-name">Siti Rahma</div>
                     <div class="candidate-hud-stats">
                       <div><strong>IPK:</strong> 3.45</div>
                       <div><strong>Prestasi:</strong> Peserta Webinar</div>
-                      <div><strong>Format File:</strong> <code>berkas.pdf</code></div>
+                      <div><strong>Berkas:</strong> <code>berkas.pdf</code></div>
                     </div>
                     <div class="hud-error-terminal" style="border-color: rgba(0,255,136,0.3); color: #86efac;">
                       <strong>[AI SCORE: 85%]:</strong><br>
                       Format .PDF terverifikasi. Seluruh data terekstrak normal -> Dinyatakan Lolos otomatis.
                     </div>
+                    <button class="btn-vault-mini btn-test-parse" data-candidate="siti" style="margin-top: 4px; padding: 6px;">
+                      TEST PARSE BERKAS
+                    </button>
                   </div>
 
-                  <div class="candidate-hud-panel">
+                  <div class="candidate-hud-panel" id="cardDimas">
                     <div class="hud-stamp-badge stamp-pass">LOLOS</div>
                     <div class="candidate-hud-name">Dimas Pratama</div>
                     <div class="candidate-hud-stats">
                       <div><strong>IPK:</strong> 3.50</div>
                       <div><strong>Prestasi:</strong> Panitia Divisi</div>
-                      <div><strong>Format File:</strong> <code>cv_dimas.pdf</code></div>
+                      <div><strong>Berkas:</strong> <code>cv_dimas.pdf</code></div>
                     </div>
                     <div class="hud-error-terminal" style="border-color: rgba(0,255,136,0.3); color: #86efac;">
                       <strong>[AI SCORE: 88%]:</strong><br>
                       Format .PDF terverifikasi. Seluruh data terekstrak normal -> Dinyatakan Lolos otomatis.
                     </div>
+                    <button class="btn-vault-mini btn-test-parse" data-candidate="dimas" style="margin-top: 4px; padding: 6px;">
+                      TEST PARSE BERKAS
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Interactive Parser Live Simulator Console -->
+                <div style="background: #040810; border: 2px solid #1a2a40; padding: 12px; display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                    <div style="font-family: var(--font-pixel); font-size: 0.78rem; font-weight: 800; color: var(--pixel-cyan);">
+                      [SIMULATOR PARSER REGEX BERKAS]:
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                      <button id="btnSimDocx" class="pixel-btn pixel-btn-red" style="padding: 4px 10px; font-size: 0.7rem;">
+                        UJI ASLI: cv_budi.docx
+                      </button>
+                      <button id="btnSimPdf" class="pixel-btn pixel-btn-yellow" style="padding: 4px 10px; font-size: 0.7rem;">
+                        SIMULASI JIKA: cv_budi.pdf
+                      </button>
+                    </div>
+                  </div>
+                  <div id="aiConsoleOutput" style="font-family: var(--font-pixel); font-size: 0.76rem; background: #02050a; border: 1px solid #142236; padding: 10px; min-height: 54px; line-height: 1.5; color: #94a3b8;">
+                    > Klik tombol "TEST PARSE BERKAS" pada salah satu kandidat di atas untuk melihat bagaimana sistem otomatisasi AI mengevaluasi berkas mereka.
                   </div>
                 </div>
               </div>
@@ -719,11 +752,20 @@
 
           <!-- Export & Management Buttons -->
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 1px solid #1f334d; padding-top: 12px;">
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px;">
               <button id="btnExportCSV" class="pixel-btn pixel-btn-yellow" style="padding: 6px 14px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px;">
                 <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-                <span>EKSPOR CSV (EXCEL)</span>
+                <span>EKSPOR CSV</span>
               </button>
+              <button id="btnExportJSON" class="pixel-btn" style="padding: 6px 14px; font-size: 0.75rem; background: #0c1829; display: inline-flex; align-items: center; gap: 6px;" title="Ekspor data JSON untuk backup/sync">
+                <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3m0 0l3-3m-3 3v-6m1.06-4.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" /></svg>
+                <span>EKSPOR JSON (BACKUP)</span>
+              </button>
+              <button id="btnTriggerImport" class="pixel-btn" style="padding: 6px 14px; font-size: 0.75rem; background: #052e25; border-color: var(--pixel-green); color: var(--pixel-green); display: inline-flex; align-items: center; gap: 6px;" title="Gabungkan data rekap dari laptop pos lain">
+                <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+                <span>IMPOR &amp; GABUNG DATA</span>
+              </button>
+              <input type="file" id="importFileInput" accept=".json,.csv" style="display: none;">
               <a href="lembar_jawaban_peserta.html" target="_blank" class="pixel-btn" style="padding: 6px 14px; font-size: 0.75rem; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
                 <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
                 <span>CETAK LEMBAR KERTAS</span>
@@ -735,6 +777,36 @@
             </button>
           </div>
 
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: PIN OTENTIKASI KHUSUS PANITIA -->
+    <div id="pinModal" class="modal-overlay">
+      <div class="modal-content-card" style="max-width: 440px; text-align: center;">
+        <div class="modal-header-pixel" style="border-color: var(--pixel-yellow); color: var(--pixel-yellow);">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+            <span>AKSES KHUSUS PANITIA POS</span>
+          </span>
+          <button id="btnClosePinModal" class="pixel-btn-icon" style="width: 32px; height: 32px;">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div class="modal-body-pixel" style="gap: 16px; align-items: center;">
+          <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;">
+            Area ini terproteksi untuk mencegah kebocoran kunci &amp; manipulasi nilai oleh peserta. Silakan masukkan PIN panitia:
+          </p>
+          <input type="password" id="pinInput" maxlength="6" placeholder="PIN (4 DIGIT)..." style="background: #040810; border: 2px solid var(--pixel-yellow); color: #fff; font-family: var(--font-pixel); font-size: 1.5rem; letter-spacing: 8px; text-align: center; padding: 10px 14px; width: 100%; max-width: 260px; outline: none; border-radius: 2px;">
+          <div id="pinErrorMsg" style="color: var(--mecha-red-bright); font-family: var(--font-pixel); font-size: 0.78rem; display: none;">
+            [ACCESS DENIED]: PIN Salah! Kunci pos tetap terproteksi.
+          </div>
+          <button id="btnSubmitPin" class="pixel-btn pixel-btn-yellow" style="width: 100%; max-width: 260px; padding: 10px 20px;">
+            BUKA AKSES
+          </button>
+          <div style="font-family: var(--font-pixel); font-size: 0.7rem; color: #64748b; margin-top: 4px;">
+            Default PIN Panitia: <code>2026</code>
+          </div>
         </div>
       </div>
     </div>

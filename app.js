@@ -350,11 +350,34 @@ document.addEventListener("DOMContentLoaded", () => {
   const displayGeneratedCode = document.getElementById("displayGeneratedCode");
   const btnCompletePos = document.getElementById("btnCompletePos");
 
-  // Admin Elements
+  // Admin & Management Elements
   const leaderboardTbody = document.getElementById("leaderboardTbody");
   const verifikasiTbody = document.getElementById("verifikasiTbody");
   const btnExportCSV = document.getElementById("btnExportCSV");
+  const btnExportJSON = document.getElementById("btnExportJSON");
+  const btnTriggerImport = document.getElementById("btnTriggerImport");
+  const importFileInput = document.getElementById("importFileInput");
   const btnResetAllData = document.getElementById("btnResetAllData");
+
+  // Station Bar Controls
+  const btnSwitchTeamBar = document.getElementById("btnSwitchTeamBar");
+  const btnReturnToHubBar = document.getElementById("btnReturnToHubBar");
+
+  // PIN Protection Modal Elements
+  const pinModal = document.getElementById("pinModal");
+  const pinInput = document.getElementById("pinInput");
+  const pinErrorMsg = document.getElementById("pinErrorMsg");
+  const btnSubmitPin = document.getElementById("btnSubmitPin");
+  const btnClosePinModal = document.getElementById("btnClosePinModal");
+
+  // Pos 4 AI Simulator Elements
+  const btnSimDocx = document.getElementById("btnSimDocx");
+  const btnSimPdf = document.getElementById("btnSimPdf");
+  const aiConsoleOutput = document.getElementById("aiConsoleOutput");
+  const cardBudi = document.getElementById("cardBudi");
+  const stampBudi = document.getElementById("stampBudi");
+  const terminalBudi = document.getElementById("terminalBudi");
+  const budiFileTag = document.getElementById("budiFileTag");
 
   // Storage Helpers
   function getSubmissions() {
@@ -725,76 +748,100 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentPos === 1) {
       html = `
         <div class="answer-input-field">
-          <label>1. EMAIL MANA YANG MERUPAKAN PHISHING?</label>
+          <label>1. EMAIL MANA YANG MERUPAKAN PHISHING? (PILIHAN PESERTA):</label>
           <select id="inputPos1Target">
+            <option value="" disabled selected>-- Pilih Email Phishing Menurut Peserta --</option>
             <option value="1">Email 1: Akademik UBHI (Jadwal KRS)</option>
-            <option value="2" selected>Email 2: Kemendikbud (Beasiswa 10 Juta Mendesak)</option>
+            <option value="2">Email 2: Kemendikbud (Beasiswa 10 Juta Mendesak)</option>
             <option value="3">Email 3: Perpustakaan UBHI</option>
           </select>
         </div>
         <div class="answer-input-field">
-          <label>2. KEJANGGALAN LOGIS YANG DISEBUTKAN PESERTA (CENTANG):</label>
-          <div style="font-family: var(--font-pixel); font-size: 0.75rem; display: flex; flex-direction: column; gap: 4px;">
-            <label><input type="checkbox" id="chkPos1A" checked> Domain email mencurigakan (xyz-domain.com, bukan .go.id / .ac.id)</label>
-            <label><input type="checkbox" id="chkPos1B" checked> Desakan panik / Social Engineering (Batas 59 Menit)</label>
-            <label><input type="checkbox" id="chkPos1C" checked> Tautan mengarah ke web login palsu pencuri akun</label>
+          <label>2. KEJANGGALAN LOGIS YANG BERHASIL DISEBUTKAN PESERTA (MIN. 2):</label>
+          <div style="font-family: var(--font-pixel); font-size: 0.75rem; display: flex; flex-direction: column; gap: 6px; padding: 6px 0;">
+            <label><input type="checkbox" id="chkPos1A"> Domain email mencurigakan (xyz-domain.com, bukan .go.id / .ac.id) [+20 Pts]</label>
+            <label><input type="checkbox" id="chkPos1B"> Desakan panik / Social Engineering batas 59 menit [+20 Pts]</label>
+            <label><input type="checkbox" id="chkPos1C"> Tautan mengarah ke web login palsu pencuri akun [+20 Pts]</label>
           </div>
         </div>
         <div class="answer-input-field">
-          <label>3. TINDAKAN MITIGASI LOGIS:</label>
-          <input type="text" id="inputPos1Mitigasi" value="Ganti password SIAKAD & laporkan phishing ke panitia IT" placeholder="Tindakan mitigasi...">
+          <label>3. CATATAN TINDAKAN MITIGASI DARURAT PESERTA:</label>
+          <input type="text" id="inputPos1Mitigasi" value="" placeholder="Contoh: Ganti password SIAKAD & laporkan phishing...">
         </div>
       `;
     } else if (currentPos === 2) {
       html = `
         <div class="answer-input-field">
-          <label>1. HASIL UJI EKSEKUSI ROBOT:</label>
+          <label>1. HASIL UJI EKSEKUSI URUTAN ROBOT BARISTA:</label>
           <select id="inputPos2Result">
-            <option value="success" selected>SUKSES 200 OK (Urutan langkah benar)</option>
-            <option value="fail">GAGAL / GLITCH (Masih ada urutan terbalik)</option>
+            <option value="" disabled selected>-- Pilih Hasil Eksekusi Robot --</option>
+            <option value="success">SUKSES (Urutan 100% Benar - Kopi Tersaji) [60 Pts]</option>
+            <option value="partial">SEBAGIAN BENAR (Ada langkah logis tapi urutan belum tuntas) [30 Pts]</option>
+            <option value="fail">GAGAL / GLITCH (Fatal Crash / Air Tumpah / Meledak) [10 Pts]</option>
           </select>
         </div>
         <div class="answer-input-field">
-          <label>2. PENJELASAN LOGIKA URUTAN OLEH PESERTA:</label>
-          <input type="text" id="inputPos2Logika" value="Cangkir harus ditaruh sebelum bubuk dan air panas dituangkan agar tidak tumpah" placeholder="Catatan logika peserta...">
+          <label>2. EVALUASI PENJELASAN NALAR SEKUANSIAL (LISAN / KERTAS):</label>
+          <select id="inputPos2LogikaScore">
+            <option value="" disabled selected>-- Nilai Penjelasan Nalar --</option>
+            <option value="40">Sangat Logis & Runtut (Paham konsep sebab-akibat alur komputasi) [40 Pts]</option>
+            <option value="25">Cukup Logis (Dapat menjelaskan alasan cangkir harus siap) [25 Pts]</option>
+            <option value="10">Kurang Logis / Terbata-bata [10 Pts]</option>
+          </select>
+        </div>
+        <div class="answer-input-field">
+          <label>3. CATATAN TAMBAHAN OPERATOR POS 2:</label>
+          <input type="text" id="inputPos2Logika" value="" placeholder="Catatan analisa peserta...">
         </div>
       `;
     } else if (currentPos === 3) {
       html = `
         <div class="answer-input-field">
-          <label>1. BRANKAS YANG BERISI DOKUMEN RAHASIA:</label>
+          <label>1. TEBAKAN BRANKAS ARSIP DIGITAL (PILIHAN PESERTA):</label>
           <select id="inputPos3Vault">
-            <option value="Vault 01">Vault 01</option>
-            <option value="Vault 02">Vault 02</option>
-            <option value="Vault 03" selected>Vault 03 (BENAR)</option>
-            <option value="Vault 04">Vault 04</option>
-            <option value="Vault 05">Vault 05</option>
-            <option value="Vault 06">Vault 06</option>
-            <option value="Vault 07">Vault 07</option>
-            <option value="Vault 08">Vault 08</option>
+            <option value="" disabled selected>-- Pilih Brankas Tebakan Peserta --</option>
+            <option value="Vault 01">Vault 01 (15 MB - Senin)</option>
+            <option value="Vault 02">Vault 02 (60 MB - Minggu)</option>
+            <option value="Vault 03">Vault 03 (85 MB - Minggu)</option>
+            <option value="Vault 04">Vault 04 (120 MB - Sabtu)</option>
+            <option value="Vault 05">Vault 05 (35 MB - Sabtu)</option>
+            <option value="Vault 06">Vault 06 (90 MB - Rabu)</option>
+            <option value="Vault 07">Vault 07 (95 MB - Kamis)</option>
+            <option value="Vault 08">Vault 08 (40 MB - Selasa)</option>
           </select>
         </div>
         <div class="answer-input-field">
-          <label>2. TAHAPAN ELIMINASI YANG BERHASIL DIJELASKAN:</label>
-          <div style="font-family: var(--font-pixel); font-size: 0.75rem; display: flex; flex-direction: column; gap: 4px;">
-            <label><input type="checkbox" id="chkPos3A" checked> Clue 1: Vault Genap tereliminasi (02, 04, 06, 08)</label>
-            <label><input type="checkbox" id="chkPos3B" checked> Clue 2: Vault < 50MB tereliminasi (01, 05)</label>
-            <label><input type="checkbox" id="chkPos3C" checked> Clue 3: Hari bukan akhir pekan tereliminasi (07 Kamis)</label>
+          <label>2. ALUR TAHAPAN ELIMINASI YANG MAMPU DIJELASKAN:</label>
+          <div style="font-family: var(--font-pixel); font-size: 0.75rem; display: flex; flex-direction: column; gap: 6px; padding: 6px 0;">
+            <label><input type="checkbox" id="chkPos3A"> Clue 1: Mampu eliminasi nomor genap (Vault 02, 04, 06, 08) [+20 Pts]</label>
+            <label><input type="checkbox" id="chkPos3B"> Clue 2: Mampu eliminasi ukuran < 50MB (Vault 01, 05) [+20 Pts]</label>
+            <label><input type="checkbox" id="chkPos3C"> Clue 3: Mampu eliminasi hari bukan akhir pekan (Vault 07 Kamis) [+20 Pts]</label>
           </div>
         </div>
       `;
     } else if (currentPos === 4) {
       html = `
         <div class="answer-input-field">
-          <label>1. AKAR KESALAHAN SISTEM AI:</label>
+          <label>1. DIAGNOSIS AKAR KESALAHAN SISTEM AI (ANALISIS PESERTA):</label>
           <select id="inputPos4Akar">
-            <option value="regex_docx" selected>Parser Regex hanya diprogram membaca .PDF (.DOCX diberi nilai 0)</option>
-            <option value="data_salah">Data IPK peserta salah input</option>
+            <option value="" disabled selected>-- Pilih Diagnosis Akar Masalah --</option>
+            <option value="regex_docx">Kelemahan Parser Regex kaku (hanya support .PDF, file .DOCX di-drop) [50 Pts]</option>
+            <option value="data_salah">Kesalahan input data nilai IPK manual [10 Pts]</option>
+            <option value="kuota_penuh">Kuota penerima beasiswa kampus sudah habis [10 Pts]</option>
           </select>
         </div>
         <div class="answer-input-field">
-          <label>2. SOLUSI LOGIS YANG DIUSULKAN KELOMPOK:</label>
-          <input type="text" id="inputPos4Solusi" value="Konverter format otomatis di sistem + Verifikasi manusia (Human in the loop)" placeholder="Solusi yang diusulkan...">
+          <label>2. EVALUASI KUALITAS USULAN SOLUSI &amp; ETIKA TEKNOLOGI:</label>
+          <select id="inputPos4SolusiScore">
+            <option value="" disabled selected>-- Nilai Kualitas Solusi --</option>
+            <option value="50">Solutif Komprehensif (Human-in-the-loop / Auto-converter / Banding) [50 Pts]</option>
+            <option value="30">Solutif Standar (Perbaiki kodingan parser saja) [30 Pts]</option>
+            <option value="10">Kurang Tepat / Tidak Memberi Solusi Konkret [10 Pts]</option>
+          </select>
+        </div>
+        <div class="answer-input-field">
+          <label>3. CATATAN USULAN SOLUSI PESERTA:</label>
+          <input type="text" id="inputPos4Solusi" value="" placeholder="Tuliskan intisari usulan peserta...">
         </div>
       `;
     }
@@ -804,18 +851,34 @@ document.addEventListener("DOMContentLoaded", () => {
   btnSubmitOperatorAnswer.addEventListener("click", () => {
     sfx.coinStart();
 
-    let webScore = 80;
+    let webScore = 0;
     if (currentPos === 1) {
-      const target = document.getElementById("inputPos1Target").value;
-      if (target === "2") webScore += 20;
+      const target = document.getElementById("inputPos1Target")?.value;
+      if (target === "2") webScore += 40; // 40 Pts jika benar pilih Email 2
+      if (document.getElementById("chkPos1A")?.checked) webScore += 20;
+      if (document.getElementById("chkPos1B")?.checked) webScore += 20;
+      if (document.getElementById("chkPos1C")?.checked) webScore += 20;
     } else if (currentPos === 2) {
-      const res = document.getElementById("inputPos2Result").value;
-      if (res === "success") webScore = 100;
+      const res = document.getElementById("inputPos2Result")?.value;
+      if (res === "success") webScore += 60;
+      else if (res === "partial") webScore += 30;
+      else if (res === "fail") webScore += 10;
+
+      const logika = parseInt(document.getElementById("inputPos2LogikaScore")?.value) || 0;
+      webScore += logika;
     } else if (currentPos === 3) {
-      const v = document.getElementById("inputPos3Vault").value;
-      if (v === "Vault 03") webScore = 100;
+      const v = document.getElementById("inputPos3Vault")?.value;
+      if (v === "Vault 03") webScore += 40; // 40 Pts jika benar Vault 03
+      if (document.getElementById("chkPos3A")?.checked) webScore += 20;
+      if (document.getElementById("chkPos3B")?.checked) webScore += 20;
+      if (document.getElementById("chkPos3C")?.checked) webScore += 20;
     } else if (currentPos === 4) {
-      webScore = 100;
+      const akar = document.getElementById("inputPos4Akar")?.value;
+      if (akar === "regex_docx") webScore += 50;
+      else if (akar) webScore += 10;
+
+      const solusi = parseInt(document.getElementById("inputPos4SolusiScore")?.value) || 0;
+      webScore += solusi;
     }
 
     const uniqueCode = generateUniqueCode(currentTeam, currentPos);
@@ -831,8 +894,8 @@ document.addEventListener("DOMContentLoaded", () => {
       time: timeStr,
       code: uniqueCode,
       webScore: webScore,
-      paperScore: 4,
-      totalScore: webScore + (4 * 5)
+      paperScore: 0,
+      totalScore: webScore
     };
 
     const subs = getSubmissions().filter(s => s.id !== newSub.id);
@@ -845,7 +908,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnCompletePos.addEventListener("click", () => {
     sfx.blip();
-    resetTimer();
+    if (confirm("Selesaikan sesi untuk kelompok ini dan rotasi ke kelompok berikutnya?")) {
+      // 1. Reset timer & glitch banner
+      resetTimer();
+
+      // 2. Reset minigames state
+      robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
+      renderRobotSteps();
+      robotAvatar.innerHTML = ICON_ROBOT_CHIP;
+      robotStatusText.textContent = "WAITING_SEQUENCE";
+      robotStatusText.style.color = "var(--pixel-yellow)";
+      robotConsole.textContent = "> Sistem di-reset. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.";
+
+      eliminatedVaults.clear();
+      renderVaults();
+
+      displayEmail(1);
+      resetPos4Simulator();
+
+      // 3. Reset form
+      renderOperatorInputForm();
+
+      // 4. Return to Team Selection Screen for the next group!
+      showTeamSelectScreen(currentPos);
+    }
   });
 
   // ==========================================================================
@@ -1164,12 +1250,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (idx === 1) badge = `<span class="rank-badge rank-2">#2</span>`;
       if (idx === 2) badge = `<span class="rank-badge rank-3">#3</span>`;
 
+      const paperDisplay = st.paperTotal > 0
+        ? `${st.paperTotal} Pts`
+        : `<span style="color: #64748b; font-size: 0.72rem;">0 Pts (Pending)</span>`;
+
       return `
         <tr>
           <td>${badge}</td>
           <td><strong style="color: ${st.color};">${st.name}</strong></td>
           <td>${st.webTotal} Pts</td>
-          <td>${st.paperTotal} Pts</td>
+          <td>${paperDisplay}</td>
           <td><strong style="color: var(--pixel-yellow); font-size: 1.05rem;">${st.totalCombined}</strong></td>
           <td>${st.posDone} / 4 Pos</td>
         </tr>
@@ -1191,14 +1281,15 @@ document.addEventListener("DOMContentLoaded", () => {
           <td style="padding: 6px;"><strong style="color: var(--pixel-cyan);">${s.teamName}</strong></td>
           <td style="padding: 6px;">Pos ${s.pos}</td>
           <td style="padding: 6px;"><code style="color: var(--pixel-yellow); background: #040810; padding: 2px 4px;">${s.code}</code></td>
-          <td style="padding: 6px;">${s.webScore}</td>
+          <td style="padding: 6px;">${s.webScore} Pts</td>
           <td style="padding: 6px;">
-            <select class="select-paper-score" data-id="${s.id}" style="background: #000; color: #fff; border: 1px solid var(--pixel-cyan); font-family: var(--font-pixel);">
-              <option value="5" ${s.paperScore === 5 ? 'selected' : ''}>5 (Sangat Logis)</option>
-              <option value="4" ${s.paperScore === 4 ? 'selected' : ''}>4 (Logis & Jelas)</option>
-              <option value="3" ${s.paperScore === 3 ? 'selected' : ''}>3 (Standar)</option>
-              <option value="2" ${s.paperScore === 2 ? 'selected' : ''}>2 (Kurang Jelas)</option>
-              <option value="1" ${s.paperScore === 1 ? 'selected' : ''}>1 (Asal-asalan)</option>
+            <select class="select-paper-score" data-id="${s.id}" style="background: #000; color: #fff; border: 1px solid var(--pixel-cyan); font-family: var(--font-pixel); font-size: 0.72rem;">
+              <option value="0" ${(!s.paperScore || s.paperScore === 0) ? 'selected' : ''}>0 (Pending Juri)</option>
+              <option value="5" ${s.paperScore === 5 ? 'selected' : ''}>5 (Sangat Logis - +25 Pts)</option>
+              <option value="4" ${s.paperScore === 4 ? 'selected' : ''}>4 (Logis & Jelas - +20 Pts)</option>
+              <option value="3" ${s.paperScore === 3 ? 'selected' : ''}>3 (Standar - +15 Pts)</option>
+              <option value="2" ${s.paperScore === 2 ? 'selected' : ''}>2 (Kurang Jelas - +10 Pts)</option>
+              <option value="1" ${s.paperScore === 1 ? 'selected' : ''}>1 (Asal-asalan - +5 Pts)</option>
             </select>
           </td>
           <td style="padding: 6px;">
@@ -1215,7 +1306,7 @@ document.addEventListener("DOMContentLoaded", () => {
         sfx.blip();
         const subId = e.target.dataset.id;
         const select = verifikasiTbody.querySelector(`.select-paper-score[data-id="${subId}"]`);
-        const newScore = parseInt(select.value);
+        const newScore = parseInt(select.value) || 0;
 
         const subs = getSubmissions();
         const target = subs.find(s => s.id === subId);
@@ -1224,7 +1315,7 @@ document.addEventListener("DOMContentLoaded", () => {
           target.totalScore = target.webScore + (newScore * 5);
           saveSubmissions(subs);
           sfx.coinStart();
-          alert(`SUKSES: Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil diperbarui!`);
+          alert(`SUKSES: Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil disimpan!`);
         }
       });
     });
@@ -1255,19 +1346,167 @@ document.addEventListener("DOMContentLoaded", () => {
     document.body.removeChild(link);
   });
 
+  // Export JSON (Clean backup for multi-laptop sync)
+  if (btnExportJSON) {
+    btnExportJSON.addEventListener("click", () => {
+      sfx.coinStart();
+      const subs = getSubmissions();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(subs, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `adhigana_pos${currentPos}_backup_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    });
+  }
+
+  // Import & Merge Data (Offline sync from other laptops)
+  if (btnTriggerImport && importFileInput) {
+    btnTriggerImport.addEventListener("click", () => {
+      importFileInput.click();
+    });
+
+    importFileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const content = event.target.result;
+          let incomingSubs = [];
+
+          if (file.name.endsWith(".json")) {
+            incomingSubs = JSON.parse(content);
+          } else if (file.name.endsWith(".csv")) {
+            const lines = content.split("\n").filter(l => l.trim().length > 0);
+            for (let i = 1; i < lines.length; i++) {
+              const cols = lines[i].split(",").map(c => c.trim());
+              if (cols.length >= 7) {
+                const teamName = cols[1];
+                const teamObj = TEAMS.find(t => t.name.toLowerCase() === teamName.toLowerCase()) || { id: teamName.toLowerCase(), name: teamName };
+                const posNum = parseInt(cols[2].replace(/\D/g, "")) || 1;
+                incomingSubs.push({
+                  id: `${teamObj.id}_pos${posNum}`,
+                  team: teamObj.id,
+                  teamName: teamObj.name,
+                  pos: posNum,
+                  time: cols[0],
+                  code: cols[3],
+                  webScore: parseInt(cols[4]) || 0,
+                  paperScore: parseInt(cols[5]) || 0,
+                  totalScore: parseInt(cols[6]) || 0
+                });
+              }
+            }
+          }
+
+          if (!Array.isArray(incomingSubs) || incomingSubs.length === 0) {
+            throw new Error("File tidak memuat data penilaian yang valid.");
+          }
+
+          const currentSubs = getSubmissions();
+          const merged = [...currentSubs];
+          let addedCount = 0;
+          let updatedCount = 0;
+
+          incomingSubs.forEach(inSub => {
+            const existingIdx = merged.findIndex(m => m.id === inSub.id);
+            if (existingIdx >= 0) {
+              merged[existingIdx] = inSub;
+              updatedCount++;
+            } else {
+              merged.push(inSub);
+              addedCount++;
+            }
+          });
+
+          saveSubmissions(merged);
+          sfx.victoryFanfare();
+          alert(`SUKSES SINKRONISASI DATA!\n- Data baru: ${addedCount}\n- Data diperbarui: ${updatedCount}\n\nTotal penilaian di rekap: ${merged.length}`);
+        } catch (err) {
+          sfx.glitchBoom();
+          alert("GAGAL MENGIMPOR DATA: " + err.message);
+        }
+        importFileInput.value = "";
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  // Hard Reset Protection (Requires typing text)
   btnResetAllData.addEventListener("click", () => {
     sfx.glitchBoom();
-    if (confirm("PERINGATAN: Apakah Anda yakin ingin mereset SEMUA data penilaian dan leaderboard? Data yang dihapus tidak dapat dikembalikan!")) {
+    const confirmInput = prompt("PERINGATAN KERAS!\nSeluruh data penilaian dan rekap di laptop ini akan DIHAPUS PERMANEN!\n\nUntuk mengonfirmasi, ketik teks 'HAPUS2026' di bawah ini:");
+    if (confirmInput === "HAPUS2026") {
       localStorage.removeItem("adhigana_submissions");
       saveSubmissions([]);
-      alert("Seluruh data telah di-reset.");
+      alert("Seluruh data penilaian telah di-reset bersih.");
+    } else if (confirmInput !== null) {
+      alert("Konfirmasi dibatalkan: Teks konfirmasi tidak sesuai.");
     }
   });
 
-  // Modal open/close
+  // ==========================================================================
+  // PIN PROTECTION MODAL ENGINE (Default PIN: 2026)
+  // ==========================================================================
+  let isPanitiaUnlocked = false;
+  let targetPendingModal = null;
+
+  function openProtectedModal(modalType) {
+    if (isPanitiaUnlocked) {
+      if (modalType === "rubrik") rubrikModal.classList.add("open");
+      else if (modalType === "admin") {
+        renderLeaderboard();
+        renderVerifikasiTable();
+        adminModal.classList.add("open");
+      }
+    } else {
+      targetPendingModal = modalType;
+      pinInput.value = "";
+      pinErrorMsg.style.display = "none";
+      pinModal.classList.add("open");
+      setTimeout(() => pinInput.focus(), 150);
+    }
+  }
+
+  btnSubmitPin.addEventListener("click", () => {
+    if (pinInput.value === "2026") {
+      isPanitiaUnlocked = true;
+      pinModal.classList.remove("open");
+      sfx.coinStart();
+      if (targetPendingModal === "rubrik") {
+        rubrikModal.classList.add("open");
+      } else if (targetPendingModal === "admin") {
+        renderLeaderboard();
+        renderVerifikasiTable();
+        adminModal.classList.add("open");
+      }
+    } else {
+      sfx.glitchBoom();
+      pinErrorMsg.style.display = "block";
+      pinInput.value = "";
+      pinInput.focus();
+    }
+  });
+
+  pinInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") btnSubmitPin.click();
+  });
+
+  btnClosePinModal.addEventListener("click", () => {
+    sfx.blip();
+    pinModal.classList.remove("open");
+  });
+  pinModal.addEventListener("click", (e) => {
+    if (e.target === pinModal) pinModal.classList.remove("open");
+  });
+
+  // Protected Modal open buttons
   btnOpenRubrik.addEventListener("click", () => {
     sfx.blip();
-    rubrikModal.classList.add("open");
+    openProtectedModal("rubrik");
   });
   btnCloseRubrik.addEventListener("click", () => {
     sfx.blip();
@@ -1279,9 +1518,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnOpenAdmin.addEventListener("click", () => {
     sfx.blip();
-    renderLeaderboard();
-    renderVerifikasiTable();
-    adminModal.classList.add("open");
+    openProtectedModal("admin");
   });
   btnCloseAdmin.addEventListener("click", () => {
     sfx.blip();
@@ -1289,6 +1526,102 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   adminModal.addEventListener("click", (e) => {
     if (e.target === adminModal) adminModal.classList.remove("open");
+  });
+
+  // Station Bar Event Handlers
+  if (btnSwitchTeamBar) {
+    btnSwitchTeamBar.addEventListener("click", () => {
+      sfx.blip();
+      showTeamSelectScreen(currentPos);
+    });
+  }
+
+  if (btnReturnToHubBar) {
+    btnReturnToHubBar.addEventListener("click", () => {
+      sfx.blip();
+      if (confirm("Kembali ke Menu Portal Utama (Keluar dari Pos Ini)?")) {
+        window.location.hash = "#/adhigana";
+      }
+    });
+  }
+
+  // ==========================================================================
+  // POS 4: AI PARSER INTERACTIVE SIMULATOR
+  // ==========================================================================
+  function resetPos4Simulator() {
+    if (cardBudi) {
+      cardBudi.className = "candidate-hud-panel rejected-panel";
+      cardBudi.style.borderColor = "";
+      stampBudi.className = "hud-stamp-badge stamp-fail";
+      stampBudi.textContent = "DISKUALIFIKASI";
+      budiFileTag.textContent = "cv_budi.docx";
+      terminalBudi.style.borderColor = "";
+      terminalBudi.style.color = "";
+      terminalBudi.innerHTML = `<strong>[PARSER ERROR 415]:</strong><br>Regex engine hanya diprogram membaca format .PDF. Format .DOCX gagal diekstrak -> Skor 0 otomatis -> Ditolak.`;
+      aiConsoleOutput.textContent = `> Klik tombol "TEST PARSE BERKAS" pada salah satu kandidat di atas untuk melihat bagaimana sistem otomatisasi AI mengevaluasi berkas mereka.`;
+    }
+  }
+
+  if (btnSimDocx) {
+    btnSimDocx.addEventListener("click", () => {
+      sfx.glitchBoom();
+      resetPos4Simulator();
+      aiConsoleOutput.innerHTML = `
+        <span style="color: var(--mecha-red-bright); font-weight: 800;">[EXECUTION TEST: cv_budi.docx]</span><br>
+        > Step 1: Ingesting file 'cv_budi.docx' (MIME: application/vnd.openxmlformats...)<br>
+        > Step 2: Testing Regex Pattern: /^.*\\.pdf$/i -> <strong style="color: #ff758f;">MATCH FAILED (FALSE)</strong><br>
+        > Step 3: Text Extractor Aborted! Extracted Fields = { IPK: NULL, Prestasi: NULL }<br>
+        > Result: Score = 0/100 -> Status: DISQUALIFIED BY RIGID ALGORITHM RULE!
+      `;
+    });
+  }
+
+  if (btnSimPdf) {
+    btnSimPdf.addEventListener("click", () => {
+      sfx.victoryFanfare();
+      cardBudi.className = "candidate-hud-panel";
+      cardBudi.style.borderColor = "var(--pixel-green)";
+      stampBudi.className = "hud-stamp-badge stamp-pass";
+      stampBudi.textContent = "LOLOS (PERINGKAT 1)";
+      budiFileTag.textContent = "cv_budi.pdf";
+      terminalBudi.style.borderColor = "rgba(0,255,136,0.3)";
+      terminalBudi.style.color = "#86efac";
+      terminalBudi.innerHTML = `<strong>[AI SCORE: 98% (TERTINGGI)]:</strong><br>Format .PDF terverifikasi. IPK 3.92 & Juara 1 Nasional berhasil diparsing -> Lolos Beasiswa Prioritas!`;
+
+      aiConsoleOutput.innerHTML = `
+        <span style="color: var(--pixel-green); font-weight: 800;">[SIMULASI FIX: JIKA BUDI MENGUNGGAH FORMAT .PDF]</span><br>
+        > Step 1: Ingesting file 'cv_budi.pdf' (MIME: application/pdf)<br>
+        > Step 2: Testing Regex Pattern: /^.*\\.pdf$/i -> <strong style="color: var(--pixel-green);">MATCH SUCCESS (TRUE)</strong><br>
+        > Step 3: Text Extractor Success: { Nama: 'Budi Santoso', IPK: 3.92, Prestasi: 'Juara 1 Hackathon' }<br>
+        > Result: Score = 98/100 -> Status: LOLOS SELEKSI UTAMA! Masalah terpecahkan!
+      `;
+    });
+  }
+
+  document.querySelectorAll(".btn-test-parse").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      sfx.blip();
+      const cand = e.target.dataset.candidate;
+      if (cand === "budi") {
+        btnSimDocx.click();
+      } else if (cand === "siti") {
+        sfx.coinStart();
+        aiConsoleOutput.innerHTML = `
+          <span style="color: var(--pixel-cyan); font-weight: 800;">[EXECUTION TEST: berkas.pdf (Siti Rahma)]</span><br>
+          > Regex Check: /^.*\\.pdf$/i -> MATCH SUCCESS.<br>
+          > Parsed: IPK 3.45, Prestasi: Webinar.<br>
+          > Result: Score 85% -> STATUS: LOLOS.
+        `;
+      } else if (cand === "dimas") {
+        sfx.coinStart();
+        aiConsoleOutput.innerHTML = `
+          <span style="color: var(--pixel-cyan); font-weight: 800;">[EXECUTION TEST: cv_dimas.pdf (Dimas Pratama)]</span><br>
+          > Regex Check: /^.*\\.pdf$/i -> MATCH SUCCESS.<br>
+          > Parsed: IPK 3.50, Prestasi: Panitia.<br>
+          > Result: Score 88% -> STATUS: LOLOS.
+        `;
+      }
+    });
   });
 
   // ==========================================================================
@@ -1300,12 +1633,19 @@ document.addEventListener("DOMContentLoaded", () => {
   renderVaults();
   renderLeaderboard();
 
-  // If no hash present, default to portal hub or pos 1 if hash specified
-  if (!window.location.hash) {
+  // Route Handling without overriding existing URL pathname
+  const currentPath = window.location.pathname.toLowerCase();
+  const currentHash = window.location.hash.toLowerCase();
+  const currentSearch = window.location.search.toLowerCase();
+  const initialRoute = `${currentPath} ${currentHash} ${currentSearch}`;
+
+  if (initialRoute.includes("pos1") || initialRoute.includes("pos2") || initialRoute.includes("pos3") || initialRoute.includes("pos4") || initialRoute.includes("leaderboard")) {
+    handleRouting();
+  } else if (!window.location.hash) {
     window.location.hash = "#/adhigana";
   } else {
     handleRouting();
   }
 
-  console.log("ADHIGANA 2026: Route Engine & Cinematic Intro Ready.");
+  console.log("ADHIGANA 2026: Secure Engine, PIN Protection, AI Simulator & Leaderboard Sync Ready.");
 });
