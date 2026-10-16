@@ -2,78 +2,79 @@
 **Tema:** DIGITAL FRONTIER  
 **Institusi:** Himpunan Mahasiswa Prodi Informatika, Universitas Bhinneka PGRI Tulungagung  
 
-Aplikasi web minigame interaktif ini dirancang untuk pos studi kasus mahasiswa baru (Maba) angkatan 2025/2026. Aplikasi beroperasi **100% OFFLINE** (tanpa butuh akses internet/WiFi sama sekali).
+Aplikasi web minigame interaktif ini dirancang untuk pos studi kasus mahasiswa baru (Maba) angkatan 2025/2026. Aplikasi beroperasi **100% OFFLINE** (tanpa butuh akses internet/WiFi) dan mendukung **Real-time Live Synchronization** antar-laptop via Cloud Firestore jika online, atau multi-tab offline via Web Storage API!
 
 ---
 
-## 📁 Cara Menjalankan di Laptop Panitia Pos
-1. Salin (copy) folder proyek ini (`Studi kasus`) ke flashdisk atau langsung ke laptop panitia di tiap pos.
-2. Di laptop pos, buka folder tersebut.
-3. Klik ganda (double click) file **`index.html`**.
-4. Web akan langsung terbuka di browser default (Google Chrome / Microsoft Edge / Mozilla Firefox).
-5. **Rekomendasi:** Tekan tombol **`Fullscreen`** di pojok kanan atas layar agar tampilan web memenuhi layar laptop dan terlihat profesional layaknya antarmuka investigasi cyberpunk!
+## 💻 Panduan Penggunaan di Tiap Laptop Panitia Pos
+
+Sistem telah dipisahkan menjadi file mandiri per stasiun pos agar sangat praktis dibuka di laptop masing-masing panitia:
+
+| Laptop / Station | File yang Dibuka | Fungsi & Peran |
+|---|---|---|
+| **Laptop Pos 1** | **`pos1.html`** | Pos 1: Investigasi Email Palsu (Cyber Phishing) |
+| **Laptop Pos 2** | **`pos2.html`** | Pos 2: Robot Barista Glitch (Algoritma Sekuensial) |
+| **Laptop Pos 3** | **`pos3.html`** | Pos 3: Brankas Data Hilang (Pola & Eliminasi) |
+| **Laptop Pos 4** | **`pos4.html`** | Pos 4: Dilema Seleksi AI (Etika Teknologi & Kritis) |
+| **Laptop Proyektor / Pusat** | **`index.html`** | Portal Utama + **Live Leaderboard Realtime** + Admin Pusat |
+
+> 💡 **Cara Menjalankan:**
+> Cukup double-click file `.html` yang sesuai di laptop masing-masing. Browser akan langsung membukanya tanpa perlu instalasi tools, web server, atau dependensi apa pun!
+> Tekan tombol **`Fullscreen`** di pojok kanan atas untuk pengalaman monitor cyber arcade penuh.
 
 ---
 
-## ⏱️ Mekanisme Waktu (10 Menit per Pos)
-Sesuai ketentuan booklet kegiatan:
-- **Total Waktu di Pos:** 10 Menit.
-- **Fase 1 (Menit 00:00 s/d 05:00) — Eksplorasi Kasus:**
-  - Panitia memilih nama kelompok yang sedang berkunjung (Meta, Gemini, Copilot, Deepseek, atau Claude).
-  - Panitia menekan tombol **"Mulai Misi"**.
-  - Peserta membaca cerita kasus dan berinteraksi dengan antarmuka di laptop pos untuk mengamati bukti, mengurutkan langkah, atau mencari data.
-- **Transisi Otomatis (Menit ke-5):**
-  - Alarm suara futuristik berbunyi otomatis menandakan waktu eksplorasi habis.
-  - Sistem beralih ke **Fase 2 (Diskusi & Penyelesaian)**. Panel pertanyaan studi kasus otomatis menyala (*glow* kuning-oranye).
-- **Fase 2 (Menit 05:00 s/d 10:00) — Diskusi & Penilaian Lisan:**
-  - Peserta menuliskan poin-poin kesimpulan di **Buku Catatan A5** mereka.
-  - Peserta memaparkan jawaban logisnya secara lisan di hadapan panitia pos.
-  - Panitia menilai berdasarkan **Kelogisan Nalar Jawaban**.
+## ⚡ Sinkronisasi Leaderboard Realtime
+
+1. **Jaringan Online (Multi-Laptop via Firebase):**
+   - Nilai yang disubmit di laptop `pos1.html` s/d `pos4.html` otomatis masuk ke database cloud dan langsung memperbarui tampilan **Live Leaderboard** di laptop proyektor `index.html` secara realtime via listener `onSnapshot`!
+2. **Offline Multi-Tab (Satu Laptop Uji Coba):**
+   - Jika dijalankan pada browser yang sama (tab berbeda), event `window.onstorage` langsung memperbarui tabel klasemen di tab `index.html` secara instan tanpa perlu refresh.
+3. **Offline Multi-Laptop (Tanpa Internet Sama Sekali):**
+   - Panitia pos dapat menekan tombol **"EKSPOR JSON (BACKUP)"** di modal Leaderboard.
+   - Operator pusat di `index.html` cukup mengklik **"IMPOR & GABUNG DATA"** untuk menyatukan semua rekap pos secara otomatis tanpa duplikasi.
 
 ---
 
-## 🎮 Ringkasan Kasus di 4 Pos
+## ⏱️ Alur Misi (4 Layar Interaktif, Durasi 2 Menit)
+
+1. **Layar 1: "Welcome in Pos ..."**
+   - Sambutan audio-visual per pos, briefing objektif, durasi 2 menit, format pilihan ganda 100 poin.
+   - Tombol: **"PILIH KELOMPOKMU (LANJUT) →"**.
+2. **Layar 2: "Kamu dari tim mana?"**
+   - Pemilihan tim: **Meta, Gemini, Copilot, Deepseek, Claude**.
+3. **Layar 3: "Loading..."**
+   - Animasi terminal otentikasi identitas kelompok (~1.8 detik).
+4. **Layar 4: "Investigasi Studi Kasus"**
+   - **Monitor Kiri (CRT 1):** Bukti interaktif & tools simulator.
+   - **Monitor Kanan (CRT 2):** Soal **Pilihan Ganda (A, B, C, D)** dengan bobot poin (2 soal @ 50 poin = Total 100 Poin). CRT 2 memiliki scroll mandiri halus.
+   - Peserta/panitia memilih jawaban lalu klik **"⚡ SUBMIT JAWABAN RESMI"**.
+   - Sistem menerbitkan skor instan dan **Kode Unik** (misal `META-P1-9021`) untuk disalin ke lembar kertas peserta.
+   - Klik **"🔄 SELESAI // ROTASI KELOMPOK"** untuk reset ke Layar 1 bagi kelompok berikutnya.
+
+---
+
+## 🎮 Ringkasan Kunci Jawaban Studi Kasus
 
 ### 🔹 Pos 1: Investigasi Email Palsu (Cyber Phishing)
-- **Tugas:** Menemukan email phishing di antara 3 email kampus.
-- **Kunci:** Email ke-2 ("PENTING: Dana Beasiswa Rp 10 Juta Segera Hangus!").
-- **Indikator Logis:** Pengirim beralamat `xyz-domain.com` (bukan `.ac.id` / `.go.id`), tombol link mengarah ke website berbahaya, ada desakan panik "59 menit".
+- **Soal 1 (50 Pts):** Email Phishing -> **Opsi B** (Email 2: Kemendikbud Beasiswa 10 Juta Mendesak).
+- **Soal 2 (50 Pts):** Kejanggalan Logis -> **Opsi B** (Domain liar `xyz-domain.com`, link mencurigakan, panik 59 menit).
 
 ### 🔹 Pos 2: Robot Barista Glitch (Logika Algoritma Dasar)
-- **Tugas:** Mengurutkan 6 langkah instruksi robot pembuat kopi yang teracak.
-- **Kunci:**
-  1. Nyalakan pemanas air
-  2. Taruh cangkir kosong di tatakan mesin
-  3. Masukkan bubuk kopi ke cangkir
-  4. Tuangkan air panas mendidih
-  5. Aduk larutan kopi hingga rata
-  6. Sajikan cangkir kopi ke pelanggan
-- **Fitur Interaktif:** Klik tombol **"⚡ Uji Eksekusi Robot"** untuk melihat simulasi apakah kopi tumpah atau tersaji sukses!
+- **Soal 1 (50 Pts):** Urutan Logika Benar -> **Opsi B** (Nyalakan pemanas -> Taruh cangkir -> Bubuk kopi -> Air panas -> Aduk -> Sajikan).
+- **Soal 2 (50 Pts):** Alasan Cangkir Harus Siap -> **Opsi B** (Wadah penampung harus siap agar bahan tidak tumpah dan sistem tidak error).
 
 ### 🔹 Pos 3: Brankas Dokumen Hilang (Logika Pola & Eliminasi)
-- **Tugas:** Menemukan brankas berkas rahasia dari 8 brankas digital menggunakan 3 petunjuk.
-- **Kunci:** **BRANKAS 03 (Vault 03)**.
-- **Alur Eliminasi:**
-  - Clue 1 (Bukan nomor genap) -> Menggugurkan Vault 02, 04, 06, 08.
-  - Clue 2 (Ukuran > 50 MB) -> Menggugurkan Vault 01 (15MB) & 05 (35MB).
-  - Clue 3 (Hari akhir pekan: Sabtu/Minggu) -> Menggugurkan Vault 07 (Kamis). Tersisa Vault 03!
+- **Soal 1 (50 Pts):** Brankas Dokumen Rahasia -> **Opsi C** (Vault 03 - 85 MB, Akses Minggu).
+- **Soal 2 (50 Pts):** Alasan Vault 07 Gugur -> **Opsi B** (Hari akses Kamis, bukan akhir pekan Sabtu/Minggu).
 
 ### 🔹 Pos 4: Dilema Seleksi AI (Etika Teknologi & Kritis)
-- **Tugas:** Menganalisis mengapa sistem AI mendiskualifikasi kandidat mahasiswa berprestasi tertinggi (Budi Santoso, IPK 3.92, Juara 1 Nasional).
-- **Kunci:** Kesalahan sistem regex (*Parser Error 415*) karena programmer hanya menyetel sistem untuk membaca format `.pdf`. Berkas Budi yang berformat `.docx` tidak terbaca dan diberi nilai 0 otomatis.
-- **Solusi Logis Peserta:** Otomatisasi konversi dokumen, pengawasan manusia (*human-in-the-loop*), atau fasilitas banding dokumen.
+- **Soal 1 (50 Pts):** Penyebab Diskualifikasi AI -> **Opsi B** (Parser regex hanya membaca format .PDF, berkas Budi .DOCX bernilai 0).
+- **Soal 2 (50 Pts):** Solusi Etis & Rekayasa -> **Opsi B** (Auto-converter format, hak sanggah/banding, dan pengawasan Human-in-the-Loop).
 
 ---
 
-## 🔑 Fitur Khusus Panitia: "Rubrik Panitia"
-1. Klik tombol **"🔑 Rubrik Panitia"** di pojok kanan atas.
-2. Jendela modal akan terbuka menampilkan:
-   - Kunci jawaban lengkap pos yang sedang aktif.
-   - Tabel rubrik penilaian (Nalar 40 poin, Ketepatan 30 poin, Kerjasama 30 poin = Total 100 poin).
-   - Form input nilai cepat per kelompok yang otomatis tersimpan di memori laptop (*browser local storage*).
-   - Rekap nilai semua kelompok (Meta, Gemini, Copilot, Deepseek, Claude).
-
----
-
-## 🔊 Catatan Efek Suara (Audio)
-Aplikasi memanfaatkan fitur *Web Audio API* bawaan browser untuk menghasilkan suara bip, alarm detik terakhir, dan nada transisi fase tanpa perlu memutar file lagu eksternal. Jika ingin mematikan suara, cukup klik tombol **Audio (🔊)** di bilah atas.
+## 🔑 Fitur Akses Panitia (Default PIN: `2026`)
+- **"🔑 KUNCI POS":** Melihat kunci jawaban, analisis logis, dan lokasi petunjuk fisik pos aktif.
+- **"📊 LEADERBOARD":** Rekap nilai total (Web + Kertas Fisik 1-5), input nilai kertas juri, ekspor CSV/JSON, dan reset data.
+- **Cetak Lembar Kertas:** Buka `lembar_jawaban_peserta.html` untuk print lembar fisik siap pakai.

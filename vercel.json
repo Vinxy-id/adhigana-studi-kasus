@@ -2,6 +2,11 @@
   "routes": [
     { "handle": "filesystem" },
     { "src": "/lembar-jawaban", "dest": "/lembar_jawaban_peserta.html" },
+    { "src": "/pos1", "dest": "/pos1.html" },
+    { "src": "/pos2", "dest": "/pos2.html" },
+    { "src": "/pos3", "dest": "/pos3.html" },
+    { "src": "/pos4", "dest": "/pos4.html" },
+    { "src": "/tutorial", "dest": "/video_tutorial_pos.html" },
     { "src": "/.*", "dest": "/index.html" }
   ]
 }

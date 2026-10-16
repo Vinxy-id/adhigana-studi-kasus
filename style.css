@@ -279,6 +279,15 @@ body::after {
   border-radius: 4px;
 }
 
+.team-status-locked {
+  background: #060b14 !important;
+  border: 1px solid #1f334d !important;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6) !important;
+  padding: 6px 14px !important;
+  user-select: none;
+  cursor: default;
+}
+
 .team-selector-card label {
   font-family: var(--font-pixel);
   font-size: 0.72rem;
@@ -588,6 +597,31 @@ body::after {
 
 .pixel-tag-phase.phase-2 { color: var(--pixel-yellow); }
 .pixel-tag-phase.phase-end { color: var(--pixel-green); }
+.pixel-tag-phase.standby { color: var(--pixel-yellow) !important; }
+.pixel-tag-phase.active { color: var(--pixel-green) !important; }
+
+.btn-start-standby {
+  background: var(--pixel-green) !important;
+  color: #040810 !important;
+  border-color: #ffffff !important;
+  font-weight: 800 !important;
+  animation: pulse-start-btn 1.4s infinite ease-in-out !important;
+}
+
+@keyframes pulse-start-btn {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 12px var(--pixel-green-glow);
+  }
+  50% {
+    transform: scale(1.04);
+    box-shadow: 0 0 24px rgba(0, 255, 136, 0.75), 0 0 36px rgba(0, 255, 136, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px var(--pixel-green-glow);
+  }
+}
 
 .phase-headline {
   font-family: var(--font-clean);
@@ -692,27 +726,26 @@ body::after {
 }
 
 /* ==========================================================================
-   GLITCH ANIMATION & SERVER DOWN BANNER
+   MISSION ALERT BANNER
    ========================================================================== */
 .glitch-alert-banner {
-  background: #1a0408;
+  background: #140307;
   border: 2px solid var(--mecha-red-bright);
-  padding: 12px 16px;
+  padding: 12px 18px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  box-shadow: 0 0 20px var(--mecha-red-glow);
-  animation: glitch-skew 1s infinite linear alternate-reverse;
+  box-shadow: 0 0 25px rgba(255, 34, 68, 0.35);
+  border-radius: 4px;
+  animation: alert-pulse 2s infinite ease-in-out;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-@keyframes glitch-skew {
-  0% { transform: skew(0deg); }
-  20% { transform: skew(-1deg); }
-  40% { transform: skew(1deg); }
-  60% { transform: skew(0deg); }
-  80% { transform: skew(0.5deg); }
-  100% { transform: skew(0deg); }
+@keyframes alert-pulse {
+  0% { box-shadow: 0 0 15px rgba(255, 34, 68, 0.25); border-color: var(--mecha-red-bright); }
+  50% { box-shadow: 0 0 32px rgba(255, 34, 68, 0.6); border-color: #ff5577; }
+  100% { box-shadow: 0 0 15px rgba(255, 34, 68, 0.25); border-color: var(--mecha-red-bright); }
 }
 
 .glitch-alert-text {
@@ -750,15 +783,15 @@ body::after {
 }
 
 .team-select-card {
-  max-width: 700px;
-  width: 100%;
+  max-width: 960px;
+  width: 95%;
   background: #070d18;
   border: 3px solid var(--mecha-red-bright);
   box-shadow: 0 0 60px rgba(255,26,74,0.45), inset 0 0 30px rgba(255,26,74,0.08);
-  padding: 30px 32px 24px;
+  padding: 26px 28px 22px;
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: 16px;
   position: relative;
   background-image: repeating-linear-gradient(
     to bottom,
@@ -858,63 +891,163 @@ body::after {
   animation: blink-danger 0.7s step-end infinite;
 }
 
+/* ==========================================================================
+   FANNING GLASS CARD DECK (TEAM SELECTION)
+   ========================================================================== */
 .team-select-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 285px;
+  padding: 35px 12px 20px;
+  perspective: 1200px;
 }
 
-.team-select-btn {
+.team-glass-card {
   position: relative;
-  background: #0c1422;
-  border: 2px solid #1b2e47;
-  padding: 16px 14px;
-  cursor: pointer;
+  width: 155px;
+  height: 232px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(8, 14, 26, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.18);
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  transition: all 0.18s ease;
-  text-align: left;
+  justify-content: space-between;
+  align-items: center;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              margin 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease, 
+              border-color 0.3s ease, 
+              background 0.3s ease;
+  border-radius: 12px;
+  margin: 0 -24px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transform: rotate(calc(var(--r) * 1deg));
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  padding: 14px 10px 0;
+  outline: none;
+}
+
+/* On hovering the entire deck container -> Cards un-fan and space out evenly */
+.team-select-grid:hover .team-glass-card {
+  transform: rotate(0deg);
+  margin: 0 10px;
+}
+
+/* On hovering or focusing a specific card -> Pop up with signature neon glow! */
+.team-select-grid .team-glass-card:hover,
+.team-select-grid .team-glass-card:focus-visible {
+  transform: rotate(0deg) translateY(-24px) scale(1.08) !important;
+  z-index: 25 !important;
+  border-color: var(--team-color) !important;
+  box-shadow: 0 0 35px var(--team-color), 0 25px 40px rgba(0, 0, 0, 0.85), inset 0 0 15px rgba(255, 255, 255, 0.15) !important;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2) 0%, rgba(12, 22, 42, 0.95) 100%) !important;
+}
+
+/* Card Selection Flash Animation when clicked */
+.team-glass-card.selected-card {
+  animation: card-select-flash 0.35s ease forwards;
+  z-index: 30 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 50px var(--team-color), 0 0 80px rgba(255, 255, 255, 0.9) !important;
+}
+
+@keyframes card-select-flash {
+  0% { transform: rotate(0deg) translateY(-24px) scale(1.08); filter: brightness(1); }
+  50% { transform: rotate(0deg) translateY(-30px) scale(1.15); filter: brightness(2.2); }
+  100% { transform: rotate(0deg) translateY(-26px) scale(1.1); filter: brightness(1.3); }
+}
+
+/* Card Top Metadata Pill */
+.team-card-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px;
+}
+
+.team-card-num {
   font-family: var(--font-pixel);
-  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
-}
-
-.team-select-btn::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0;
-  width: 12px; height: 12px;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
-  transition: background 0.18s;
-}
-
-.team-select-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 0 30px rgba(44,212,224,0.4);
-}
-
-.team-select-btn:hover::before {
-  background: #fff;
-}
-
-.team-select-btn-num {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 1px;
-  opacity: 0.6;
   color: #94a3b8;
+  font-weight: 800;
 }
 
-.team-select-btn-name {
-  font-size: 1.1rem;
+.team-card-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--team-color);
+  box-shadow: 0 0 8px var(--team-color);
+}
+
+/* Card Center Tech Brand Icon */
+.team-card-icon-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.team-card-icon-wrap svg.team-glass-icon {
+  width: 52px;
+  height: 52px;
+  fill: var(--team-color);
+  filter: drop-shadow(0 0 10px var(--team-color));
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.team-glass-card:hover .team-card-icon-wrap svg.team-glass-icon {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 22px var(--team-color));
+}
+
+/* Card Bottom Banner (data-text) */
+.team-card-bottom {
+  width: calc(100% + 20px);
+  margin: 0 -10px;
+  padding: 10px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.team-glass-card:hover .team-card-bottom {
+  background: rgba(0, 0, 0, 0.88);
+  border-top-color: var(--team-color);
+}
+
+.team-card-name {
+  font-family: var(--font-clean);
+  font-size: 1.05rem;
   font-weight: 900;
-  color: #fff;
-  letter-spacing: 1px;
+  color: #ffffff;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 
-.team-select-btn-ip {
-  font-size: 0.7rem;
-  color: #94a3b8;
+.team-glass-card:hover .team-card-name {
+  color: var(--team-color);
+  text-shadow: 0 0 10px var(--team-color);
+}
+
+.team-card-ip {
+  font-family: var(--font-pixel);
+  font-size: 0.62rem;
+  color: #64748b;
+  letter-spacing: 0.5px;
 }
 
 .team-select-footer {
@@ -1294,6 +1427,7 @@ body::after {
   display: grid;
   grid-template-columns: 1.65fr 1fr;
   gap: 16px;
+  align-items: start;
 }
 
 .crt-monitor-frame {
@@ -1305,6 +1439,14 @@ body::after {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.crt-monitor-frame.crt-monitor-right {
+  display: flex;
+  flex-direction: column;
+  min-height: 480px;
+  max-height: 560px;
+  height: 100%;
 }
 
 .crt-monitor-tab {
@@ -1319,6 +1461,7 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
 }
 
 .crt-screen-surface {
@@ -1335,6 +1478,38 @@ body::after {
     transparent 2px,
     transparent 4px
   );
+}
+
+/* CRT 2 Independent Scroll Surface (Only CRT 2 scrolls) */
+.crt-screen-scrollable {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  padding-right: 12px !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--pixel-yellow) #060b14;
+}
+
+/* Custom Cyberpunk Neon Scrollbar for CRT 2 */
+.crt-screen-scrollable::-webkit-scrollbar {
+  width: 7px;
+}
+.crt-screen-scrollable::-webkit-scrollbar-track {
+  background: #060b14;
+  border-left: 1px solid #172436;
+}
+.crt-screen-scrollable::-webkit-scrollbar-thumb {
+  background: var(--pixel-yellow);
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(252, 238, 10, 0.45);
+}
+.crt-screen-scrollable::-webkit-scrollbar-thumb:hover {
+  background: #ffffff;
+  box-shadow: 0 0 16px rgba(252, 238, 10, 0.85);
 }
 
 .crt-monitor-frame::after {
@@ -1848,6 +2023,256 @@ body::after {
 }
 
 /* ==========================================================================
+   PILIHAN GANDA (MULTIPLE CHOICE) & INTERACTIVE SCORING STYLES
+   ========================================================================== */
+.mcq-question-card {
+  background: #040812;
+  border: 1px solid #1a2a44;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.mcq-question-card:hover {
+  border-color: rgba(44, 212, 224, 0.4);
+}
+
+.mcq-q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #142032;
+  padding-bottom: 6px;
+}
+
+.mcq-q-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: var(--pixel-yellow);
+  background: rgba(252, 238, 10, 0.12);
+  padding: 3px 8px;
+  border: 1px solid rgba(252, 238, 10, 0.35);
+  letter-spacing: 1px;
+}
+
+.mcq-points-badge {
+  font-family: var(--font-pixel);
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--pixel-green);
+  background: rgba(0, 255, 136, 0.12);
+  padding: 3px 8px;
+  border: 1px solid rgba(0, 255, 136, 0.35);
+}
+
+.mcq-q-text {
+  font-size: 0.85rem;
+  color: #f1f5f9;
+  line-height: 1.5;
+}
+
+.mcq-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mcq-option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #02050c;
+  border: 1px solid #182335;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.mcq-option-item:hover {
+  border-color: var(--pixel-cyan);
+  background: rgba(44, 212, 224, 0.08);
+}
+
+.mcq-option-item.selected {
+  border-color: var(--pixel-cyan);
+  background: rgba(44, 212, 224, 0.18);
+  box-shadow: 0 0 14px rgba(44, 212, 224, 0.28);
+}
+
+.mcq-opt-key {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #02050c;
+  background: var(--pixel-cyan);
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.mcq-opt-text {
+  font-size: 0.8rem;
+  color: #e2e8f0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.mcq-opt-pts {
+  display: none; /* Concealed during quiz so participants cannot see answer points */
+  font-family: var(--font-pixel);
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin-left: auto;
+  align-self: center;
+  white-space: nowrap;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+/* Revealed after submission */
+.mcq-options-list.is-submitted .mcq-opt-pts,
+.mcq-option-item.show-pts .mcq-opt-pts {
+  display: inline-block !important;
+}
+
+/* Evaluated feedback: Optimal answer (50 Pts) */
+.mcq-option-item.is-correct {
+  border-color: var(--pixel-green) !important;
+  background: rgba(0, 255, 136, 0.18) !important;
+  box-shadow: 0 0 16px rgba(0, 255, 136, 0.35) !important;
+}
+
+.mcq-option-item.is-correct .mcq-opt-key {
+  background: var(--pixel-green) !important;
+  color: #000 !important;
+}
+
+.mcq-option-item.is-correct .mcq-opt-pts {
+  color: var(--pixel-green) !important;
+  border-color: rgba(0, 255, 136, 0.45) !important;
+  font-weight: 800;
+}
+
+/* Evaluated feedback: Partial strong answer (25 - 30 Pts) */
+.mcq-option-item.is-partial {
+  border-color: var(--pixel-yellow) !important;
+  background: rgba(252, 238, 10, 0.16) !important;
+  box-shadow: 0 0 16px rgba(252, 238, 10, 0.3) !important;
+}
+
+.mcq-option-item.is-partial .mcq-opt-key {
+  background: var(--pixel-yellow) !important;
+  color: #000 !important;
+}
+
+.mcq-option-item.is-partial .mcq-opt-pts {
+  color: var(--pixel-yellow) !important;
+  border-color: rgba(252, 238, 10, 0.45) !important;
+  font-weight: 800;
+}
+
+/* Evaluated feedback: Minor partial answer (10 - 15 Pts) */
+.mcq-option-item.is-minor {
+  border-color: #f97316 !important;
+  background: rgba(249, 115, 22, 0.16) !important;
+  box-shadow: 0 0 14px rgba(249, 115, 22, 0.3) !important;
+}
+
+.mcq-option-item.is-minor .mcq-opt-key {
+  background: #f97316 !important;
+  color: #000 !important;
+}
+
+.mcq-option-item.is-minor .mcq-opt-pts {
+  color: #f97316 !important;
+  border-color: rgba(249, 115, 22, 0.45) !important;
+  font-weight: 800;
+}
+
+/* Evaluated feedback: Wrong / 0 Pts answer */
+.mcq-option-item.is-wrong {
+  border-color: var(--mecha-red-bright) !important;
+  background: rgba(255, 34, 68, 0.18) !important;
+}
+
+.mcq-option-item.is-wrong .mcq-opt-key {
+  background: var(--mecha-red-bright) !important;
+  color: #fff !important;
+}
+
+.mcq-option-item.is-wrong .mcq-opt-pts {
+  color: var(--mecha-red-bright) !important;
+  border-color: rgba(255, 34, 68, 0.45) !important;
+}
+
+/* Submission action & result */
+.mcq-actions-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.mcq-result-banner {
+  background: #020610;
+  border: 2px solid var(--pixel-green);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.25);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
+}
+
+.mcq-result-header {
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--pixel-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mcq-result-score-val {
+  font-family: var(--font-pixel);
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 12px var(--pixel-green);
+}
+
+.mcq-result-code-box {
+  background: rgba(252, 238, 10, 0.08);
+  border: 2px dashed var(--pixel-yellow);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mcq-result-code-val {
+  font-family: 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--pixel-yellow);
+  letter-spacing: 3px;
+}
+
+/* ==========================================================================
    MODAL / POPUP: PANDUAN & ADMIN LEADERBOARD
    ========================================================================== */
 .modal-overlay {
@@ -1903,6 +2328,370 @@ body::after {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+/* Custom Cyber Alert & Confirm Modal Dialog */
+.cyber-dialog-card {
+  border-radius: 4px;
+  animation: cyberModalPop 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes cyberModalPop {
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.cyber-dialog-card.type-warning {
+  border-color: var(--pixel-yellow) !important;
+  box-shadow: 0 0 40px rgba(255, 204, 0, 0.35) !important;
+}
+.cyber-dialog-card.type-warning .modal-header-pixel {
+  border-bottom-color: var(--pixel-yellow) !important;
+  color: var(--pixel-yellow) !important;
+}
+
+.cyber-dialog-card.type-danger {
+  border-color: var(--mecha-red-bright) !important;
+  box-shadow: 0 0 40px rgba(255, 34, 68, 0.35) !important;
+}
+.cyber-dialog-card.type-danger .modal-header-pixel {
+  border-bottom-color: var(--mecha-red-bright) !important;
+  color: var(--mecha-red-bright) !important;
+}
+
+.cyber-dialog-card.type-success {
+  border-color: var(--pixel-green) !important;
+  box-shadow: 0 0 40px var(--pixel-green-glow) !important;
+}
+.cyber-dialog-card.type-success .modal-header-pixel {
+  border-bottom-color: var(--pixel-green) !important;
+  color: var(--pixel-green) !important;
+}
+
+.cyber-dialog-card.type-info {
+  border-color: var(--pixel-cyan) !important;
+  box-shadow: 0 0 40px var(--pixel-cyan-glow) !important;
+}
+.cyber-dialog-card.type-info .modal-header-pixel {
+  border-bottom-color: var(--pixel-cyan) !important;
+  color: var(--pixel-cyan) !important;
+}
+
+.cyber-dialog-message {
+  font-family: var(--font-clean);
+  font-size: 0.95rem;
+  color: #e2e8f0;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.cyber-dialog-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.cyber-dialog-input {
+  display: none;
+  background: #040810;
+  border: 2px solid var(--pixel-cyan);
+  color: #fff;
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  letter-spacing: 2px;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 0 15px var(--pixel-cyan-glow);
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.cyber-dialog-input:focus {
+  border-color: #fff;
+}
+
+.cyber-dialog-card.type-danger .cyber-dialog-input {
+  border-color: var(--mecha-red-bright);
+  box-shadow: 0 0 15px rgba(255, 34, 68, 0.35);
+}
+
+.cyber-dialog-card.type-warning .cyber-dialog-input {
+  border-color: var(--pixel-yellow);
+  box-shadow: 0 0 15px var(--pixel-yellow-glow);
+}
+
+.cyber-dialog-card.type-success .cyber-dialog-input {
+  border-color: var(--pixel-green);
+  box-shadow: 0 0 15px var(--pixel-green-glow);
+}
+
+/* ==========================================================================
+   INTERACTIVE POS TUTORIAL MODAL
+   ========================================================================== */
+.tutorial-modal-card {
+  max-width: 680px !important;
+  width: 95% !important;
+  background: #080f1e !important;
+  border: 2px solid var(--pixel-cyan) !important;
+  box-shadow: 0 0 45px var(--pixel-cyan-glow) !important;
+  border-radius: 4px;
+  overflow: hidden;
+  animation: modal-pop 0.25s ease-out;
+}
+
+.tutorial-tabs-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.tutorial-step-tab {
+  background: #060c18;
+  border: 1px solid #1a2e4d;
+  color: #94a3b8;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  font-family: var(--font-pixel);
+  text-align: center;
+}
+
+.tutorial-step-tab:hover {
+  background: #0e1d36;
+  border-color: var(--pixel-cyan);
+  color: #fff;
+}
+
+.tutorial-step-tab.active {
+  background: #0a1f38;
+  border-color: var(--pixel-cyan);
+  box-shadow: 0 0 15px var(--pixel-cyan-glow);
+  color: #fff;
+}
+
+.tutorial-step-tab .step-num {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--pixel-yellow);
+}
+
+.tutorial-step-tab.active .step-num {
+  color: var(--pixel-cyan);
+}
+
+.tutorial-step-tab .step-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.5px;
+}
+
+.tutorial-content-box {
+  background: #040812;
+  border: 1px solid #162842;
+  border-radius: 2px;
+  padding: 16px 18px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tutorial-step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px dashed #1a2f4c;
+  padding-bottom: 8px;
+}
+
+.tutorial-step-title {
+  font-family: var(--font-pixel);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.tutorial-step-body {
+  font-family: var(--font-clean);
+  font-size: 0.92rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+.tutorial-callout-box {
+  background: rgba(0, 255, 200, 0.06);
+  border-left: 3px solid var(--pixel-cyan);
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  border-radius: 0 2px 2px 0;
+  line-height: 1.5;
+}
+
+.tutorial-callout-box.tip-yellow {
+  background: rgba(252, 238, 10, 0.06);
+  border-left-color: var(--pixel-yellow);
+}
+
+.tutorial-callout-box.tip-green {
+  background: rgba(0, 255, 136, 0.06);
+  border-left-color: var(--pixel-green);
+}
+
+.tutorial-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+  border-top: 1px solid #162842;
+  padding-top: 14px;
+}
+
+/* ==========================================================================
+   CYBERPUNK SPOTLIGHT TOUR ENGINE (INTRO.JS STYLE)
+   ========================================================================== */
+.cyber-tour-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: rgba(2, 6, 16, 0.45);
+  backdrop-filter: blur(2px);
+  pointer-events: auto;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.cyber-tour-spotlight {
+  position: fixed;
+  z-index: 9995;
+  pointer-events: none;
+  border-radius: 4px;
+  border: 2px solid var(--pixel-cyan);
+  box-shadow: 0 0 0 9999px rgba(3, 7, 18, 0.86),
+              0 0 30px var(--pixel-cyan-glow),
+              inset 0 0 20px rgba(0, 255, 200, 0.12);
+  transition: all 0.35s cubic-bezier(0.2, 0, 0, 1);
+  box-sizing: border-box;
+}
+
+/* Corner Reticles for Targeting Look */
+.spotlight-reticle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--pixel-yellow);
+  border-style: solid;
+  pointer-events: none;
+}
+.reticle-tl { top: -2px; left: -2px; border-width: 3px 0 0 3px; }
+.reticle-tr { top: -2px; right: -2px; border-width: 3px 3px 0 0; }
+.reticle-bl { bottom: -2px; left: -2px; border-width: 0 0 3px 3px; }
+.reticle-br { bottom: -2px; right: -2px; border-width: 0 3px 3px 0; }
+
+.cyber-tour-tooltip {
+  position: fixed;
+  z-index: 10000;
+  width: 430px;
+  max-width: calc(100vw - 32px);
+  background: #080f1e;
+  border: 2px solid var(--pixel-cyan);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.9), 0 0 30px var(--pixel-cyan-glow);
+  border-radius: 4px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: top 0.35s cubic-bezier(0.2, 0, 0, 1), left 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.2s ease;
+  animation: modal-pop 0.25s ease-out;
+  box-sizing: border-box;
+}
+
+.tour-tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px dashed #1a2f4c;
+  padding-bottom: 8px;
+}
+
+.tour-step-badge {
+  background: #0a1f38;
+  border: 1px solid var(--pixel-yellow);
+  color: var(--pixel-yellow);
+  font-family: var(--font-pixel);
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+}
+
+.tour-step-title {
+  font-family: var(--font-pixel);
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.5px;
+}
+
+.tour-tooltip-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tour-step-body-text {
+  font-family: var(--font-clean);
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.55;
+}
+
+.tour-tooltip-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #162842;
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.tour-dots-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tour-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #1e293b;
+  border: 1px solid #334155;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tour-dot:hover {
+  border-color: var(--pixel-cyan);
+  background: #0e1d36;
+}
+
+.tour-dot.active {
+  background: var(--pixel-cyan);
+  border-color: var(--pixel-cyan);
+  box-shadow: 0 0 8px var(--pixel-cyan-glow);
+  transform: scale(1.25);
 }
 
 /* Leaderboard Rank Table */
@@ -2138,12 +2927,29 @@ body::after {
   .team-select-card { clip-path: none; }
 
   /* Team select: compact on mobile */
-  .team-select-card { padding: 20px 16px 18px; gap: 16px; }
+  .team-select-card { padding: 18px 14px 16px; gap: 14px; }
   .team-select-title { font-size: 1.2rem; }
-  .team-select-logo { width: 52px; height: 52px; }
-  .team-select-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-  .team-select-btn { padding: 12px 10px; }
-  .team-select-btn-name { font-size: 0.9rem; }
+  .team-select-logo { width: 50px; height: 50px; }
+  .team-select-grid {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    min-height: auto !important;
+    padding: 10px 0 !important;
+  }
+  .team-glass-card {
+    margin: 0 !important;
+    transform: rotate(0deg) !important;
+    width: calc(50% - 8px) !important;
+    max-width: 150px !important;
+    height: 195px !important;
+  }
+  .team-select-grid:hover .team-glass-card {
+    margin: 0 !important;
+  }
+  .team-card-icon-wrap svg.team-glass-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
 
   /* Boot terminal: compact */
   .boot-terminal { padding: 16px 18px; gap: 12px; }

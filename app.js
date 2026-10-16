@@ -27,49 +27,182 @@ document.addEventListener("DOMContentLoaded", () => {
       subTitle: "CYBERSECURITY & DIGITAL FORENSICS",
       objective: "Identifikasi serangan phishing dan temukan celah keamanan siber kampus.",
       threat: "CRITICAL BREACH // MALICIOUS EMAIL ATTACK",
-      story: "Insiden keamanan siber melanda kampus! Salah satu mahasiswa baru menerima pesan darurat. Sebagai agen penyelidik digital, teliti 3 email di bawah dan temukan ancaman siber yang sedang berlangsung!",
+      story: "Insiden keamanan siber melanda kampus! Salah satu mahasiswa baru menerima pesan darurat. Sebagai agen penyelidik digital, teliti 3 email di terminal investigasi dan temukan ancaman siber yang sedang berlangsung!",
       physicalClue: "Sembunyikan Amplop Merah di bawah meja panitia pos bertuliskan: 'CATATAN FORENSIK: Domain resmi lembaga pemerintah selalu berakhiran .go.id dan kampus berakhiran .ac.id. Waspadai domain bebas berakhiran .xyz!'",
       questions: [
-        { no: 1, text: "Berdasarkan 3 email di terminal, tentukan <strong>email mana yang merupakan Phishing / Penipuan</strong>!" },
-        { no: 2, text: "Sebutkan minimal <strong>2 kejanggalan logis</strong> dari email tersebut (alamat pengirim, psikologi panik 59 menit, atau tautan palsu)!" },
-        { no: 3, text: "Jika akun mahasiswa terlanjur memasukkan data di tautan tersebut, langkah mitigasi darurat apa yang harus diambil?" }
+        {
+          id: "p1_q1",
+          no: 1,
+          points: 50,
+          text: "Berdasarkan 3 email di terminal investigasi, email manakah yang merupakan serangan <strong>Phishing / Penipuan</strong>?",
+          options: [
+            { key: "A", text: "Email 1: Bagian Akademik UBHI (Jadwal Pengisian KRS)", score: 0 },
+            { key: "B", text: "Email 2: [URGENT] Kemendikbud Pusat (Beasiswa 10 Juta Segera Hangus)", score: 50, isCorrect: true },
+            { key: "C", text: "Email 3: Perpustakaan UBHI (Kartu Anggota Digital)", score: 10 },
+            { key: "D", text: "Email 2 dan Email 3 sekaligus karena keduanya meminta tindakan dari mahasiswa", score: 25 }
+          ]
+        },
+        {
+          id: "p1_q2",
+          no: 2,
+          points: 50,
+          text: "Apa <strong>kejanggalan logis paling fatal</strong> yang membuktikan email tersebut adalah penipuan siber?",
+          options: [
+            { key: "A", text: "Tautan (link) formulir mengarah ke domain pihak ketiga tidak resmi (beasiswa-cair-10jt.xyz/login-akun) dan bukan portal kampus", score: 30 },
+            { key: "B", text: "Domain pengirim mencurigakan (xyz-domain.com), tautan eksternal pencuri kredensial, dan manipulasi batas 59 menit", score: 50, isCorrect: true },
+            { key: "C", text: "Penggunaan tanda [URGENT] dan ancaman hangus 59 menit untuk memicu kepanikan mahasiswa (urgency trigger)", score: 15 },
+            { key: "D", text: "Email dikirimkan pada malam hari di luar jam perkuliahan serta tidak menyertakan foto cap stempel basah rektor", score: 0 }
+          ]
+        }
       ],
       kunci: `
-        <strong>Kunci & Poin Penilaian Pos 1:</strong><br>
-        • <strong>Email Phishing:</strong> Email ke-2 ("[URGENT] KEMENDIKBUD PUSAT: BEASISWA 10 JUTA SEGERA HANGUS!").<br>
-        • <strong>Kejanggalan Logis:</strong><br>
-          1. <em>Domain Pengirim Palsu:</em> Menggunakan domain liar <code>xyz-domain.com</code>, bukan domain resmi kementerian (<code>.go.id</code>) atau kampus (<code>.ac.id</code>).<br>
-          2. <em>Tautan Tidak Sinkron:</em> Tombol mengarah ke alamat berbahaya <code>http://beasiswa-cair-10jt.xyz/login-akun</code> untuk mencuri password.<br>
-          3. <em>Psikologi Panik (Social Engineering):</em> Memberi batas waktu palsu "59 Menit" agar korban tergesa-gesa tanpa berpikir kritis.<br>
+        <strong>Kunci Jawaban & Rubrik Penilaian Pos 1 (100 Poin):</strong><br>
+        • <strong>Soal 1 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Tepat sasaran mengidentifikasi Email 2 sebagai vektor serangan phishing beasiswa palsu.<br>
+          - <em>Opsi D (25 Pts):</em> Mengenali Email 2 berbahaya namun keliru mencurigai Email 3 resmi perpustakaan.<br>
+          - <em>Opsi C (10 Pts):</em> Analisis dangkal karena mencurigai email resmi perpustakaan.<br>
+          - <em>Opsi A (0 Pts):</em> Salah, email KRS akademik adalah komunikasi resmi institusi kampus (.ac.id).<br><br>
+        • <strong>Soal 2 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Analisis holistik 3 pilar: spoofing domain, link pencuri kredensial, dan manipulasi psikologi panik.<br>
+          - <em>Opsi A (30 Pts):</em> Bukti forensik teknis URL tepat, namun belum menganalisis teknik rekayasa sosial.<br>
+          - <em>Opsi C (15 Pts):</em> Mengenali manipulasi kepanikan psikologis, namun mengabaikan bukti teknis domain/URL.<br>
+          - <em>Opsi D (0 Pts):</em> Miskonsepsi non-teknis (email resmi digital modern tidak memakai stempel basah fisik).<br><br>
         • <strong>Mitigasi Darurat:</strong> Segera ganti password SIAKAD, aktifkan 2FA, hubungi helpdesk IT kampus, dan tandai email sebagai phishing.
-      `
+      `,
+      tutorial: {
+        posTag: "POS 01 // INVESTIGASI EMAIL PALSU",
+        posTitle: "PANDUAN MISI: INVESTIGASI EMAIL PALSU",
+        steps: [
+          {
+            step: 1,
+            title: "CRT 1 (KIRI): TERMINAL INVESTIGASI EMAIL",
+            body: `Di monitor kiri, terdapat <strong>3 kotak masuk email</strong> mahasiswa. Tugas kelompokmu adalah mengklik dan membaca detail setiap email secara forensik:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Periksa <strong>Alamat Domain Pengirim</strong> (apakah domain resmi kampus <code>.ac.id</code> / pemerintah <code>.go.id</code>, atau domain bebas mencurigakan seperti <code>.xyz</code>).</li>
+              <li>Teliti <strong>Tautan / Link Formulir</strong> yang dilampirkan (arahkan perhatian pada tujuan URL aslinya).</li>
+              <li>Waspadai <strong>Trik Urgensi Palsu</strong> (ancaman waktu hangus untuk memicu kepanikan mahasiswa).</li>
+            </ul>`,
+            callout: "💡 <strong>Tips Forensik:</strong> Jangan terburu-buru! Klik Email 1, Email 2, dan Email 3 untuk membandingkan mana komunikasi resmi dan mana serangan penipuan siber.",
+            calloutType: "tip-cyan"
+          },
+          {
+            step: 2,
+            title: "CRT 2 (KANAN): 2 SOAL PILIHAN GANDA (100 POIN)",
+            body: `Di monitor kanan, terdapat <strong>2 Pertanyaan Kritis</strong> dengan sistem skor berbobot:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li><strong>Soal 1 (Max 50 Poin):</strong> Mengidentifikasi email mana yang merupakan vektor penipuan.</li>
+              <li><strong>Soal 2 (Max 50 Poin):</strong> Menganalisis kejanggalan logis paling fatal pada email tersebut.</li>
+              <li>Setiap pilihan jawaban memiliki bobot nilai berbeda (<strong>0 s/d 50 Poin</strong>) tergantung kedalaman analisis kelompok.</li>
+            </ul>`,
+            callout: "⚠️ <strong>Penting:</strong> Jawaban tidak dapat diubah setelah tombol <code>[KIRIM JAWABAN AKHIR]</code> diklik. Diskusikan dan pastikan mufakat bersama tim!",
+            calloutType: "tip-yellow"
+          },
+          {
+            step: 3,
+            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            body: `Setelah mengklik tombol submit:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Sistem akan menerbitkan <strong>Kode Unik Verifikasi</strong> (contoh: <code>META-P1-9F2B</code>).</li>
+              <li>Salin kode unik dan alasan jawaban kelompokmu ke <strong>Lembar Kertas Jawaban Fisik</strong> yang tersedia di meja pos.</li>
+              <li>Juri / panitia pos akan memeriksa lembar fisik dan menginput nilai penalaran akhir ke sistem leaderboard.</li>
+            </ul>`,
+            callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini dalam posisi STANDBY (belum berkurang). Klik tombol di bawah ketika tim sudah siap!",
+            calloutType: "tip-green"
+          }
+        ]
+      }
     },
     2: {
       route: "adhigana/pos2",
       tag: "POS 02 / 04",
       title: "Pos 2: Robot Barista Glitch (Logika Algoritma Dasar)",
       subTitle: "ALGORITHMIC THINKING & SEQUENCE DEBUGGING",
-      objective: "Perbaiki 6 baris instruksi robot peracik kopi yang terbalik agar tidak tumpah.",
+      objective: "Perbaiki urutan instruksi robot peracik kopi yang terbalik agar tidak tumpah.",
       threat: "SYSTEM DEADLOCK // HARDWARE FAULT",
       story: "Robot pembuat kopi di kantin mengalami kekacauan alur instruksi! Robot menuangkan kopi ke lantai dan mesinnya overheating. Bantu perbaiki urutan algoritma robot sebelum pelanggan komplain!",
       physicalClue: "Sembunyikan Kertas Biru di balik sandaran kursi pos bertuliskan: 'LOGIKA SEKUANSI: Penampung (cangkir) harus selalu siap di tatakan sebelum zat cair atau bubuk dituangkan!'",
       questions: [
-        { no: 1, text: "Susun kembali <strong>6 langkah robot</strong> ke urutan eksekusi yang paling logis (gunakan tombol panah untuk menguji)!" },
-        { no: 2, text: "Secara logika, apa yang terjadi jika langkah <em>'Tuangkan air panas mendidih'</em> dieksekusi sebelum <em>'Taruh cangkir di tatakan'</em>?" },
-        { no: 3, text: "Mengapa di dunia pemrograman, <strong>urutan eksekusi instruksi (algoritma sekuensial)</strong> tidak boleh terbalik?" }
+        {
+          id: "p2_q1",
+          no: 1,
+          points: 50,
+          text: "Berdasarkan uji simulasi logika robot, <strong>urutan eksekusi langkah yang paling benar dan runtut</strong> dari awal hingga akhir adalah:",
+          options: [
+            { key: "A", text: "Taruh cangkir di tatakan → Masukkan bubuk kopi → Tuangkan air panas → Aduk rata → Sajikan → Nyalakan pemanas air", score: 15 },
+            { key: "B", text: "Nyalakan pemanas air → Taruh cangkir di tatakan → Masukkan bubuk kopi → Tuangkan air panas mendidih → Aduk hingga rata → Sajikan ke pelanggan", score: 50, isCorrect: true },
+            { key: "C", text: "Tuangkan air panas mendidih → Masukkan bubuk kopi → Taruh cangkir di tatakan → Nyalakan pemanas → Aduk → Sajikan", score: 0 },
+            { key: "D", text: "Taruh cangkir di tatakan → Nyalakan pemanas air → Masukkan bubuk kopi → Tuangkan air panas mendidih → Aduk hingga rata → Sajikan ke pelanggan", score: 30 }
+          ]
+        },
+        {
+          id: "p2_q2",
+          no: 2,
+          points: 50,
+          text: "Secara logika komputasi sekuensial, mengapa langkah <em>'Taruh cangkir di tatakan'</em> <strong>HARUS</strong> dieksekusi sebelum menuangkan air atau bubuk?",
+          options: [
+            { key: "A", text: "Sebagai inisialisasi hardware dan validasi kesiapan perangkat output fisik sebelum instruksi penuangan cairan dieksekusi", score: 30 },
+            { key: "B", text: "Karena wadah penampung fisik harus tersedia terlebih dahulu agar bahan tidak tumpah ke meja dan sistem aktuator tidak error/deadlock", score: 50, isCorrect: true },
+            { key: "C", text: "Hanya sekadar formalitas estetika penyajian di kafe agar terlihat rapi oleh pelanggan", score: 0 },
+            { key: "D", text: "Agar sensor timbangan dan suhu robot dapat melakukan kalibrasi berat kosong (tare weight) sebelum bahan dimasukkan", score: 15 }
+          ]
+        }
       ],
       kunci: `
-        <strong>Kunci & Poin Penilaian Pos 2:</strong><br>
-        • <strong>Urutan Instruksi yang Benar:</strong><br>
-          1. Nyalakan pemanas air.<br>
-          2. Taruh cangkir kosong di tatakan mesin.<br>
-          3. Masukkan bubuk kopi ke cangkir.<br>
-          4. Tuangkan air panas mendidih.<br>
-          5. Aduk larutan kopi hingga rata.<br>
-          6. Sajikan cangkir kopi ke pelanggan.<br>
-        • <strong>Analisis Kesalahan Urutan:</strong> Jika air/kopi dituang sebelum cangkir ditaruh di tatakan, cairan panas akan tumpah ke meja/lantai.<br>
-        • <strong>Konsep Informatika:</strong> Mesin komputer mengeksekusi instruksi secara harfiah tanpa akal sehat; jika urutan logikanya salah, akan memicu crash/bug fatal.
-      `
+        <strong>Kunci Jawaban & Rubrik Penilaian Pos 2 (100 Poin):</strong><br>
+        • <strong>Soal 1 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Urutan optimal & efisien: Pemanas di awal (1) → Cangkir (2) → Bubuk (3) → Air (4) → Aduk (5) → Sajikan (6).<br>
+          - <em>Opsi D (30 Pts):</em> Urutan aman & berfungsi, cangkir siap di tatakan, hanya pemanas air dinyalakan setelah cangkir siap.<br>
+          - <em>Opsi A (15 Pts):</em> Cangkir aman, namun kopi dingin karena pemanas baru dinyalakan di akhir setelah disajikan.<br>
+          - <em>Opsi C (0 Pts):</em> Fatal! Air dituangkan sebelum cangkir ditaruh sehingga kopi tumpah ke lantai / mesin rusak.<br><br>
+        • <strong>Soal 2 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Mengaitkan logika sekuensial komputasi dengan realitas fisik hardware (penampung output harus siap sebelum penuangan).<br>
+          - <em>Opsi A (30 Pts):</em> Analisis inisialisasi hardware & validasi output sangat logis, namun belum menyebut pencegahan tumpah/deadlock.<br>
+          - <em>Opsi D (15 Pts):</em> Analisis fungsi sensorik (tare weight) masuk akal secara fitur robotika, namun periferal.<br>
+          - <em>Opsi C (0 Pts):</em> Miskonsepsi non-teknis yang mengabaikan keselamatan operasional mesin.<br><br>
+        • <strong>Esensi Informatika:</strong> Algoritma sekuensial bersifat deterministik; urutan instruksi menentukan output sistem.
+      `,
+      tutorial: {
+        posTag: "POS 02 // ROBOT BARISTA GLITCH",
+        posTitle: "PANDUAN MISI: DEBUGGING ALGORITMA ROBOT",
+        steps: [
+          {
+            step: 1,
+            title: "CRT 1 (KIRI): SIMULATOR LOGIKA ALGORITMA ROBOT",
+            body: `Di monitor kiri, urutan instruksi robot peracik kopi mengalami kesalahan logika sehingga kopi tumpah ke lantai:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Gunakan tombol panah <strong>[▲ Naik]</strong> dan <strong>[▼ Turun]</strong> pada kartu langkah untuk menyusun ulang 6 instruksi secara sekuensial.</li>
+              <li>Klik tombol <strong>[UJI SIMULASI LOGIKA ROBOT]</strong> untuk menjalankan uji coba aktuator robot.</li>
+              <li>Perhatikan avatar robot dan log terminal: apakah robot berhasil menyajikan kopi panas dengan sukses, atau mengalami tabrakan/tumpah!</li>
+            </ul>`,
+            callout: "💡 <strong>Prinsip Komputasi:</strong> Dalam algoritma sekuensial, urutan menentukan hasil. Wadah penampung fisik (cangkir) harus selalu siap sebelum zat cair dituangkan!",
+            calloutType: "tip-cyan"
+          },
+          {
+            step: 2,
+            title: "CRT 2 (KANAN): 2 SOAL PILIHAN GANDA (100 POIN)",
+            body: `Di monitor kanan, selesaikan <strong>2 Pertanyaan Logika Algoritma</strong>:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li><strong>Soal 1 (Max 50 Poin):</strong> Menentukan susunan eksekusi instruksi paling runtut, efisien, dan benar.</li>
+              <li><strong>Soal 2 (Max 50 Poin):</strong> Menjelaskan secara komputasional mengapa inisialisasi penampung fisik (cangkir) wajib dilakukan di awal.</li>
+              <li>Pilihan jawaban berbobot (0, 15, 30, 50 Poin) menguji pemahaman konsep sequence vs trial-and-error.</li>
+            </ul>`,
+            callout: "⚠️ <strong>Penting:</strong> Pastikan seluruh anggota kelompok sepakat sebelum mengklik <code>[KIRIM JAWABAN AKHIR]</code>.",
+            calloutType: "tip-yellow"
+          },
+          {
+            step: 3,
+            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            body: `Setelah submit di monitor kanan:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Sistem akan mengunci jawaban dan memunculkan <strong>Kode Unik Verifikasi</strong> (contoh: <code>GEMINI-P2-4C1A</code>).</li>
+              <li>Catat kode unik tersebut pada <strong>Lembar Kertas Jawaban Fisik</strong> dan tuliskan penjelasan logika kelompokmu.</li>
+              <li>Tunjukkan lembar kertas ke panitia pos untuk mendapatkan stempel dan penilaian penalaran juri.</li>
+            </ul>`,
+            callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk memulai hitung mundur!",
+            calloutType: "tip-green"
+          }
+        ]
+      }
     },
     3: {
       route: "adhigana/pos3",
@@ -78,22 +211,96 @@ document.addEventListener("DOMContentLoaded", () => {
       subTitle: "DATA PATTERN RECOGNITION & ELIMINATION",
       objective: "Saring 8 brankas digital menggunakan 3 petunjuk logika untuk menemukan arsip rahasia.",
       threat: "DATA ISOLATION // RECOVERY OPERATION",
-      story: "Sebuah file arsip proyek rahasia kampus tersimpan di salah satu dari 8 brankas digital. Petugas arsip meninggalkan 3 petunjuk logika. Gunakan teknik eliminasi untuk menemukan brankas yang tepat!",
+      story: "Sebuah file arsip penting kampus tersimpan di salah satu dari 8 brankas digital. Gunakan 3 petunjuk logika eliminasi untuk menyaring brankas dan menemukan berkas asli!",
       physicalClue: "Sembunyikan 3 Kertas Petunjuk di sudut area pos: Clue 1 (Bukan Genap), Clue 2 (Ukuran > 50MB), Clue 3 (Hari Akhir Pekan).",
       questions: [
-        { no: 1, text: "Gunakan 3 petunjuk di samping untuk mengeliminasi brankas. <strong>Brankas nomor berapakah yang berisi dokumen rahasia tersebut?</strong>" },
-        { no: 2, text: "Jelaskan langkah demi langkah bagaimana kelompok kalian <strong>mengeliminasi brankas lainnya</strong> secara bertahap!" },
-        { no: 3, text: "Metode pemecahan masalah dengan menyaring kemungkinan ini mencerminkan algoritma apa dalam komputasi?" }
+        {
+          id: "p3_q1",
+          no: 1,
+          points: 50,
+          text: "Gunakan 3 petunjuk eliminasi pada konsol matrix. <strong>Brankas digital manakah yang menyimpan dokumen rahasia?</strong>",
+          options: [
+            { key: "A", text: "Vault 01 (15 MB — Akses Hari Senin)", score: 0 },
+            { key: "B", text: "Vault 02 (60 MB — Akses Hari Minggu)", score: 25 },
+            { key: "C", text: "Vault 03 (85 MB — Akses Hari Minggu)", score: 50, isCorrect: true },
+            { key: "D", text: "Vault 07 (95 MB — Akses Hari Kamis)", score: 25 }
+          ]
+        },
+        {
+          id: "p3_q2",
+          no: 2,
+          points: 50,
+          text: "Mengapa <strong>Vault 07</strong> dinyatakan GUGUR dari pencarian meskipun ukurannya 95 MB (> 50 MB) dan nomornya ganjil?",
+          options: [
+            { key: "A", text: "Karena gagal memenuhi kondisi Petunjuk 3 (aturan waktu akses berkas), meskipun telah memenuhi Petunjuk 1 dan Petunjuk 2", score: 30 },
+            { key: "B", text: "Karena hari aksesnya adalah hari Kamis (hari kerja), sedangkan Petunjuk 3 secara tegas mensyaratkan hari akhir pekan (Sabtu atau Minggu)", score: 50, isCorrect: true },
+            { key: "C", text: "Karena nomor brankas 07 melebihi kapasitas indeks prioritas sistem penyimpanan kampus", score: 10 },
+            { key: "D", text: "Karena brankas tersebut dibuat oleh pengguna yang tidak dikenal (anonymous user)", score: 0 }
+          ]
+        }
       ],
       kunci: `
-        <strong>Kunci & Poin Penilaian Pos 3:</strong><br>
-        • <strong>Brankas yang Benar:</strong> <strong>BRANKAS 03 (Vault 03)</strong>.<br>
+        <strong>Kunci Jawaban & Rubrik Penilaian Pos 3 (100 Poin):</strong><br>
+        • <strong>Soal 1 (Max 50 Poin):</strong><br>
+          - <em>Opsi C (50 Pts):</em> Sempurna! Memenuhi ke-3 kriteria: Nomor Ganjil (03), Ukuran 85 MB (> 50 MB), Hari Minggu (Akhir Pekan).<br>
+          - <em>Opsi B (25 Pts):</em> Lolos 2 syarat (>50MB & Minggu), namun tereliminasi karena nomor genap (Vault 02).<br>
+          - <em>Opsi D (25 Pts):</em> Lolos 2 syarat (Ganjil & 95MB), namun tereliminasi karena hari Kamis bukan akhir pekan.<br>
+          - <em>Opsi A (0 Pts):</em> Gagal pada 2 syarat (ukuran hanya 15 MB dan hari Senin adalah hari kerja).<br><br>
+        • <strong>Soal 2 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Evaluasi logika proposisi AND lengkap dengan pembuktian hari Kamis vs akhir pekan secara presisi.<br>
+          - <em>Opsi A (30 Pts):</em> Memahami prinsip eliminasi multi-kondisi dengan baik, walau tanpa merinci hari Kamis.<br>
+          - <em>Opsi C (10 Pts):</em> Menebak alasan indeks fiktif yang tidak ada dalam basis aturan eliminasi.<br>
+          - <em>Opsi D (0 Pts):</em> Tidak relevan dengan tabel metadata brankas.<br><br>
         • <strong>Alur Eliminasi Bertahap:</strong><br>
-          1. <em>Clue 1 (Bukan nomor genap):</em> Mengeliminasi Vault 02, 04, 06, 08. Tersisa: 01, 03, 05, 07.<br>
-          2. <em>Clue 2 (Ukuran > 50 MB):</em> Cek sisa brankas: Vault 01 (15MB) & Vault 05 (35MB) gugur karena < 50MB. Tersisa: Vault 03 (85MB) dan Vault 07 (95MB).<br>
-          3. <em>Clue 3 (Hari akhir pekan: Sabtu/Minggu):</em> Vault 07 dibuat hari Kamis (gugur). Vault 03 dibuat hari Minggu (LOLOS!).<br>
-        • <strong>Konsep Komputasi:</strong> Decision Tree, Filtering Data, dan metode Branch Pruning (Eliminasi).
-      `
+          - Clue 1 (Bukan Genap): Gugur Vault 02, 04, 06, 08.<br>
+          - Clue 2 (> 50 MB): Gugur Vault 01 (15MB) & 05 (35MB).<br>
+          - Clue 3 (Akhir Pekan): Gugur Vault 07 (Kamis). Sisa satu-satunya: <strong>Vault 03!</strong>
+      `,
+      tutorial: {
+        posTag: "POS 03 // BRANKAS DOKUMEN HILANG",
+        posTitle: "PANDUAN MISI: BRANKAS DATA HILANG",
+        steps: [
+          {
+            step: 1,
+            title: "CRT 1 (KIRI): MATRIKS 8 BRANKAS & 3 CLUE ELIMINASI",
+            body: `Di monitor kiri, terdapat <strong>8 Brankas Digital</strong> penyimpanan arsip kampus:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Terapkan <strong>3 Petunjuk Logika Proposisi</strong>:
+                <br>• <em>Petunjuk 1:</em> Nomor brankas BUKAN bilangan genap.
+                <br>• <em>Petunjuk 2:</em> Ukuran arsip lebih dari 50 MB (&gt; 50 MB).
+                <br>• <em>Petunjuk 3:</em> Berkas terakhir diakses pada hari akhir pekan (Sabtu / Minggu).
+              </li>
+              <li>Klik kartu brankas pada layar untuk <strong>mencoret / mengeliminasi</strong> brankas yang gugur secara interaktif.</li>
+            </ul>`,
+            callout: "💡 <strong>Tips Eliminasi:</strong> Saring brankas secara bertahap. Brankas yang memenuhi KETIGA syarat sekaligus adalah brankas dokumen rahasia yang asli!",
+            calloutType: "tip-cyan"
+          },
+          {
+            step: 2,
+            title: "CRT 2 (KANAN): 2 SOAL PILIHAN GANDA (100 POIN)",
+            body: `Di monitor kanan, jawab <strong>2 Pertanyaan Analisis Data</strong>:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li><strong>Soal 1 (Max 50 Poin):</strong> Memilih nomor brankas yang menyimpan dokumen rahasia.</li>
+              <li><strong>Soal 2 (Max 50 Poin):</strong> Menganalisis alasan logis mengapa salah satu brankas jebakan (Vault 07) gugur dari seleksi.</li>
+              <li>Poin berbobot: Opsi dengan penalaran logika multi-kondisi paling presisi mendapat nilai maksimal 50 Poin.</li>
+            </ul>`,
+            callout: "⚠️ <strong>Penting:</strong> Verifikasi nomor brankas dan metadata ukuran serta harinya sebelum mengklik <code>[KIRIM JAWABAN AKHIR]</code>.",
+            calloutType: "tip-yellow"
+          },
+          {
+            step: 3,
+            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            body: `Setelah submit di monitor kanan:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Sistem akan menerbitkan <strong>Kode Unik Verifikasi</strong> (contoh: <code>COPILOT-P3-7E59</code>).</li>
+              <li>Salin kode unik dan tuliskan alur eliminasi 8 brankas pada <strong>Lembar Kertas Jawaban Fisik</strong> kelompok.</li>
+              <li>Serahkan ke juri pos untuk verifikasi kode dan penginputan nilai penalaran.</li>
+            </ul>`,
+            callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk mulai beraksi!",
+            calloutType: "tip-green"
+          }
+        ]
+      }
     },
     4: {
       route: "adhigana/pos4",
@@ -105,19 +312,87 @@ document.addEventListener("DOMContentLoaded", () => {
       story: "Sistem seleksi berbasis kecerdasan buatan (AI) digunakan untuk memilih penerima beasiswa prestasi. Amati log sistem di bawah dan temukan masalah krusial yang terjadi pada kandidat terbaik!",
       physicalClue: "Sembunyikan Kertas Kuning di dekat dinding pos bertuliskan: 'ETIKA TEKNOLOGI: Mesin otomatis hanya sepintar aturan kode yang dibuat oleh programmernya. Tanpa tinjauan akal budi manusia, otomasi bisa menjadi diskriminatif.'",
       questions: [
-        { no: 1, text: "Mengapa Kandidat Budi Santoso (IPK 3.92, Juara 1 Nasional) <strong>bisa didiskualifikasi oleh sistem AI</strong>?" },
-        { no: 2, text: "Apakah keputusan sistem AI tersebut adil? Mengapa sebuah mesin pintar bisa berbuat kekeliruan konyol seperti itu?" },
-        { no: 3, text: "Sebagai calon sarjana Informatika masa depan, <strong>solusi logis apa yang kalian usulkan</strong> agar sistem otomatisasi ini adil?" }
+        {
+          id: "p4_q1",
+          no: 1,
+          points: 50,
+          text: "Mengapa sistem AI mendiskualifikasi Budi Santoso padahal memiliki IPK tertinggi (3.92) dan Juara 1 Hackathon?",
+          options: [
+            { key: "A", text: "Terjadi kegagalan ekstraksi dokumen otomatis pada sistem sehingga kualifikasi prestasi Budi tidak masuk ke penghitungan AI", score: 30 },
+            { key: "B", text: "Parser regex sistem hanya diprogram mengekstrak format berkas .PDF (Error 415), sehingga berkas Budi (.DOCX) gagal diekstrak dan diskor 0", score: 50, isCorrect: true },
+            { key: "C", text: "Sistem AI mengira berkas Budi tidak lengkap karena tidak memenuhi parameter form otomatis pada database", score: 15 },
+            { key: "D", text: "Karena kuota penerima beasiswa kampus sudah habis terpenuhi sebelum berkas Budi diproses", score: 0 }
+          ]
+        },
+        {
+          id: "p4_q2",
+          no: 2,
+          points: 50,
+          text: "Dari perspektif etika AI dan rekayasa perangkat lunak, apa <strong>solusi paling tepat & komprehensif</strong> untuk mencegah kegagalan seleksi semacam ini?",
+          options: [
+            { key: "A", text: "Membatalkan seluruh sistem seleksi digital dan mengundi nama kandidat beasiswa secara acak", score: 0 },
+            { key: "B", text: "Menerapkan konversi format berkas otomatis di backend, fasilitas sanggah/banding dokumen bagi pelamar, dan pengawasan manusia (Human-in-the-Loop)", score: 50, isCorrect: true },
+            { key: "C", text: "Menyediakan fasilitas banding dokumen dan mewajibkan verifikasi manual oleh panitia manusia untuk semua berkas yang terdeteksi error", score: 30 },
+            { key: "D", text: "Menambahkan validasi format ketat di formulir frontend agar mahasiswa hanya dapat mengunggah file bertipe .PDF", score: 15 }
+          ]
+        }
       ],
       kunci: `
-        <strong>Kunci & Poin Penilaian Pos 4:</strong><br>
-        • <strong>Penyebab Kesalahan AI:</strong> Sistem parser regex hanya diprogram mengenali ekstensi <code>.pdf</code>. Ketika Budi mengunggah <code>.docx</code>, sistem gagal mengekstrak teks lalu secara otomatis memberi skor 0.<br>
-        • <strong>Analisis Kritis:</strong> Sangat tidak adil. Sistem AI tidak memiliki pertimbangan akal sehat; ia hanya menjalankan aturan sempit yang dikoding oleh pembuatnya (*Garbage in, Garbage out*).<br>
-        • <strong>Solusi Logis yang Diharapkan:</strong><br>
-          1. <em>Otomatisasi Converter:</em> Tambahkan sistem konverter otomatis di server atau tolak upload dengan pesan peringatan di awal.<br>
-          2. <em>Human-in-the-Loop:</em> Wajib ada verifikasi manusia sebelum keputusan diskualifikasi final dijatuhkan.<br>
-          3. <em>Mekanisme Banding:</em> Menyediakan jalur klarifikasi bagi peserta jika terjadi malafungsi sistem.
-      `
+        <strong>Kunci Jawaban & Rubrik Penilaian Pos 4 (100 Poin):</strong><br>
+        • <strong>Soal 1 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Menemukan akar masalah teknis presisi pada log sistem (Parser Error 415: ketidakcocokan ekstensi .DOCX vs .PDF).<br>
+          - <em>Opsi A (30 Pts):</em> Mengidentifikasi modul ekstraksi yang gagal, namun belum merujuk akar teknis ekstensi berkas .DOCX.<br>
+          - <em>Opsi C (15 Pts):</em> Analisis gejala permukaan tanpa membaca detail pesan error parser regex.<br>
+          - <em>Opsi D (0 Pts):</em> Distractor tanpa dasar log/data sistem.<br><br>
+        • <strong>Soal 2 (Max 50 Poin):</strong><br>
+          - <em>Opsi B (50 Pts):</em> Solusi holistik: perbaikan software engineering (multi-format converter), fasilitas banding, dan etika Human-in-the-Loop.<br>
+          - <em>Opsi C (30 Pts):</em> Prinsip Human-in-the-Loop & banding sangat adil, namun belum memperbaiki pipeline konversi otomatis sistem.<br>
+          - <em>Opsi D (15 Pts):</em> Solusi cepat di frontend, namun kaku dan masih rentan mendiskualifikasi pelamar awam.<br>
+          - <em>Opsi A (0 Pts):</em> Solusi destruktif yang membuang seluruh efisiensi teknologi.<br><br>
+        • <strong>Pelajaran Etika:</strong> Otomatisasi AI tidak boleh berjalan tanpa supervisi manusia (Human-in-the-Loop) saat menentukan nasib manusia.
+      `,
+      tutorial: {
+        posTag: "POS 04 // DILEMA SELEKSI AI",
+        posTitle: "PANDUAN MISI: DILEMA SELEKSI AI",
+        steps: [
+          {
+            step: 1,
+            title: "CRT 1 (KIRI): SIMULATOR PARSER REGEX SELEKSI AI",
+            body: `Di monitor kiri, terdapat sistem otomatisasi seleksi beasiswa berbasis AI:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Amati tabel 3 kandidat: Budi Santoso memiliki IPK 3.92 &amp; Juara 1 Hackathon, namun berstatus <strong>DISKUALIFIKASI</strong>.</li>
+              <li>Klik tombol <strong>[TEST PARSE BERKAS]</strong> atau tombol simulasi di bawah untuk menjalankan engine regex parser.</li>
+              <li>Baca log terminal konsol AI untuk memahami penyebab teknis: mengapa ekstensi file <code>.docx</code> ditolak error 415 oleh regex yang kaku.</li>
+            </ul>`,
+            callout: "💡 <strong>Etika Teknologi:</strong> AI hanya menjalankan aturan algoritma yang ditulis pembuatnya. Kesalahan sekecil regex dapat berdampak fatal dan diskriminatif bagi manusia!",
+            calloutType: "tip-cyan"
+          },
+          {
+            step: 2,
+            title: "CRT 2 (KANAN): 2 SOAL PILIHAN GANDA (100 POIN)",
+            body: `Di monitor kanan, pecahkan <strong>2 Pertanyaan Etika &amp; Software Engineering</strong>:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li><strong>Soal 1 (Max 50 Poin):</strong> Menganalisis penyebab teknis utama kegagalan seleksi berkas Budi Santoso.</li>
+              <li><strong>Soal 2 (Max 50 Poin):</strong> Merumuskan solusi rekayasa &amp; etika komprehensif (fasilitas banding, konversi berkas otomatis, dan prinsip <em>Human-in-the-Loop</em>).</li>
+              <li>Opsi dengan penalaran rekayasa perangkat lunak dan etika paling utuh mendapat 50 Poin.</li>
+            </ul>`,
+            callout: "⚠️ <strong>Penting:</strong> Diskusikan bersama tim solusi terbaik sebelum mengklik <code>[KIRIM JAWABAN AKHIR]</code>.",
+            calloutType: "tip-yellow"
+          },
+          {
+            step: 3,
+            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            body: `Setelah submit di monitor kanan:
+            <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
+              <li>Sistem akan mengunci jawaban dan mencetak <strong>Kode Unik Verifikasi</strong> (contoh: <code>DEEPSEEK-P4-3D8E</code>).</li>
+              <li>Salin kode unik dan tuliskan argumen solusi etika teknologi pada <strong>Lembar Kertas Jawaban Fisik</strong> tim.</li>
+              <li>Juri pos akan memvalidasi kode dan memberi penilaian pada rubrik lembar kertas.</li>
+            </ul>`,
+            callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk memulai misi!",
+            calloutType: "tip-green"
+          }
+        ]
+      }
     }
   };
 
@@ -257,22 +532,181 @@ document.addEventListener("DOMContentLoaded", () => {
       this.playTone(150, "sawtooth", 0.2, 0.3);
       setTimeout(() => this.playTone(90, "sawtooth", 0.35, 0.35), 60);
     }
+
+    fail() {
+      if (!this.enabled) return;
+      this.playTone(330, "sawtooth", 0.15, 0.25);
+      setTimeout(() => this.playTone(220, "sawtooth", 0.35, 0.3), 120);
+    }
+
+    // Melodic cyber tick when hovering over cards in the deck
+    cardHover(index = 0) {
+      if (!this.enabled) return;
+      try {
+        this.init();
+        const baseFreqs = [659.25, 783.99, 880.00, 1046.50, 1174.66];
+        const freq = baseFreqs[index % baseFreqs.length] || 880;
+        const now = this.ctx.currentTime;
+
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.18, now + 0.04);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      } catch (e) {}
+    }
+
+    // Arcade Character-Select & Mecha Lock-In Sound Effect
+    teamSelectLock(teamId = "meta", index = 0) {
+      if (!this.enabled) return;
+      try {
+        this.init();
+        const now = this.ctx.currentTime;
+
+        // Signature chord per AI team
+        const chordMap = {
+          meta: [587.33, 739.99, 880.00, 1174.66],       // Meta: D Major ethereal synth
+          gemini: [523.25, 659.25, 783.99, 1046.50],     // Gemini: C Major bright star
+          copilot: [440.00, 554.37, 659.25, 880.00],     // Copilot: A Major cyber pilot
+          deepseek: [392.00, 493.88, 587.33, 783.99],    // DeepSeek: G Major ocean sonar
+          claude: [493.88, 622.25, 739.99, 987.77]       // Claude: B Major warm sunburst
+        };
+        const chord = chordMap[teamId] || [523.25, 659.25, 783.99, 1046.50];
+
+        // 1. Rapid Cyber Power Chime Arpeggio
+        chord.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const startT = now + idx * 0.045;
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, startT);
+
+          gain.gain.setValueAtTime(0.001, startT);
+          gain.gain.linearRampToValueAtTime(0.24, startT + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.001, startT + 0.22);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(startT);
+          osc.stop(startT + 0.23);
+        });
+
+        // 2. Mechanical Sci-Fi Lock Sub-Drop (Deep Sine Punch)
+        const subOsc = this.ctx.createOscillator();
+        const subGain = this.ctx.createGain();
+        const subStart = now + 0.08;
+        subOsc.type = "sine";
+        subOsc.frequency.setValueAtTime(260, subStart);
+        subOsc.frequency.exponentialRampToValueAtTime(60, subStart + 0.32);
+
+        subGain.gain.setValueAtTime(0.001, subStart);
+        subGain.gain.linearRampToValueAtTime(0.35, subStart + 0.02);
+        subGain.gain.exponentialRampToValueAtTime(0.001, subStart + 0.38);
+
+        subOsc.connect(subGain);
+        subGain.connect(this.ctx.destination);
+        subOsc.start(subStart);
+        subOsc.stop(subStart + 0.40);
+
+        // 3. High Shimmer Confirmation Sparkle
+        const sparkOsc = this.ctx.createOscillator();
+        const sparkGain = this.ctx.createGain();
+        const sparkStart = now + 0.16;
+        sparkOsc.type = "sine";
+        sparkOsc.frequency.setValueAtTime(1760, sparkStart);
+        sparkOsc.frequency.exponentialRampToValueAtTime(2349, sparkStart + 0.18);
+
+        sparkGain.gain.setValueAtTime(0.001, sparkStart);
+        sparkGain.gain.linearRampToValueAtTime(0.12, sparkStart + 0.02);
+        sparkGain.gain.exponentialRampToValueAtTime(0.001, sparkStart + 0.25);
+
+        sparkOsc.connect(sparkGain);
+        sparkGain.connect(this.ctx.destination);
+        sparkOsc.start(sparkStart);
+        sparkOsc.stop(sparkStart + 0.26);
+      } catch (e) {}
+    }
+
+    // Sci-Fi Mainframe Engine Launch Sound
+    bootLaunch() {
+      if (!this.enabled) return;
+      try {
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(330, now);
+        osc.frequency.exponentialRampToValueAtTime(1320, now + 0.22);
+
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.26);
+      } catch (e) {}
+    }
   }
 
   const sfx = new ChiptuneSynth();
+
+  // Auto-unlock AudioContext on first touch/pointer/key event
+  const unlockAudioContext = () => {
+    sfx.init();
+    window.removeEventListener("pointerdown", unlockAudioContext);
+    window.removeEventListener("keydown", unlockAudioContext);
+  };
+  window.addEventListener("pointerdown", unlockAudioContext, { once: true });
+  window.addEventListener("keydown", unlockAudioContext, { once: true });
 
   // ==========================================================================
   // 3. APPLICATION STATE & STORAGE
   // ==========================================================================
   let currentPos = 1;
   let currentTeam = "meta";
-  let phase = 1; // 1: Exploration, 2: Input, 3: Locked
-  let secondsLeft = 300;
-  const PHASE_DURATION = 300;
+  let phase = 1; // 1: Active Mission, 2: Locked
+  let secondsLeft = 120;
+  const PHASE_DURATION = 120; // 2 Menit (120 detik)
   let timerInterval = null;
   let isRunning = false;
   let robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
   let eliminatedVaults = new Set();
+
+  const ICON_ROBOT_CHIP = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 16.5V21m3.75-18v1.5m0 16.5V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V5.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 19.5Z" /></svg>`;
+  const ICON_ROBOT_SUCCESS = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`;
+  const ICON_ROBOT_CRASH = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`;
+  const ICON_ARCHIVE = `<svg class="h-icon h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" /></svg>`;
+
+  // Pos 2 Robot Barista Elements
+  const robotStepsList = document.getElementById("robotStepsList");
+  const robotAvatar = document.getElementById("robotAvatar");
+  const robotStatusText = document.getElementById("robotStatusText");
+  const robotConsole = document.getElementById("robotConsole");
+  const btnRunRobot = document.getElementById("btnRunRobot");
+  const btnResetSteps = document.getElementById("btnResetSteps");
+
+  // Pos 3 Digital Vaults Elements
+  const vaultsGrid = document.getElementById("vaultsGrid");
+  const btnResetVaults = document.getElementById("btnResetVaults");
+
+  // MCQ State & DOM
+  let userMcqAnswers = {};
+  let isMcqSubmitted = false;
+  const btnSubmitMcq = document.getElementById("btnSubmitMcq");
+  const mcqResultBox = document.getElementById("mcqResultBox");
+  const mcqScoreDisplay = document.getElementById("mcqScoreDisplay");
+  const mcqCodeDisplay = document.getElementById("mcqCodeDisplay");
+  const btnNextGroupRotation = document.getElementById("btnNextGroupRotation");
 
   // DOM Elements
   const teamSelect = document.getElementById("teamSelect");
@@ -306,6 +740,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Glitch Banner
   const glitchAlertBanner = document.getElementById("glitchAlertBanner");
   const btnDismissGlitch = document.getElementById("btnDismissGlitch");
+
+  // Dual CRT Monitor Frames
+  const crt1MonitorFrame = document.getElementById("crt1MonitorFrame");
+  const crt2MonitorFrame = document.getElementById("crt2MonitorFrame");
 
   // Single Pos Station Bar & Mission Containers
   const singlePosStationBar = document.getElementById("singlePosStationBar");
@@ -352,6 +790,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Admin & Management Elements
   const leaderboardTbody = document.getElementById("leaderboardTbody");
+  const hubLeaderboardTbody = document.getElementById("hubLeaderboardTbody");
   const verifikasiTbody = document.getElementById("verifikasiTbody");
   const btnExportCSV = document.getElementById("btnExportCSV");
   const btnExportJSON = document.getElementById("btnExportJSON");
@@ -369,6 +808,651 @@ document.addEventListener("DOMContentLoaded", () => {
   const pinErrorMsg = document.getElementById("pinErrorMsg");
   const btnSubmitPin = document.getElementById("btnSubmitPin");
   const btnClosePinModal = document.getElementById("btnClosePinModal");
+
+  // Retro Cyber Alert & Confirm Modal Dialog Elements & Handlers
+  const cyberDialogModal = document.getElementById("cyberDialogModal");
+  const cyberDialogCard = document.getElementById("cyberDialogCard");
+  const cyberDialogTitle = document.getElementById("cyberDialogTitle");
+  const cyberDialogIcon = document.getElementById("cyberDialogIcon");
+  const cyberDialogMessage = document.getElementById("cyberDialogMessage");
+  const cyberDialogInput = document.getElementById("cyberDialogInput");
+  const btnCloseCyberDialog = document.getElementById("btnCloseCyberDialog");
+  const btnCyberDialogConfirm = document.getElementById("btnCyberDialogConfirm");
+  const btnCyberDialogCancel = document.getElementById("btnCyberDialogCancel");
+
+  let cyberDialogConfirmCallback = null;
+  let cyberDialogCancelCallback = null;
+
+  function closeCyberDialog() {
+    if (cyberDialogModal) {
+      cyberDialogModal.classList.remove("open");
+    }
+    if (cyberDialogInput) {
+      cyberDialogInput.style.display = "none";
+      cyberDialogInput.value = "";
+    }
+    cyberDialogConfirmCallback = null;
+    cyberDialogCancelCallback = null;
+  }
+
+  const ICON_PATHS = {
+    info: '<path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />',
+    warning: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />',
+    danger: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />',
+    success: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />'
+  };
+
+  function setupCyberDialogTheme(type) {
+    if (!cyberDialogCard) return;
+    cyberDialogCard.classList.remove("type-info", "type-warning", "type-danger", "type-success");
+    const safeType = ["info", "warning", "danger", "success"].includes(type) ? type : "info";
+    cyberDialogCard.classList.add(`type-${safeType}`);
+    if (cyberDialogIcon) {
+      cyberDialogIcon.innerHTML = ICON_PATHS[safeType] || ICON_PATHS.info;
+    }
+    if (btnCyberDialogConfirm) {
+      btnCyberDialogConfirm.className = "pixel-btn";
+      if (safeType === "warning") btnCyberDialogConfirm.classList.add("pixel-btn-yellow");
+      else if (safeType === "danger") btnCyberDialogConfirm.classList.add("pixel-btn-red");
+      else if (safeType === "success") btnCyberDialogConfirm.classList.add("pixel-btn-green");
+      else btnCyberDialogConfirm.classList.add("pixel-btn-cyan");
+    }
+  }
+
+  function showCyberAlert(title, message, type = "info", onClose = null) {
+    setupCyberDialogTheme(type);
+    if (cyberDialogTitle) cyberDialogTitle.textContent = title || "NOTIFIKASI SISTEM";
+    if (cyberDialogMessage) cyberDialogMessage.textContent = message || "";
+    if (cyberDialogInput) cyberDialogInput.style.display = "none";
+    if (btnCyberDialogCancel) btnCyberDialogCancel.style.display = "none";
+    if (btnCyberDialogConfirm) btnCyberDialogConfirm.textContent = "MENGERTI";
+    cyberDialogConfirmCallback = onClose;
+    if (cyberDialogModal) cyberDialogModal.classList.add("open");
+    sfx.blip();
+  }
+
+  function showCyberConfirm(title, message, onConfirm, type = "warning", onCancel = null) {
+    setupCyberDialogTheme(type);
+    if (cyberDialogTitle) cyberDialogTitle.textContent = title || "KONFIRMASI TINDAKAN";
+    if (cyberDialogMessage) cyberDialogMessage.textContent = message || "";
+    if (cyberDialogInput) cyberDialogInput.style.display = "none";
+    if (btnCyberDialogCancel) {
+      btnCyberDialogCancel.style.display = "inline-flex";
+      btnCyberDialogCancel.textContent = "BATAL";
+    }
+    if (btnCyberDialogConfirm) btnCyberDialogConfirm.textContent = "YA, LANJUTKAN";
+    cyberDialogConfirmCallback = onConfirm;
+    cyberDialogCancelCallback = onCancel;
+    if (cyberDialogModal) cyberDialogModal.classList.add("open");
+    sfx.blip();
+  }
+
+  function showCyberPrompt(title, message, placeholder, onConfirm, type = "danger", onCancel = null) {
+    setupCyberDialogTheme(type);
+    if (cyberDialogTitle) cyberDialogTitle.textContent = title || "KONFIRMASI TINDAKAN";
+    if (cyberDialogMessage) cyberDialogMessage.textContent = message || "";
+    if (cyberDialogInput) {
+      cyberDialogInput.style.display = "block";
+      cyberDialogInput.placeholder = placeholder || "";
+      cyberDialogInput.value = "";
+    }
+    if (btnCyberDialogCancel) {
+      btnCyberDialogCancel.style.display = "inline-flex";
+      btnCyberDialogCancel.textContent = "BATAL";
+    }
+    if (btnCyberDialogConfirm) {
+      btnCyberDialogConfirm.textContent = "KONFIRMASI";
+    }
+
+    cyberDialogConfirmCallback = () => {
+      const val = cyberDialogInput ? cyberDialogInput.value.trim() : "";
+      if (onConfirm) onConfirm(val);
+    };
+    cyberDialogCancelCallback = onCancel;
+
+    if (cyberDialogModal) cyberDialogModal.classList.add("open");
+    sfx.blip();
+
+    setTimeout(() => {
+      if (cyberDialogInput) {
+        cyberDialogInput.focus();
+        cyberDialogInput.select();
+      }
+    }, 50);
+  }
+
+  if (cyberDialogInput) {
+    cyberDialogInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (btnCyberDialogConfirm) btnCyberDialogConfirm.click();
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        if (btnCyberDialogCancel) btnCyberDialogCancel.click();
+      }
+    });
+  }
+
+  if (btnCloseCyberDialog) {
+    btnCloseCyberDialog.addEventListener("click", () => {
+      sfx.blip();
+      const cancelCb = cyberDialogCancelCallback;
+      closeCyberDialog();
+      if (cancelCb) cancelCb();
+    });
+  }
+
+  if (btnCyberDialogCancel) {
+    btnCyberDialogCancel.addEventListener("click", () => {
+      sfx.blip();
+      const cancelCb = cyberDialogCancelCallback;
+      closeCyberDialog();
+      if (cancelCb) cancelCb();
+    });
+  }
+
+  if (btnCyberDialogConfirm) {
+    btnCyberDialogConfirm.addEventListener("click", () => {
+      sfx.blip();
+      const confirmCb = cyberDialogConfirmCallback;
+      closeCyberDialog();
+      if (confirmCb) confirmCb();
+    });
+  }
+
+  if (cyberDialogModal) {
+    cyberDialogModal.addEventListener("click", (e) => {
+      if (e.target === cyberDialogModal) {
+        const cancelCb = cyberDialogCancelCallback;
+        closeCyberDialog();
+        if (cancelCb) cancelCb();
+      }
+    });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && cyberDialogModal && cyberDialogModal.classList.contains("open")) {
+      const cancelCb = cyberDialogCancelCallback;
+      closeCyberDialog();
+      if (cancelCb) cancelCb();
+    } else if (e.key === "Escape" && posTutorialModal && posTutorialModal.classList.contains("open")) {
+      closeTutorialModal();
+    }
+  });
+
+  // ==========================================================================
+  // CYBERPUNK SPOTLIGHT TOUR ENGINE (INTRO.JS STYLE)
+  // ==========================================================================
+  const cyberTourOverlay = document.getElementById("cyberTourOverlay");
+  const cyberTourSpotlight = document.getElementById("cyberTourSpotlight");
+  const cyberTourTooltip = document.getElementById("cyberTourTooltip");
+  const tourStepBadge = document.getElementById("tourStepBadge");
+  const tourStepTitle = document.getElementById("tourStepTitle");
+  const tourStepBodyText = document.getElementById("tourStepBodyText");
+  const tourStepCallout = document.getElementById("tourStepCallout");
+  const tourDotsRow = document.getElementById("tourDotsRow");
+  const btnCloseTour = document.getElementById("btnCloseTour");
+  const btnSkipTour = document.getElementById("btnSkipTour");
+  const btnPrevTourStep = document.getElementById("btnPrevTourStep");
+  const btnNextTourStep = document.getElementById("btnNextTourStep");
+  const btnStartMissionFromTour = document.getElementById("btnStartMissionFromTour");
+  const btnOpenTutorial = document.getElementById("btnOpenTutorial");
+
+  let isTourActive = false;
+  let currentTourIndex = 0;
+  let activeTourPos = 1;
+
+  const POS_TOUR_STEPS = {
+    0: [
+      {
+        target: ".hub-portal-grid",
+        placement: "bottom",
+        title: "PORTAL 4 POS STUDI KASUS",
+        body: `Pilih Pos Misi yang ingin dijalankan di laptop ini (<strong>Pos 1 s/d Pos 4</strong>).<br>
+        • Pos 1: Investigasi Email Phishing (Cybersecurity)<br>
+        • Pos 2: Robot Barista Glitch (Algoritma Sekuensial)<br>
+        • Pos 3: Brankas Data Hilang (Eliminasi Data)<br>
+        • Pos 4: Seleksi Berkas AI Glitch (Etika Teknologi)`,
+        callout: "💡 <strong>Tips Operasional:</strong> Buka pos sesuai jadwal rotasi pos kelompok.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: ".hub-leaderboard-section",
+        placement: "top",
+        title: "LIVE LEADERBOARD REALTIME",
+        body: `Papan peringkat realtime 5 Kelompok (<strong>META, GEMINI, COPILOT, DEEPSEEK, CLAUDE</strong>).<br>
+        • Skor otomatis tersinkronisasi saat peserta men-submit jawaban di pos manapun.<br>
+        • Mendukung sinkronisasi offline (LocalStorage) maupun online (Cloud Firestore).`,
+        callout: "🏆 <strong>Fair Play:</strong> Total akumulasi poin di 4 pos menentukan juara The Logic Escape.",
+        calloutType: "tip-yellow"
+      },
+      {
+        target: ".header-toolbar",
+        placement: "bottom",
+        title: "KONTROL AUDIO, LEMBAR & ADMIN",
+        body: `Gunakan tombol di toolbar atas:<br>
+        • <strong>Ikon Kertas:</strong> Cetak Lembar Kertas Jawaban Fisik untuk peserta.<br>
+        • <strong>KUNCI POS:</strong> Lihat rubrik penilaian juri.<br>
+        • <strong>LEADERBOARD:</strong> Kelola data rekapitulasi nilai.`,
+        callout: "✨ <strong>Siap Digunakan:</strong> Klik tombol Buka Pos pada kartu untuk memulai!",
+        calloutType: "tip-green"
+      }
+    ],
+    1: [
+      {
+        target: "#crt1MonitorFrame",
+        placement: "right",
+        title: "CRT 1: TERMINAL BUKTI INVESTIGASI",
+        body: `Di monitor kiri, terdapat <strong>3 kotak masuk email</strong> mahasiswa.<br>
+        • Klik tombol Email 1, 2, dan 3 untuk membaca bukti forensik.<br>
+        • Periksa domain pengirim (<code>.ac.id</code> resmi vs <code>.xyz</code> palsu).<br>
+        • Waspadai tautan link eksternal dan trik urgensi kepanikan!`,
+        callout: "💡 <strong>Tips Forensik:</strong> Bandingkan email KRS resmi kampus dengan email beasiswa mencurigakan.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#crt2MonitorFrame",
+        placement: "left",
+        title: "CRT 2: 2 SOAL PILIHAN GANDA (100 POIN)",
+        body: `Di monitor kanan, selesaikan <strong>2 Pertanyaan Kritis</strong>:<br>
+        • <strong>Soal 1 (Max 50 Pts):</strong> Identifikasi email vektor penipuan.<br>
+        • <strong>Soal 2 (Max 50 Pts):</strong> Analisis kejanggalan teknis paling fatal.<br>
+        • Tiap opsi memiliki bobot skor berjenjang (<strong>0 s/d 50 Pts</strong>). Diskusikan bersama tim!`,
+        callout: "⚠️ <strong>Perhatian:</strong> Pilihan tidak dapat diubah setelah tombol submit ditekan.",
+        calloutType: "tip-yellow"
+      },
+      {
+        target: ".energy-timer-console",
+        placement: "bottom",
+        title: "COUNTDOWN TIMER: 2 MENIT (STANDBY)",
+        body: `Durasi misi pos ini adalah <strong>2 MENIT (120 Detik)</strong>.<br>
+        • Timer saat ini dalam kondisi <strong>STANDBY (02:00)</strong> sehingga waktu tim belum berkurang.<br>
+        • Countdown baru akan mulai berdetak ketika tombol <em>Mulai Misi</em> ditekan!`,
+        callout: "⏱️ <strong>Manajemen Waktu:</strong> Manfaatkan 2 menit untuk berdiskusi cepat dan mufakat.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#btnSubmitMcq",
+        placement: "left",
+        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        body: `Langkah terakhir penyelesaian studi kasus:<br>
+        • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk mengunci jawaban.<br>
+        • Sistem akan mencetak <strong>KODE UNIK VERIFIKASI</strong> (misal: <code>META-P1-9F2B</code>).<br>
+        • <strong>Salin kode unik dan argumen tim</strong> ke Lembar Kertas Jawaban Fisik di meja pos!`,
+        callout: "🚀 <strong>Siap Bertanding?</strong> Klik tombol di bawah untuk langsung memulai countdown 2 menit!",
+        calloutType: "tip-green"
+      }
+    ],
+    2: [
+      {
+        target: "#crt1MonitorFrame",
+        placement: "right",
+        title: "CRT 1: SIMULATOR LOGIKA ROBOT BARISTA",
+        body: `Di monitor kiri, robot peracik kopi mengalami glitch logika sekuensial:<br>
+        • Gunakan tombol panah <strong>[▲ Naik]</strong> dan <strong>[▼ Turun]</strong> untuk merapikan 6 langkah.<br>
+        • Klik <strong>[UJI SIMULASI LOGIKA ROBOT]</strong> untuk menguji apakah aktuator sukses menyajikan kopi atau tumpah!`,
+        callout: "💡 <strong>Prinsip Algoritma:</strong> Cangkir fisik penampung harus selalu siap di tatakan sebelum zat cair dituangkan!",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#crt2MonitorFrame",
+        placement: "left",
+        title: "CRT 2: 2 SOAL LOGIKA SEKUENSIAL (100 POIN)",
+        body: `Di monitor kanan, jawab <strong>2 Pertanyaan Debugging</strong>:<br>
+        • <strong>Soal 1 (Max 50 Pts):</strong> Tentukan urutan eksekusi langkah paling runtut dan efisien.<br>
+        • <strong>Soal 2 (Max 50 Pts):</strong> Jelaskan secara komputasional mengapa wadah output wajib diinisialisasi di awal.<br>
+        • Bobot poin (0, 15, 30, 50 Pts) mengukur ketajaman logika tim.`,
+        callout: "⚠️ <strong>Perhatian:</strong> Pastikan seluruh anggota tim sepakat sebelum memilih opsi akhir.",
+        calloutType: "tip-yellow"
+      },
+      {
+        target: ".energy-timer-console",
+        placement: "bottom",
+        title: "COUNTDOWN TIMER: 2 MENIT (STANDBY)",
+        body: `Durasi misi pos ini adalah <strong>2 MENIT (120 Detik)</strong>.<br>
+        • Timer saat ini masih <strong>STANDBY (02:00)</strong>.<br>
+        • Jangan tergesa-gesa saat membaca panduan ini, waktu baru berkurang setelah tour ditutup!`,
+        callout: "⏱️ <strong>Efisien:</strong> Selesaikan urutan robot dan pilih opsi jawaban sebelum 120 detik habis.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#btnSubmitMcq",
+        placement: "left",
+        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        body: `Kunci evaluasi misi kelompok:<br>
+        • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk mencetak <strong>KODE UNIK VERIFIKASI</strong> (misal: <code>GEMINI-P2-4C1A</code>).<br>
+        • Salin kode unik dan tuliskan penjelasan logika pada Lembar Kertas Fisik untuk dinilai juri pos!`,
+        callout: "🚀 <strong>Mulai Misi!</strong> Klik tombol di bawah untuk langsung mengaktifkan timer 2 menit!",
+        calloutType: "tip-green"
+      }
+    ],
+    3: [
+      {
+        target: "#crt1MonitorFrame",
+        placement: "right",
+        title: "CRT 1: MATRIKS 8 BRANKAS & 3 CLUE ELIMINASI",
+        body: `Di monitor kiri, terdapat <strong>8 Brankas Digital</strong> arsip kampus:<br>
+        • Terapkan 3 Clue: <em>Bukan Genap</em>, <em>Ukuran > 50 MB</em>, dan <em>Akses Akhir Pekan (Sabtu/Minggu)</em>.<br>
+        • Klik kartu brankas untuk <strong>mencoret / mengeliminasi</strong> brankas yang gugur secara interaktif!`,
+        callout: "💡 <strong>Tips Eliminasi:</strong> Brankas dokumen rahasia adalah yang memenuhi KETIGA syarat sekaligus.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#crt2MonitorFrame",
+        placement: "left",
+        title: "CRT 2: 2 SOAL ELIMINASI DATA (100 POIN)",
+        body: `Di monitor kanan, tuntaskan <strong>2 Pertanyaan Eliminasi</strong>:<br>
+        • <strong>Soal 1 (Max 50 Pts):</strong> Tentukan nomor brankas dokumen rahasia yang lolos seluruh kriteria.<br>
+        • <strong>Soal 2 (Max 50 Pts):</strong> Buktikan mengapa Vault 07 gugur (hari Kamis bukan akhir pekan).<br>
+        • Opsi dengan penalaran logika multi-kondisi paling presisi meraih 50 Poin!`,
+        callout: "⚠️ <strong>Perhatian:</strong> Periksa kembali metadata brankas sebelum mengunci jawaban.",
+        calloutType: "tip-yellow"
+      },
+      {
+        target: ".energy-timer-console",
+        placement: "bottom",
+        title: "COUNTDOWN TIMER: 2 MENIT (STANDBY)",
+        body: `Durasi misi pos ini adalah <strong>2 MENIT (120 Detik)</strong>.<br>
+        • Waktu saat ini masih <strong>STANDBY (02:00)</strong>.<br>
+        • Diskusikan eliminasi brankas bersama anggota regu sebelum menekan tombol mulai!`,
+        callout: "⏱️ <strong>Fokus:</strong> Gunakan waktu 2 menit secara efektif bersama seluruh anggota regu.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#btnSubmitMcq",
+        placement: "left",
+        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        body: `Penerbitan kode verifikasi pos:<br>
+        • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk mengunci skor dan memunculkan <strong>KODE UNIK</strong> (misal: <code>COPILOT-P3-7E59</code>).<br>
+        • Catat kode dan alur eliminasi 8 brankas pada Lembar Kertas Jawaban Fisik di meja!`,
+        callout: "🚀 <strong>Siap Beraksi?</strong> Klik tombol di bawah untuk langsung memulai hitung mundur 2 menit!",
+        calloutType: "tip-green"
+      }
+    ],
+    4: [
+      {
+        target: "#crt1MonitorFrame",
+        placement: "right",
+        title: "CRT 1: SIMULATOR PARSER REGEX SELEKSI AI",
+        body: `Di monitor kiri, sistem AI menolak kandidat mahasiswa terbaik:<br>
+        • Amati tabel kandidat: Budi (IPK 3.92 & Juara 1) berstatus <strong>DISKUALIFIKASI</strong>.<br>
+        • Klik <strong>[TEST PARSE BERKAS]</strong> untuk melihat engine regex error 415 (.docx vs .pdf).<br>
+        • Coba tombol perbaikan berkas .pdf untuk mengamati perbedaannya!`,
+        callout: "💡 <strong>Etika Teknologi:</strong> Tanpa supervisi manusia (Human-in-the-Loop), otomasi kaku dapat mendiskriminasi manusia.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#crt2MonitorFrame",
+        placement: "left",
+        title: "CRT 2: 2 SOAL ETIKA TEKNOLOGI (100 POIN)",
+        body: `Di monitor kanan, evaluasi <strong>2 Pertanyaan Etika & Rekayasa</strong>:<br>
+        • <strong>Soal 1 (Max 50 Pts):</strong> Analisis akar penyebab teknis parser regex yang kaku.<br>
+        • <strong>Soal 2 (Max 50 Pts):</strong> Rumuskan solusi komprehensif (konversi format otomatis, fasilitas sanggah/banding, dan supervisi manusia).<br>
+        • Poin berbobot (0 s/d 50 Pts) menguji kedalaman analisis sistem.`,
+        callout: "⚠️ <strong>Perhatian:</strong> Pilihlah solusi rekayasa & etika yang paling adil dan menyeluruh.",
+        calloutType: "tip-yellow"
+      },
+      {
+        target: ".energy-timer-console",
+        placement: "bottom",
+        title: "COUNTDOWN TIMER: 2 MENIT (STANDBY)",
+        body: `Durasi misi pos ini adalah <strong>2 MENIT (120 Detik)</strong>.<br>
+        • Waktu saat ini masih <strong>STANDBY (02:00)</strong>.<br>
+        • Peserta tidak perlu terburu-buru membaca tour panduan ini, waktu belum berkurang!`,
+        callout: "⏱️ <strong>Critical Thinking:</strong> Pahami masalah algoritma secara mendalam sebelum menjawab.",
+        calloutType: "tip-cyan"
+      },
+      {
+        target: "#btnSubmitMcq",
+        placement: "left",
+        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        body: `Kunci nilai pos etika AI:<br>
+        • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk menerbitkan <strong>KODE UNIK VERIFIKASI</strong> (misal: <code>DEEPSEEK-P4-3D8E</code>).<br>
+        • Salin kode unik dan tuliskan solusi etika teknologi tim ke Lembar Kertas Jawaban Fisik!`,
+        callout: "🚀 <strong>Mulai Investigasi!</strong> Klik tombol di bawah untuk menyalakan countdown timer 2 menit!",
+        calloutType: "tip-green"
+      }
+    ]
+  };
+
+  function updateActiveTourPosition() {
+    if (!isTourActive) return;
+    const steps = POS_TOUR_STEPS[activeTourPos] || POS_TOUR_STEPS[1];
+    const step = steps[currentTourIndex];
+    if (!step) return;
+    const targetEl = document.querySelector(step.target);
+    if (!targetEl || !cyberTourSpotlight || !cyberTourTooltip) return;
+
+    positionTourSpotlight(targetEl);
+    positionTourTooltip(targetEl, step.placement);
+  }
+
+  function positionTourSpotlight(targetEl) {
+    if (!cyberTourSpotlight) return;
+    const rect = targetEl.getBoundingClientRect();
+    const pad = 8;
+    const top = Math.max(0, rect.top - pad);
+    const left = Math.max(0, rect.left - pad);
+    const width = Math.min(window.innerWidth - left, rect.width + pad * 2);
+    const height = Math.min(window.innerHeight - top, rect.height + pad * 2);
+
+    cyberTourSpotlight.style.top = `${top}px`;
+    cyberTourSpotlight.style.left = `${left}px`;
+    cyberTourSpotlight.style.width = `${width}px`;
+    cyberTourSpotlight.style.height = `${height}px`;
+  }
+
+  function positionTourTooltip(targetEl, preferredPlacement = "auto") {
+    if (!cyberTourTooltip) return;
+    const targetRect = targetEl.getBoundingClientRect();
+    const tooltipRect = cyberTourTooltip.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const pad = 16;
+    let top, left, placement = preferredPlacement;
+
+    if (vw < 960) {
+      if (targetRect.top > vh / 2) {
+        top = pad + 40;
+      } else {
+        top = vh - tooltipRect.height - pad;
+      }
+      left = Math.max(pad, (vw - tooltipRect.width) / 2);
+    } else {
+      if (placement === "auto") {
+        if (targetRect.right + tooltipRect.width + pad < vw) placement = "right";
+        else if (targetRect.left - tooltipRect.width - pad > 0) placement = "left";
+        else if (targetRect.bottom + tooltipRect.height + pad < vh) placement = "bottom";
+        else placement = "top";
+      }
+
+      if (placement === "right") {
+        left = targetRect.right + pad;
+        top = Math.max(pad, Math.min(vh - tooltipRect.height - pad, targetRect.top + (targetRect.height - tooltipRect.height) / 2));
+      } else if (placement === "left") {
+        left = targetRect.left - tooltipRect.width - pad;
+        top = Math.max(pad, Math.min(vh - tooltipRect.height - pad, targetRect.top + (targetRect.height - tooltipRect.height) / 2));
+      } else if (placement === "bottom") {
+        left = Math.max(pad, Math.min(vw - tooltipRect.width - pad, targetRect.left + (targetRect.width - tooltipRect.width) / 2));
+        top = targetRect.bottom + pad;
+      } else if (placement === "top") {
+        left = Math.max(pad, Math.min(vw - tooltipRect.width - pad, targetRect.left + (targetRect.width - tooltipRect.width) / 2));
+        top = targetRect.top - tooltipRect.height - pad;
+      }
+    }
+
+    left = Math.max(pad, Math.min(vw - tooltipRect.width - pad, left));
+    top = Math.max(pad, Math.min(vh - tooltipRect.height - pad, top));
+
+    cyberTourTooltip.style.left = `${left}px`;
+    cyberTourTooltip.style.top = `${top}px`;
+  }
+
+  function renderTourStep(index) {
+    const steps = POS_TOUR_STEPS[activeTourPos] || POS_TOUR_STEPS[1];
+    if (index < 0 || index >= steps.length) return;
+    currentTourIndex = index;
+    const step = steps[index];
+
+    const targetEl = document.querySelector(step.target);
+    if (!targetEl) return;
+
+    targetEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    if (tourStepBadge) tourStepBadge.textContent = `STEP ${index + 1} / ${steps.length}`;
+    if (tourStepTitle) tourStepTitle.textContent = step.title;
+    if (tourStepBodyText) tourStepBodyText.innerHTML = step.body;
+    if (tourStepCallout) {
+      tourStepCallout.className = `tutorial-callout-box ${step.calloutType || 'tip-cyan'}`;
+      tourStepCallout.innerHTML = step.callout;
+    }
+
+    if (tourDotsRow) {
+      tourDotsRow.innerHTML = steps.map((_, idx) => 
+        `<span class="tour-dot ${idx === index ? 'active' : ''}" data-step="${idx}" title="Langkah ${idx + 1}"></span>`
+      ).join("");
+      tourDotsRow.querySelectorAll(".tour-dot").forEach(dot => {
+        dot.addEventListener("click", () => {
+          sfx.blip();
+          const s = parseInt(dot.dataset.step) || 0;
+          renderTourStep(s);
+        });
+      });
+    }
+
+    if (btnPrevTourStep) {
+      btnPrevTourStep.disabled = (index === 0);
+      btnPrevTourStep.style.opacity = (index === 0) ? "0.3" : "1";
+    }
+
+    if (index === steps.length - 1) {
+      if (btnNextTourStep) btnNextTourStep.style.display = "none";
+      if (btnStartMissionFromTour) {
+        btnStartMissionFromTour.style.display = "inline-flex";
+        btnStartMissionFromTour.textContent = (activeTourPos === 0) ? "🚀 SAYA PAHAM!" : "🚀 MULAI MISI (2 MENIT)!";
+      }
+    } else {
+      if (btnNextTourStep) btnNextTourStep.style.display = "inline-flex";
+      if (btnStartMissionFromTour) btnStartMissionFromTour.style.display = "none";
+    }
+
+    setTimeout(() => {
+      positionTourSpotlight(targetEl);
+      positionTourTooltip(targetEl, step.placement);
+    }, 40);
+  }
+
+  let wasRunningBeforeTour = false;
+
+  function startCyberTour(posNum = 1, startStep = 0) {
+    activeTourPos = posNum;
+    isTourActive = true;
+    wasRunningBeforeTour = isRunning;
+    if (isRunning) {
+      pauseTimer();
+    }
+
+    if (cyberTourOverlay) cyberTourOverlay.style.display = "block";
+    if (cyberTourSpotlight) cyberTourSpotlight.style.display = "block";
+    if (cyberTourTooltip) cyberTourTooltip.style.display = "flex";
+
+    renderTourStep(startStep);
+    sfx.coinStart();
+  }
+
+  function closeCyberTour(startMission = false) {
+    isTourActive = false;
+    if (cyberTourOverlay) cyberTourOverlay.style.display = "none";
+    if (cyberTourSpotlight) cyberTourSpotlight.style.display = "none";
+    if (cyberTourTooltip) cyberTourTooltip.style.display = "none";
+
+    if (startMission || wasRunningBeforeTour) {
+      startTimer();
+    }
+    wasRunningBeforeTour = false;
+  }
+
+  if (btnCloseTour) {
+    btnCloseTour.addEventListener("click", () => {
+      sfx.blip();
+      closeCyberTour(false);
+    });
+  }
+
+  if (btnSkipTour) {
+    btnSkipTour.addEventListener("click", () => {
+      sfx.blip();
+      closeCyberTour(false);
+    });
+  }
+
+  if (btnPrevTourStep) {
+    btnPrevTourStep.addEventListener("click", () => {
+      sfx.blip();
+      if (currentTourIndex > 0) {
+        renderTourStep(currentTourIndex - 1);
+      }
+    });
+  }
+
+  if (btnNextTourStep) {
+    btnNextTourStep.addEventListener("click", () => {
+      sfx.blip();
+      const steps = POS_TOUR_STEPS[activeTourPos] || POS_TOUR_STEPS[1];
+      if (currentTourIndex < steps.length - 1) {
+        renderTourStep(currentTourIndex + 1);
+      }
+    });
+  }
+
+  if (btnStartMissionFromTour) {
+    btnStartMissionFromTour.addEventListener("click", () => {
+      closeCyberTour(true);
+    });
+  }
+
+  if (btnOpenTutorial) {
+    btnOpenTutorial.addEventListener("click", () => {
+      sfx.blip();
+      const p = document.getElementById("arcadePortalHub") ? 0 : currentPos;
+      startCyberTour(p, 0);
+    });
+  }
+
+  if (cyberTourOverlay) {
+    cyberTourOverlay.addEventListener("click", () => {
+      closeCyberTour(false);
+    });
+  }
+
+  window.addEventListener("resize", updateActiveTourPosition);
+  window.addEventListener("scroll", updateActiveTourPosition, { passive: true });
+  document.querySelectorAll(".crt-screen-scrollable").forEach(el => {
+    el.addEventListener("scroll", updateActiveTourPosition, { passive: true });
+  });
+
+  window.addEventListener("keydown", (e) => {
+    if (!isTourActive) return;
+    if (e.key === "ArrowRight" || e.key === "Enter") {
+      e.preventDefault();
+      const steps = POS_TOUR_STEPS[activeTourPos] || POS_TOUR_STEPS[1];
+      if (currentTourIndex < steps.length - 1) {
+        sfx.blip();
+        renderTourStep(currentTourIndex + 1);
+      } else {
+        closeCyberTour(true);
+      }
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      if (currentTourIndex > 0) {
+        sfx.blip();
+        renderTourStep(currentTourIndex - 1);
+      }
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      closeCyberTour(false);
+    }
+  });
 
   // Pos 4 AI Simulator Elements
   const btnSimDocx = document.getElementById("btnSimDocx");
@@ -522,29 +1606,77 @@ document.addEventListener("DOMContentLoaded", () => {
   const bootProgressLabel = document.getElementById("bootProgressLabel");
   const bootTeamName = document.getElementById("bootTeamName");
 
-  // Build team selection buttons
+  // Team Brand SVGs for Cyber Glass Cards (Official brand vectors)
+  const TEAM_ICONS = {
+    meta: `<svg viewBox="0 0 24 24" class="team-glass-icon" xmlns="http://www.w3.org/2000/svg"><path d="M6.915 4.03c-1.968 0-3.683 1.28-4.871 3.113C.704 9.208 0 11.883 0 14.449c0 .706.07 1.369.21 1.973a6.624 6.624 0 0 0 .265.86 5.297 5.297 0 0 0 .371.761c.696 1.159 1.818 1.927 3.593 1.927 1.497 0 2.633-.671 3.965-2.444.76-1.012 1.144-1.626 2.663-4.32l.756-1.339.186-.325c.061.1.121.196.183.3l2.152 3.595c.724 1.21 1.665 2.556 2.47 3.314 1.046.987 1.992 1.22 3.06 1.22 1.075 0 1.876-.355 2.455-.843a3.743 3.743 0 0 0 .81-.973c.542-.939.861-2.127.861-3.745 0-2.72-.681-5.357-2.084-7.45-1.282-1.912-2.957-2.93-4.716-2.93-1.047 0-2.088.467-3.053 1.308-.652.57-1.257 1.29-1.82 2.05-.69-.875-1.335-1.547-1.958-2.056-1.182-.966-2.315-1.303-3.454-1.303zm10.16 2.053c1.147 0 2.188.758 2.992 1.999 1.132 1.748 1.647 4.195 1.647 6.4 0 1.548-.368 2.9-1.839 2.9-.58 0-1.027-.23-1.664-1.004-.496-.601-1.343-1.878-2.832-4.358l-.617-1.028a44.908 44.908 0 0 0-1.255-1.98c.07-.109.141-.224.211-.327 1.12-1.667 2.118-2.602 3.358-2.602zm-10.201.553c1.265 0 2.058.791 2.675 1.446.307.327.737.871 1.234 1.579l-1.02 1.566c-.757 1.163-1.882 3.017-2.837 4.338-1.191 1.649-1.81 1.817-2.486 1.817-.524 0-1.038-.237-1.383-.794-.263-.426-.464-1.13-.464-2.046 0-2.221.63-4.535 1.66-6.088.454-.687.964-1.226 1.533-1.533a2.264 2.264 0 0 1 1.088-.285z"/></svg>`,
+    gemini: `<svg viewBox="0 0 24 24" class="team-glass-icon" xmlns="http://www.w3.org/2000/svg"><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81"/></svg>`,
+    copilot: `<svg viewBox="0 0 24 24" class="team-glass-icon" xmlns="http://www.w3.org/2000/svg"><path d="M23.922 16.997C23.061 18.492 18.063 22.02 12 22.02 5.937 22.02.939 18.492.078 16.997A.641.641 0 0 1 0 16.741v-2.869a.883.883 0 0 1 .053-.22c.372-.935 1.347-2.292 2.605-2.656.167-.429.414-1.055.644-1.517a10.098 10.098 0 0 1-.052-1.086c0-1.331.282-2.499 1.132-3.368.397-.406.89-.717 1.474-.952C7.255 2.937 9.248 1.98 11.978 1.98c2.731 0 4.767.957 6.166 2.093.584.235 1.077.546 1.474.952.85.869 1.132 2.037 1.132 3.368 0 .368-.014.733-.052 1.086.23.462.477 1.088.644 1.517 1.258.364 2.233 1.721 2.605 2.656a.841.841 0 0 1 .053.22v2.869a.641.641 0 0 1-.078.256Zm-11.75-5.992h-.344a4.359 4.359 0 0 1-.355.508c-.77.947-1.918 1.492-3.508 1.492-1.725 0-2.989-.359-3.782-1.259a2.137 2.137 0 0 1-.085-.104L4 11.746v6.585c1.435.779 4.514 2.179 8 2.179 3.486 0 6.565-1.4 8-2.179v-6.585l-.098-.104s-.033.045-.085.104c-.793.9-2.057 1.259-3.782 1.259-1.59 0-2.738-.545-3.508-1.492a4.359 4.359 0 0 1-.355-.508Zm2.328 3.25c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm-5 0c.549 0 1 .451 1 1v2c0 .549-.451 1-1 1-.549 0-1-.451-1-1v-2c0-.549.451-1 1-1Zm3.313-6.185c.136 1.057.403 1.913.878 2.497.442.544 1.134.938 2.344.938 1.573 0 2.292-.337 2.657-.751.384-.435.558-1.15.558-2.361 0-1.14-.243-1.847-.705-2.319-.477-.488-1.319-.862-2.824-1.025-1.487-.161-2.192.138-2.533.529-.269.307-.437.808-.438 1.578v.021c0 .265.021.562.063.893Zm-1.626 0c.042-.331.063-.628.063-.894v-.02c-.001-.77-.169-1.271-.438-1.578-.341-.391-1.046-.69-2.533-.529-1.505.163-2.347.537-2.824 1.025-.462.472-.705 1.179-.705 2.319 0 1.211.175 1.926.558 2.361.365.414 1.084.751 2.657.751 1.21 0 1.902-.394 2.344-.938.475-.584.742-1.44.878-2.497Z"/></svg>`,
+    deepseek: `<svg viewBox="0 0 24 24" class="team-glass-icon" xmlns="http://www.w3.org/2000/svg"><path d="M23.748 4.651c-.254-.124-.364.113-.512.233-.051.04-.094.09-.137.137-.372.397-.806.657-1.373.626-.829-.046-1.537.214-2.163.848-.133-.782-.575-1.248-1.247-1.548-.352-.155-.708-.311-.955-.65-.172-.24-.219-.509-.305-.774-.055-.16-.11-.323-.293-.35-.2-.031-.278.136-.356.276-.313.572-.434 1.202-.422 1.84.027 1.436.633 2.58 1.838 3.393.137.094.172.187.129.323-.082.28-.18.553-.266.833-.055.179-.137.218-.328.14a5.5 5.5 0 0 1-1.737-1.179c-.857-.828-1.631-1.743-2.597-2.46a12 12 0 0 0-.689-.47c-.985-.957.13-1.743.387-1.836.27-.098.094-.433-.778-.428-.872.003-1.67.295-2.687.685a3 3 0 0 1-.465.136 9.6 9.6 0 0 0-2.883-.101c-1.885.21-3.39 1.1-4.497 2.622C.082 8.776-.231 10.854.152 13.02c.403 2.284 1.568 4.175 3.36 5.653 1.857 1.533 3.997 2.284 6.438 2.14 1.482-.085 3.132-.284 4.994-1.86.47.234.962.328 1.78.398.629.058 1.235-.031 1.705-.129.735-.155.684-.836.418-.961-2.155-1.004-1.682-.595-2.112-.926 1.095-1.295 2.768-3.598 3.284-6.733.05-.346.115-.834.108-1.114-.004-.171.035-.238.23-.257a4.2 4.2 0 0 0 1.545-.475c1.397-.763 1.96-2.016 2.093-3.517.02-.23-.004-.467-.247-.588M11.58 18.168c-2.088-1.642-3.101-2.183-3.52-2.16-.39.024-.32.472-.234.763.09.288.207.487.371.74.114.167.192.416-.113.603-.673.416-1.842-.14-1.897-.168-1.361-.801-2.5-1.86-3.301-3.306-.775-1.393-1.225-2.888-1.299-4.482-.02-.385.094-.522.477-.592a4.7 4.7 0 0 1 1.53-.038c2.131.311 3.946 1.264 5.467 2.774.868.86 1.525 1.887 2.202 2.89.72 1.066 1.494 2.082 2.48 2.915.348.291.626.513.892.677-.802.09-2.14.109-3.055-.615zm1.001-6.44a.306.306 0 0 1 .415-.287.3.3 0 0 1 .113.074.3.3 0 0 1 .086.214c0 .17-.136.307-.308.307a.303.303 0 0 1-.306-.307m3.11 1.596c-.2.081-.4.151-.591.16a1.25 1.25 0 0 1-.798-.254c-.274-.23-.47-.358-.551-.758a1.7 1.7 0 0 1 .015-.588c.07-.327-.007-.537-.238-.727-.188-.156-.426-.199-.689-.199a.6.6 0 0 1-.254-.078.253.253 0 0 1-.114-.358 1 1 0 0 1 .192-.21c.356-.202.767-.136 1.146.016.352.144.618.408 1.001.782.392.451.462.576.685.915.176.264.336.536.446.848.066.194-.02.353-.25.45"/></svg>`,
+    claude: `<svg viewBox="0 0 24 24" class="team-glass-icon" xmlns="http://www.w3.org/2000/svg"><path d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></svg>`
+  };
+
+  const TEAM_ROTATIONS = [-16, -8, 0, 8, 16];
+
+  // Build team selection card deck
   function renderTeamSelectGrid(posNum) {
     const config = POS_CONFIG[posNum];
-    teamSelectPosLabel.textContent = `POS 0${posNum}: ${config.subTitle}`;
-    teamSelectGrid.innerHTML = TEAMS.map((t, i) => `
-      <button class="team-select-btn" data-team-id="${t.id}"
-        style="border-color: ${t.color}30; --team-color: ${t.color};"
-        onmouseover="this.style.borderColor='${t.color}'; this.style.background='${t.color}12';"
-        onmouseout="this.style.borderColor='${t.color}30'; this.style.background='';">
-        <span class="team-select-btn::before" style="background:${t.color};"></span>
-        <span class="team-select-btn-num">KELOMPOK ${i + 1}</span>
-        <span class="team-select-btn-name" style="color: ${t.color};">${t.name.toUpperCase()}</span>
-        <span class="team-select-btn-ip">IP: ${t.ip}</span>
-      </button>
-    `).join("");
+    if (teamSelectPosLabel && config) {
+      teamSelectPosLabel.textContent = `POS 0${posNum}: ${config.subTitle}`;
+    }
+    if (!teamSelectGrid) return;
 
-    // Bind button clicks
-    teamSelectGrid.querySelectorAll(".team-select-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const chosenId = btn.dataset.teamId;
+    teamSelectGrid.innerHTML = TEAMS.map((t, i) => {
+      const rot = TEAM_ROTATIONS[i] !== undefined ? TEAM_ROTATIONS[i] : 0;
+      const iconSvg = TEAM_ICONS[t.id] || "";
+      return `
+        <div class="team-glass-card" data-team-id="${t.id}" data-text="${t.name.toUpperCase()}"
+          style="--r: ${rot}; --team-color: ${t.color};"
+          role="button" tabindex="0" title="Pilih Kelompok ${i + 1}: ${t.name}">
+          <div class="team-card-top">
+            <span class="team-card-num">KELOMPOK ${i + 1}</span>
+            <span class="team-card-dot" style="background:${t.color}; box-shadow:0 0 8px ${t.color};"></span>
+          </div>
+          <div class="team-card-icon-wrap">
+            ${iconSvg}
+          </div>
+          <div class="team-card-bottom">
+            <span class="team-card-name">${t.name.toUpperCase()}</span>
+            <span class="team-card-ip">PJ: ${t.ip}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // Bind card clicks, hover & keyboard accessibility
+    teamSelectGrid.querySelectorAll(".team-glass-card").forEach((card, idx) => {
+      // Hover audio feedback (light ascending cyber tick)
+      card.addEventListener("mouseenter", () => {
+        sfx.cardHover(idx);
+      });
+
+      card.addEventListener("focus", () => {
+        sfx.cardHover(idx);
+      });
+
+      // Click / Selection sound effect
+      card.addEventListener("click", () => {
+        const chosenId = card.dataset.teamId;
         const chosenTeam = TEAMS.find(t => t.id === chosenId);
-        sfx.coinStart();
-        selectTeamAndBoot(chosenTeam, posNum);
+        card.classList.add("selected-card");
+
+        // Epic Arcade Character-Select & Mecha Lock-in sound effect
+        sfx.teamSelectLock(chosenId, idx);
+
+        setTimeout(() => {
+          selectTeamAndBoot(chosenTeam, posNum);
+        }, 360);
+      });
+
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          card.click();
+        }
       });
     });
   }
@@ -600,77 +1732,116 @@ document.addEventListener("DOMContentLoaded", () => {
       }, l.delay);
     });
 
-    // Animate progress bar
-    function animateProgress(ts) {
-      if (!startTime) startTime = ts;
-      const elapsed = ts - startTime;
+    // Animate progress bar reliably with setInterval (never freezes in background tabs)
+    const startTs = Date.now();
+    const bootTimer = setInterval(() => {
+      const elapsed = Date.now() - startTs;
       const pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
-      bootProgressBar.style.width = pct + "%";
-      bootProgressLabel.textContent = `LOADING... ${pct}%`;
-      if (pct < 100) {
-        requestAnimationFrame(animateProgress);
-      } else {
-        bootProgressLabel.textContent = "COMPLETE — LAUNCHING MISSION CONSOLE";
-        setTimeout(onComplete, 320);
+      if (bootProgressBar) bootProgressBar.style.width = pct + "%";
+      if (bootProgressLabel) bootProgressLabel.textContent = `LOADING... ${pct}%`;
+      if (pct >= 100) {
+        clearInterval(bootTimer);
+        if (bootProgressLabel) bootProgressLabel.textContent = "COMPLETE — LAUNCHING MISSION CONSOLE";
+        sfx.bootLaunch();
+        setTimeout(onComplete, 280);
       }
-    }
-    requestAnimationFrame(animateProgress);
+    }, 40);
   }
 
   function selectTeamAndBoot(team, posNum) {
     // Sync team to the operator header selector
     currentTeam = team.id;
-    teamSelect.value = team.id;
-    teamBadge.textContent = team.label;
-    teamBadge.style.color = team.color;
+    if (teamSelect) teamSelect.value = team.id;
+    if (teamBadge) {
+      teamBadge.textContent = team.label;
+      teamBadge.style.color = team.color;
+    }
 
-    // Transition: hide team screen → show boot loader
+    // Transition: hide team screen → show boot loader (Langkah 3: Loading)
     hideTeamSelectScreen();
-    bootLoadingOverlay.classList.remove("hidden");
+    if (bootLoadingOverlay) bootLoadingOverlay.classList.remove("hidden");
 
     runBootSequence(team, posNum, () => {
-      // Boot done → hide boot, show intro cutscene
-      bootLoadingOverlay.classList.add("hidden");
-      showIntroCutscene(posNum);
+      // Boot done → Langsung tampilkan studi kasus (Langkah 4: Menampilkan Studi Kasus)
+      if (bootLoadingOverlay) bootLoadingOverlay.classList.add("hidden");
+      if (activePosWorkArea) activePosWorkArea.style.display = "block";
+      
+      // Reset entire session and re-render fresh questions for this team!
+      resetGroupSession(posNum);
+      renderPos(posNum);
+      
+      // Standby mode: Timer waits at 02:00 for participants/panitia to click MULAI
+      setPhase(1);
+
+      // Otomatis munculkan Spotlight Tour interaktif (ala Intro.js) sebelum pos dimulai!
+      setTimeout(() => {
+        startCyberTour(posNum, 0);
+      }, 450);
     });
   }
 
-  // Intro cutscene
-  function showIntroCutscene(posNum) {
+  // SCREEN 1: Welcome in Pos
+  function showWelcomeScreen(posNum) {
+    currentPos = posNum;
     const config = POS_CONFIG[posNum];
-    introMissionTag.textContent = `MISSION INITIATION // POS 0${posNum}`;
-    introRouteUrl.textContent = config.route;
-    introRouteText.textContent = config.route;
-    introPosTitle.textContent = config.title;
-    introPosSubtitle.textContent = config.subTitle;
-    introObjectiveText.textContent = config.objective;
+    if (!config) return;
 
-    introCutsceneOverlay.classList.remove("hidden");
+    if (introMissionTag) introMissionTag.textContent = `WELCOME TO POS 0${posNum} // DIGITAL FRONTIER`;
+    if (introRouteUrl) introRouteUrl.textContent = config.route;
+    if (introRouteText) introRouteText.textContent = config.route;
+    if (introPosTitle) introPosTitle.textContent = `WELCOME IN POS ${posNum}: ${config.title.replace(/^Pos \d+:\s*/i, "")}`;
+    if (introPosSubtitle) introPosSubtitle.textContent = config.subTitle;
+    if (introObjectiveText) introObjectiveText.textContent = config.objective;
+
+    if (introCutsceneOverlay) introCutsceneOverlay.classList.remove("hidden");
+    if (teamSelectOverlay) teamSelectOverlay.classList.add("hidden");
+    if (bootLoadingOverlay) bootLoadingOverlay.classList.add("hidden");
+    if (activePosWorkArea) activePosWorkArea.style.display = "none";
     sfx.coinStart();
   }
 
-  function hideIntroCutscene() {
-    introCutsceneOverlay.classList.add("hidden");
+  function hideWelcomeScreen() {
+    if (introCutsceneOverlay) introCutsceneOverlay.classList.add("hidden");
     sfx.blip();
   }
 
-  btnEnterConsole.addEventListener("click", () => {
-    sfx.coinStart();
-    hideIntroCutscene();
-  });
+  // When clicking "PILIH KELOMPOKMU (LANJUT)" on Welcome screen -> Screen 2: Kamu dari tim mana?
+  if (btnEnterConsole) {
+    btnEnterConsole.addEventListener("click", () => {
+      sfx.coinStart();
+      hideWelcomeScreen();
+      showTeamSelectScreen(currentPos);
+    });
+  }
 
-  btnReturnToHub.addEventListener("click", () => {
-    sfx.blip();
-    hideIntroCutscene();
-    hideTeamSelectScreen();
-    bootLoadingOverlay.classList.add("hidden");
-    window.location.hash = "#/adhigana";
-  });
+  if (btnReturnToHub) {
+    btnReturnToHub.addEventListener("click", () => {
+      sfx.blip();
+      hideWelcomeScreen();
+      hideTeamSelectScreen();
+      if (bootLoadingOverlay) bootLoadingOverlay.classList.add("hidden");
+      window.location.href = "index.html";
+    });
+  }
 
-  brandLogoHome.addEventListener("click", () => {
-    sfx.blip();
-    window.location.hash = "#/adhigana";
-  });
+  if (btnReturnToHubBar) {
+    btnReturnToHubBar.addEventListener("click", () => {
+      sfx.blip();
+      window.location.href = "index.html";
+    });
+  }
+
+  if (brandLogoHome) {
+    brandLogoHome.addEventListener("click", () => {
+      sfx.blip();
+      if (window.location.pathname.toLowerCase().includes("pos")) {
+        window.location.href = "index.html";
+      } else {
+        window.location.hash = "#/adhigana";
+        handleRouting();
+      }
+    });
+  }
 
   function handleRouting() {
     const hash = window.location.hash.toLowerCase();
@@ -687,24 +1858,28 @@ document.addEventListener("DOMContentLoaded", () => {
     else if (routeFull.includes("leaderboard")) {
       renderLeaderboard();
       renderVerifikasiTable();
-      adminModal.classList.add("open");
+      if (adminModal) adminModal.classList.add("open");
       return;
     }
 
     if (targetPos) {
-      // Pos View: show main layout, then trigger student team selection flow
-      arcadePortalHub.style.display = "none";
-      activePosWorkArea.style.display = "block";
-      renderPos(targetPos);
-      // Show team selection screen first (instead of going directly to cutscene)
-      showTeamSelectScreen(targetPos);
+      const currentFile = window.location.pathname.split("/").pop().toLowerCase();
+      if (currentFile === "index.html" || currentFile === "" || !currentFile.includes(".html")) {
+        window.location.href = `pos${targetPos}.html`;
+        return;
+      }
+      // Pos View: Mulai dari Langkah 1: Welcome in Pos
+      if (arcadePortalHub) arcadePortalHub.style.display = "none";
+      if (activePosWorkArea) activePosWorkArea.style.display = "none";
+      showWelcomeScreen(targetPos);
     } else {
       // Hub View (Operator / Main Landing)
-      activePosWorkArea.style.display = "none";
-      arcadePortalHub.style.display = "flex";
-      hideIntroCutscene();
+      if (activePosWorkArea) activePosWorkArea.style.display = "none";
+      if (arcadePortalHub) arcadePortalHub.style.display = "flex";
+      hideWelcomeScreen();
       hideTeamSelectScreen();
-      bootLoadingOverlay.classList.add("hidden");
+      if (bootLoadingOverlay) bootLoadingOverlay.classList.add("hidden");
+      renderLeaderboard();
     }
   }
 
@@ -721,6 +1896,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateTimerUI() {
+    if (!timerClock || !hudPercentBadge || !energySegmentedBar) return;
     timerClock.textContent = formatTime(secondsLeft);
     const percent = Math.round((secondsLeft / PHASE_DURATION) * 100);
     hudPercentBadge.textContent = `${percent}%`;
@@ -753,46 +1929,46 @@ document.addEventListener("DOMContentLoaded", () => {
     secondsLeft = PHASE_DURATION;
     updateTimerUI();
 
-    if (phase === 1) {
-      phaseBadge.className = "pixel-tag-phase";
-      phaseBadgeText.textContent = "PHASE 01: EKSPLORASI (5 MIN)";
-      phaseTitle.textContent = "Pencarian Petunjuk Fisik";
-      phaseInstruction.textContent = "Peserta mencari petunjuk tersembunyi di sekitar pos. Panitia mengawasi waktu.";
-      challengeBox.classList.remove("active-glow");
-      operatorInputSection.style.display = "none";
-      lockedCodeSection.style.display = "none";
-      btnFinishExploration.style.display = isRunning ? "inline-flex" : "none";
-    } else if (phase === 2) {
-      phaseBadge.className = "pixel-tag-phase phase-2";
-      phaseBadgeText.textContent = "PHASE 02: INPUT JAWABAN (5 MIN)";
-      phaseTitle.textContent = "Pengisian Jawaban Peserta";
-      phaseInstruction.textContent = "Peserta menyampaikan jawaban logika & menulis di lembar kertas. Panitia menginput di form bawah.";
-      challengeBox.classList.add("active-glow");
-      renderOperatorInputForm();
-      operatorInputSection.style.display = "flex";
-      lockedCodeSection.style.display = "none";
-      btnFinishExploration.style.display = "none";
-    } else {
-      phaseBadge.className = "pixel-tag-phase phase-end";
-      phaseBadgeText.textContent = "PHASE 03: DATA TERKUNCI";
-      phaseTitle.textContent = "Sesi Selesai - Kode Diterbitkan";
-      phaseInstruction.textContent = "Salin Kode Unik ke lembar jawaban kertas peserta sebelum rotasi kelompok.";
-      operatorInputSection.style.display = "none";
-      lockedCodeSection.style.display = "flex";
-      btnFinishExploration.style.display = "none";
+    if (phaseBadge) phaseBadge.className = "pixel-tag-phase standby";
+    if (phaseBadgeText) phaseBadgeText.textContent = "STATUS: STANDBY // SIAP";
+    if (phaseTitle) phaseTitle.textContent = "Sesi Studi Kasus Siap";
+    if (phaseInstruction) phaseInstruction.textContent = "Amati bukti di terminal kiri dan pertanyaan di kanan. Tekan tombol [▶ MULAI (2 MIN)] di atas ketika kelompok sudah siap!";
+    if (btnStartTimer) {
+      btnStartTimer.style.display = "inline-flex";
+      btnStartTimer.classList.add("btn-start-standby");
     }
+    if (btnPauseTimer) btnPauseTimer.style.display = "none";
+    if (challengeBox) challengeBox.classList.remove("active-glow");
+    if (operatorInputSection) operatorInputSection.style.display = "none";
+    if (lockedCodeSection) lockedCodeSection.style.display = "none";
+    if (btnFinishExploration) btnFinishExploration.style.display = "none";
   }
+
+  let glitchBannerTimeout = null;
 
   function startTimer() {
     if (isRunning) return;
     sfx.coinStart();
     isRunning = true;
-    btnStartTimer.style.display = "none";
-    btnPauseTimer.style.display = "inline-flex";
-    btnFinishExploration.style.display = "inline-flex";
+    if (btnStartTimer) {
+      btnStartTimer.style.display = "none";
+      btnStartTimer.classList.remove("btn-start-standby");
+    }
+    if (btnPauseTimer) btnPauseTimer.style.display = "inline-flex";
 
-    glitchAlertBanner.style.display = "flex";
-    sfx.glitchBoom();
+    if (phaseBadge) phaseBadge.className = "pixel-tag-phase active";
+    if (phaseBadgeText) phaseBadgeText.textContent = "MISI AKTIF // 2 MENIT";
+    if (phaseTitle) phaseTitle.textContent = "Penyelesaian Studi Kasus";
+    if (phaseInstruction) phaseInstruction.textContent = "Amati bukti di terminal monitor kiri dan pilih jawaban pilihan ganda di monitor kanan sebelum waktu 2 menit habis.";
+
+    if (glitchAlertBanner) {
+      glitchAlertBanner.style.display = "flex";
+      sfx.glitchBoom();
+      clearTimeout(glitchBannerTimeout);
+      glitchBannerTimeout = setTimeout(() => {
+        if (glitchAlertBanner) glitchAlertBanner.style.display = "none";
+      }, 6000);
+    }
 
     timerInterval = setInterval(() => {
       if (secondsLeft > 0) {
@@ -801,20 +1977,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (secondsLeft <= 5 && secondsLeft > 0) {
           sfx.tickDanger();
-        } else if (secondsLeft <= 10 && secondsLeft % 2 === 0) {
+        } else if (secondsLeft <= 15 && secondsLeft % 2 === 0) {
           sfx.tick();
         }
       } else {
-        if (phase === 1) {
-          sfx.phaseAlert();
-          setPhase(2);
-        } else {
-          clearInterval(timerInterval);
-          isRunning = false;
-          btnPauseTimer.style.display = "none";
-          sfx.phaseAlert();
-          alert("WAKTU POS HABIS! Segera submit jawaban peserta.");
+        clearInterval(timerInterval);
+        isRunning = false;
+        if (btnPauseTimer) btnPauseTimer.style.display = "none";
+        if (btnStartTimer) {
+          btnStartTimer.style.display = "inline-flex";
+          btnStartTimer.classList.remove("btn-start-standby");
         }
+        sfx.phaseAlert();
+        if (!isMcqSubmitted) {
+          submitMcqAnswers();
+        }
+        showCyberAlert(
+          "⏱️ WAKTU 2 MENIT HABIS!",
+          "Sesi investigasi studi kasus pos telah selesai.\n\nSemua jawaban pilihan ganda telah otomatis dikunci dan skor berhasil disimpan ke sistem rekap.",
+          "warning"
+        );
       }
     }, 1000);
   }
@@ -823,175 +2005,173 @@ document.addEventListener("DOMContentLoaded", () => {
     sfx.blip();
     clearInterval(timerInterval);
     isRunning = false;
-    btnStartTimer.style.display = "inline-flex";
-    btnPauseTimer.style.display = "none";
+    if (btnStartTimer) {
+      btnStartTimer.style.display = "inline-flex";
+      btnStartTimer.classList.add("btn-start-standby");
+    }
+    if (btnPauseTimer) btnPauseTimer.style.display = "none";
+    if (phaseBadge) phaseBadge.className = "pixel-tag-phase standby";
+    if (phaseBadgeText) phaseBadgeText.textContent = "MISI DIJEDA // PAUSED";
   }
 
   function resetTimer() {
     sfx.blip();
     pauseTimer();
     setPhase(1);
-    glitchAlertBanner.style.display = "none";
+    clearTimeout(glitchBannerTimeout);
+    if (glitchAlertBanner) glitchAlertBanner.style.display = "none";
     updateTimerUI();
   }
 
-  btnStartTimer.addEventListener("click", startTimer);
-  btnPauseTimer.addEventListener("click", pauseTimer);
-  btnResetTimer.addEventListener("click", resetTimer);
-  btnDismissGlitch.addEventListener("click", () => {
-    sfx.blip();
-    glitchAlertBanner.style.display = "none";
-  });
-  btnFinishExploration.addEventListener("click", () => {
-    sfx.phaseAlert();
-    setPhase(2);
-  });
-
-  // ==========================================================================
-  // 6. OPERATOR INPUT FORM & SUBMISSION
-  // ==========================================================================
-
-  function renderOperatorInputForm() {
-    let html = "";
-    if (currentPos === 1) {
-      html = `
-        <div class="answer-input-field">
-          <label>1. EMAIL MANA YANG MERUPAKAN PHISHING? (PILIHAN PESERTA):</label>
-          <select id="inputPos1Target">
-            <option value="" disabled selected>-- Pilih Email Phishing Menurut Peserta --</option>
-            <option value="1">Email 1: Akademik UBHI (Jadwal KRS)</option>
-            <option value="2">Email 2: Kemendikbud (Beasiswa 10 Juta Mendesak)</option>
-            <option value="3">Email 3: Perpustakaan UBHI</option>
-          </select>
-        </div>
-        <div class="answer-input-field">
-          <label>2. KEJANGGALAN LOGIS YANG BERHASIL DISEBUTKAN PESERTA (MIN. 2):</label>
-          <div style="font-family: var(--font-pixel); font-size: 0.75rem; display: flex; flex-direction: column; gap: 6px; padding: 6px 0;">
-            <label><input type="checkbox" id="chkPos1A"> Domain email mencurigakan (xyz-domain.com, bukan .go.id / .ac.id) [+20 Pts]</label>
-            <label><input type="checkbox" id="chkPos1B"> Desakan panik / Social Engineering batas 59 menit [+20 Pts]</label>
-            <label><input type="checkbox" id="chkPos1C"> Tautan mengarah ke web login palsu pencuri akun [+20 Pts]</label>
-          </div>
-        </div>
-        <div class="answer-input-field">
-          <label>3. CATATAN TINDAKAN MITIGASI DARURAT PESERTA:</label>
-          <input type="text" id="inputPos1Mitigasi" value="" placeholder="Contoh: Ganti password SIAKAD & laporkan phishing...">
-        </div>
-      `;
-    } else if (currentPos === 2) {
-      html = `
-        <div class="answer-input-field">
-          <label>1. HASIL UJI EKSEKUSI URUTAN ROBOT BARISTA:</label>
-          <select id="inputPos2Result">
-            <option value="" disabled selected>-- Pilih Hasil Eksekusi Robot --</option>
-            <option value="success">SUKSES (Urutan 100% Benar - Kopi Tersaji) [60 Pts]</option>
-            <option value="partial">SEBAGIAN BENAR (Ada langkah logis tapi urutan belum tuntas) [30 Pts]</option>
-            <option value="fail">GAGAL / GLITCH (Fatal Crash / Air Tumpah / Meledak) [10 Pts]</option>
-          </select>
-        </div>
-        <div class="answer-input-field">
-          <label>2. EVALUASI PENJELASAN NALAR SEKUANSIAL (LISAN / KERTAS):</label>
-          <select id="inputPos2LogikaScore">
-            <option value="" disabled selected>-- Nilai Penjelasan Nalar --</option>
-            <option value="40">Sangat Logis & Runtut (Paham konsep sebab-akibat alur komputasi) [40 Pts]</option>
-            <option value="25">Cukup Logis (Dapat menjelaskan alasan cangkir harus siap) [25 Pts]</option>
-            <option value="10">Kurang Logis / Terbata-bata [10 Pts]</option>
-          </select>
-        </div>
-        <div class="answer-input-field">
-          <label>3. CATATAN TAMBAHAN OPERATOR POS 2:</label>
-          <input type="text" id="inputPos2Logika" value="" placeholder="Catatan analisa peserta...">
-        </div>
-      `;
-    } else if (currentPos === 3) {
-      html = `
-        <div class="answer-input-field">
-          <label>1. TEBAKAN BRANKAS ARSIP DIGITAL (PILIHAN PESERTA):</label>
-          <select id="inputPos3Vault">
-            <option value="" disabled selected>-- Pilih Brankas Tebakan Peserta --</option>
-            <option value="Vault 01">Vault 01 (15 MB - Senin)</option>
-            <option value="Vault 02">Vault 02 (60 MB - Minggu)</option>
-            <option value="Vault 03">Vault 03 (85 MB - Minggu)</option>
-            <option value="Vault 04">Vault 04 (120 MB - Sabtu)</option>
-            <option value="Vault 05">Vault 05 (35 MB - Sabtu)</option>
-            <option value="Vault 06">Vault 06 (90 MB - Rabu)</option>
-            <option value="Vault 07">Vault 07 (95 MB - Kamis)</option>
-            <option value="Vault 08">Vault 08 (40 MB - Selasa)</option>
-          </select>
-        </div>
-        <div class="answer-input-field">
-          <label>2. ALUR TAHAPAN ELIMINASI YANG MAMPU DIJELASKAN:</label>
-          <div style="font-family: var(--font-pixel); font-size: 0.75rem; display: flex; flex-direction: column; gap: 6px; padding: 6px 0;">
-            <label><input type="checkbox" id="chkPos3A"> Clue 1: Mampu eliminasi nomor genap (Vault 02, 04, 06, 08) [+20 Pts]</label>
-            <label><input type="checkbox" id="chkPos3B"> Clue 2: Mampu eliminasi ukuran < 50MB (Vault 01, 05) [+20 Pts]</label>
-            <label><input type="checkbox" id="chkPos3C"> Clue 3: Mampu eliminasi hari bukan akhir pekan (Vault 07 Kamis) [+20 Pts]</label>
-          </div>
-        </div>
-      `;
-    } else if (currentPos === 4) {
-      html = `
-        <div class="answer-input-field">
-          <label>1. DIAGNOSIS AKAR KESALAHAN SISTEM AI (ANALISIS PESERTA):</label>
-          <select id="inputPos4Akar">
-            <option value="" disabled selected>-- Pilih Diagnosis Akar Masalah --</option>
-            <option value="regex_docx">Kelemahan Parser Regex kaku (hanya support .PDF, file .DOCX di-drop) [50 Pts]</option>
-            <option value="data_salah">Kesalahan input data nilai IPK manual [10 Pts]</option>
-            <option value="kuota_penuh">Kuota penerima beasiswa kampus sudah habis [10 Pts]</option>
-          </select>
-        </div>
-        <div class="answer-input-field">
-          <label>2. EVALUASI KUALITAS USULAN SOLUSI &amp; ETIKA TEKNOLOGI:</label>
-          <select id="inputPos4SolusiScore">
-            <option value="" disabled selected>-- Nilai Kualitas Solusi --</option>
-            <option value="50">Solutif Komprehensif (Human-in-the-loop / Auto-converter / Banding) [50 Pts]</option>
-            <option value="30">Solutif Standar (Perbaiki kodingan parser saja) [30 Pts]</option>
-            <option value="10">Kurang Tepat / Tidak Memberi Solusi Konkret [10 Pts]</option>
-          </select>
-        </div>
-        <div class="answer-input-field">
-          <label>3. CATATAN USULAN SOLUSI PESERTA:</label>
-          <input type="text" id="inputPos4Solusi" value="" placeholder="Tuliskan intisari usulan peserta...">
-        </div>
-      `;
-    }
-    dynamicInputFields.innerHTML = html;
+  if (btnStartTimer) btnStartTimer.addEventListener("click", startTimer);
+  if (btnPauseTimer) btnPauseTimer.addEventListener("click", pauseTimer);
+  if (btnResetTimer) btnResetTimer.addEventListener("click", resetTimer);
+  if (btnDismissGlitch) {
+    btnDismissGlitch.addEventListener("click", () => {
+      sfx.blip();
+      clearTimeout(glitchBannerTimeout);
+      if (glitchAlertBanner) glitchAlertBanner.style.display = "none";
+    });
+  }
+  if (btnFinishExploration) {
+    btnFinishExploration.addEventListener("click", () => {
+      sfx.phaseAlert();
+      setPhase(2);
+    });
   }
 
-  btnSubmitOperatorAnswer.addEventListener("click", () => {
-    sfx.coinStart();
+  // ==========================================================================
+  // 6. MULTIPLE CHOICE QUESTIONS (PILIHAN GANDA) ENGINE & SUBMISSION
+  // ==========================================================================
 
-    let webScore = 0;
-    if (currentPos === 1) {
-      const target = document.getElementById("inputPos1Target")?.value;
-      if (target === "2") webScore += 40; // 40 Pts jika benar pilih Email 2
-      if (document.getElementById("chkPos1A")?.checked) webScore += 20;
-      if (document.getElementById("chkPos1B")?.checked) webScore += 20;
-      if (document.getElementById("chkPos1C")?.checked) webScore += 20;
-    } else if (currentPos === 2) {
-      const res = document.getElementById("inputPos2Result")?.value;
-      if (res === "success") webScore += 60;
-      else if (res === "partial") webScore += 30;
-      else if (res === "fail") webScore += 10;
+  function renderMcqQuestions(posNum) {
+    const config = POS_CONFIG[posNum];
+    userMcqAnswers = {};
+    isMcqSubmitted = false;
 
-      const logika = parseInt(document.getElementById("inputPos2LogikaScore")?.value) || 0;
-      webScore += logika;
-    } else if (currentPos === 3) {
-      const v = document.getElementById("inputPos3Vault")?.value;
-      if (v === "Vault 03") webScore += 40; // 40 Pts jika benar Vault 03
-      if (document.getElementById("chkPos3A")?.checked) webScore += 20;
-      if (document.getElementById("chkPos3B")?.checked) webScore += 20;
-      if (document.getElementById("chkPos3C")?.checked) webScore += 20;
-    } else if (currentPos === 4) {
-      const akar = document.getElementById("inputPos4Akar")?.value;
-      if (akar === "regex_docx") webScore += 50;
-      else if (akar) webScore += 10;
+    const qContainer = document.getElementById("questionsContainer");
+    const resBox = document.getElementById("mcqResultBox");
+    const submitBtn = document.getElementById("btnSubmitMcq");
 
-      const solusi = parseInt(document.getElementById("inputPos4SolusiScore")?.value) || 0;
-      webScore += solusi;
+    if (resBox) resBox.style.display = "none";
+    if (submitBtn) {
+      submitBtn.style.display = "inline-flex";
+      submitBtn.disabled = false;
     }
 
-    const uniqueCode = generateUniqueCode(currentTeam, currentPos);
-    displayGeneratedCode.textContent = uniqueCode;
+    if (!qContainer) return;
 
+    qContainer.innerHTML = config.questions.map(q => `
+      <div class="mcq-question-card" id="card_${q.id}">
+        <div class="mcq-q-header">
+          <span class="mcq-q-badge">SOAL 0${q.no}</span>
+          <span class="mcq-points-badge">[BOBOT: MAKS ${q.points} POIN]</span>
+        </div>
+        <div class="mcq-q-text">${q.text}</div>
+        <div class="mcq-options-list" id="optList_${q.id}">
+          ${q.options.map(opt => `
+            <div class="mcq-option-item" data-qid="${q.id}" data-key="${opt.key}">
+              <span class="mcq-opt-key">${opt.key}</span>
+              <span class="mcq-opt-text">${opt.text}</span>
+              <span class="mcq-opt-pts">[+${opt.score} Pts]</span>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `).join("");
+
+    // Bind option click
+    qContainer.querySelectorAll(".mcq-option-item").forEach(item => {
+      item.addEventListener("click", () => {
+        if (isMcqSubmitted) return;
+
+        // Auto-start timer if user begins answering options directly while on standby
+        if (!isRunning && secondsLeft === PHASE_DURATION) {
+          startTimer();
+        }
+
+        const qid = item.dataset.qid;
+        const key = item.dataset.key;
+        userMcqAnswers[qid] = key;
+        sfx.blip();
+
+        const card = document.getElementById(`card_${qid}`);
+        if (card) {
+          card.querySelectorAll(".mcq-option-item").forEach(el => el.classList.remove("selected"));
+          item.classList.add("selected");
+        }
+      });
+    });
+  }
+
+  function submitMcqAnswers() {
+    if (isMcqSubmitted) return;
+    const config = POS_CONFIG[currentPos];
+    let totalScore = 0;
+    isMcqSubmitted = true;
+
+    config.questions.forEach(q => {
+      const selectedKey = userMcqAnswers[q.id];
+      const selectedOpt = q.options.find(o => o.key === selectedKey);
+      const earned = selectedOpt ? (selectedOpt.score || 0) : 0;
+      totalScore += earned;
+
+      const card = document.getElementById(`card_${q.id}`);
+      if (card) {
+        const optList = card.querySelector(".mcq-options-list");
+        if (optList) optList.classList.add("is-submitted");
+
+        card.querySelectorAll(".mcq-option-item").forEach(item => {
+          const optKey = item.dataset.key;
+          const optData = q.options.find(o => o.key === optKey);
+          const optScore = optData ? (optData.score || 0) : 0;
+
+          // Reveal point badge on all options so students learn the evaluation
+          const ptsSpan = item.querySelector(".mcq-opt-pts");
+          if (ptsSpan) {
+            ptsSpan.textContent = optScore > 0 ? `+${optScore} Pts` : `0 Pts`;
+          }
+
+          if (optScore === 50) {
+            // Optimal answer is always highlighted green
+            item.classList.add("is-correct");
+          } else if (optKey === selectedKey) {
+            // Selected option styling based on tiered score
+            if (optScore >= 25) {
+              item.classList.add("is-partial"); // Yellow/amber for strong partial
+            } else if (optScore > 0) {
+              item.classList.add("is-minor"); // Orange for minor partial
+            } else {
+              item.classList.add("is-wrong"); // Red for 0 pts
+            }
+          }
+        });
+      }
+    });
+
+    pauseTimer();
+
+    const uniqueCode = generateUniqueCode(currentTeam, currentPos);
+
+    const submitBtn = document.getElementById("btnSubmitMcq");
+    const resBox = document.getElementById("mcqResultBox");
+    const scoreDisp = document.getElementById("mcqScoreDisplay");
+    const codeDisp = document.getElementById("mcqCodeDisplay");
+
+    if (submitBtn) submitBtn.style.display = "none";
+    if (scoreDisp) scoreDisp.textContent = `${totalScore} / 100 POIN`;
+    if (codeDisp) codeDisp.textContent = uniqueCode;
+    if (resBox) resBox.style.display = "flex";
+
+    // Auto scroll CRT 2 to show score verification and unique code
+    const crt2Scrollable = document.querySelector(".crt-screen-scrollable");
+    if (crt2Scrollable) {
+      setTimeout(() => {
+        crt2Scrollable.scrollTo({ top: crt2Scrollable.scrollHeight, behavior: "smooth" });
+      }, 100);
+    }
+
+    // Simpan ke storage dan sinkronisasi
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
     const newSub = {
@@ -1001,46 +2181,116 @@ document.addEventListener("DOMContentLoaded", () => {
       pos: currentPos,
       time: timeStr,
       code: uniqueCode,
-      webScore: webScore,
+      webScore: totalScore,
       paperScore: 0,
-      totalScore: webScore
+      totalScore: totalScore
     };
 
     const subs = getSubmissions().filter(s => s.id !== newSub.id);
     subs.push(newSub);
     saveSubmissions(subs, newSub);
 
-    setPhase(3);
-    sfx.victoryFanfare();
-  });
+    if (totalScore >= 80) {
+      sfx.victoryFanfare();
+    } else if (totalScore >= 50) {
+      sfx.phaseAlert();
+    } else {
+      sfx.fail();
+    }
+  }
 
-  btnCompletePos.addEventListener("click", () => {
-    sfx.blip();
-    if (confirm("Selesaikan sesi untuk kelompok ini dan rotasi ke kelompok berikutnya?")) {
-      // 1. Reset timer & glitch banner
-      resetTimer();
+  // Clean and complete reset function for rotating to a new group
+  function resetGroupSession(posNum) {
+    // 1. Reset timer & glitch banner
+    resetTimer();
 
-      // 2. Reset minigames state
-      robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
-      renderRobotSteps();
-      robotAvatar.innerHTML = ICON_ROBOT_CHIP;
+    // 2. Reset MCQ state and DOM
+    userMcqAnswers = {};
+    isMcqSubmitted = false;
+
+    const submitBtn = document.getElementById("btnSubmitMcq");
+    const resBox = document.getElementById("mcqResultBox");
+    if (resBox) resBox.style.display = "none";
+    if (submitBtn) {
+      submitBtn.style.display = "inline-flex";
+      submitBtn.disabled = false;
+    }
+
+    // 3. Reset minigames state per pos
+    robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
+    if (typeof renderRobotSteps === "function") renderRobotSteps();
+    if (robotAvatar) robotAvatar.innerHTML = ICON_ROBOT_CHIP;
+    if (robotStatusText) {
       robotStatusText.textContent = "WAITING_SEQUENCE";
       robotStatusText.style.color = "var(--pixel-yellow)";
-      robotConsole.textContent = "> Sistem di-reset. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.";
-
-      eliminatedVaults.clear();
-      renderVaults();
-
-      displayEmail(1);
-      resetPos4Simulator();
-
-      // 3. Reset form
-      renderOperatorInputForm();
-
-      // 4. Return to Team Selection Screen for the next group!
-      showTeamSelectScreen(currentPos);
     }
-  });
+    if (robotConsole) robotConsole.textContent = "> Sistem di-reset. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.";
+
+    eliminatedVaults.clear();
+    if (typeof renderVaults === "function") renderVaults();
+
+    if (typeof displayEmail === "function") displayEmail(1);
+    if (typeof resetPos4Simulator === "function") resetPos4Simulator();
+
+    // 4. Reset team selection card highlights
+    if (teamSelectGrid) {
+      teamSelectGrid.querySelectorAll(".team-glass-card").forEach(c => c.classList.remove("selected-card"));
+    }
+
+    // 5. Re-render questions fresh
+    renderMcqQuestions(posNum);
+
+    // 6. Scroll CRT 2 back to top
+    const crt2Scrollable = document.querySelector(".crt-screen-scrollable");
+    if (crt2Scrollable) {
+      crt2Scrollable.scrollTop = 0;
+    }
+  }
+
+  function handleNextGroupRotation() {
+    const teamObj = TEAMS.find(t => t.id === currentTeam);
+    const teamLabel = teamObj ? teamObj.name.toUpperCase() : currentTeam.toUpperCase();
+    showCyberConfirm(
+      "🔄 ROTASI KELOMPOK",
+      `Selesaikan sesi untuk kelompok ${teamLabel} dan siapkan pos untuk kelompok berikutnya?`,
+      () => {
+        // 1. Reset full session state for the next group
+        resetGroupSession(currentPos);
+
+        // 2. Kembali ke Layar 1 (Welcome in Pos) untuk kelompok maba berikutnya!
+        showWelcomeScreen(currentPos);
+      },
+      "warning"
+    );
+  }
+
+  if (btnSubmitMcq) {
+    btnSubmitMcq.addEventListener("click", () => {
+      const config = POS_CONFIG[currentPos];
+      if (config && config.questions) {
+        const answeredCount = Object.keys(userMcqAnswers).length;
+        if (answeredCount < config.questions.length) {
+          sfx.fail();
+          showCyberAlert(
+            "JAWABAN BELUM LENGKAP",
+            `Harap pilih jawaban untuk semua ${config.questions.length} soal sebelum mengirim evaluasi resmi!`,
+            "warning"
+          );
+          return;
+        }
+      }
+      sfx.coinStart();
+      submitMcqAnswers();
+    });
+  }
+
+  if (btnNextGroupRotation) {
+    btnNextGroupRotation.addEventListener("click", handleNextGroupRotation);
+  }
+
+  if (btnCompletePos) {
+    btnCompletePos.addEventListener("click", handleNextGroupRotation);
+  }
 
   // ==========================================================================
   // 7. POS RENDERING LOGIC
@@ -1049,6 +2299,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderPos(posNum) {
     currentPos = posNum;
     const config = POS_CONFIG[posNum];
+    if (!config) return;
 
     if (stationTitleMain) {
       stationTitleMain.textContent = config.title.toUpperCase();
@@ -1057,38 +2308,72 @@ document.addEventListener("DOMContentLoaded", () => {
       stationRoutePill.textContent = config.route;
     }
 
-    missionTabBtns.forEach(btn => {
-      btn.classList.toggle("active", parseInt(btn.dataset.pos) === posNum);
-    });
+    if (missionTabBtns) {
+      missionTabBtns.forEach(btn => {
+        btn.classList.toggle("active", parseInt(btn.dataset.pos) === posNum);
+      });
+    }
 
     Object.keys(posContainers).forEach(key => {
-      posContainers[key].style.display = parseInt(key) === posNum ? "block" : "none";
+      if (posContainers[key]) {
+        posContainers[key].style.display = parseInt(key) === posNum ? "block" : "none";
+      }
     });
 
-    casePosTag.textContent = config.tag;
-    caseHeading.textContent = config.title;
-    caseStory.innerHTML = config.story;
-    challengePosLabel.textContent = `TANTANGAN ${config.tag}`;
+    if (casePosTag) casePosTag.textContent = config.tag;
+    if (caseHeading) caseHeading.textContent = config.title;
+    if (caseStory) caseStory.innerHTML = config.story;
+    if (challengePosLabel) challengePosLabel.textContent = `TANTANGAN ${config.tag}`;
 
-    questionsContainer.innerHTML = config.questions.map(q => `
-      <div class="pixel-q-row">
-        <div class="pixel-q-badge">${q.no}</div>
-        <div class="pixel-q-text">${q.text}</div>
-      </div>
-    `).join("");
+    // Render Multiple Choice Questions (Pilgan 100 Poin)
+    renderMcqQuestions(posNum);
 
-    modalKunciJawaban.innerHTML = config.kunci;
-    modalPhysicalClues.innerHTML = `<strong>LOKASI &amp; INSTRUKSI:</strong> ${config.physicalClue}`;
+    if (modalKunciJawaban) modalKunciJawaban.innerHTML = config.kunci;
+    if (modalPhysicalClues) modalPhysicalClues.innerHTML = `<strong>LOKASI &amp; INSTRUKSI:</strong> ${config.physicalClue}`;
 
-    if (posNum === 2) renderRobotSteps();
-    if (posNum === 3) renderVaults();
+    if (posNum === 2 && typeof renderRobotSteps === "function") renderRobotSteps();
+    if (posNum === 3 && typeof renderVaults === "function") renderVaults();
 
-    if (phase === 2) renderOperatorInputForm();
+    // Synchronize CRT 2 height with CRT 1 so only CRT 2 is scrollable
+    syncCrtHeights();
+    setTimeout(syncCrtHeights, 50);
+  }
+
+  // ==========================================================================
+  // DUAL CRT MONITOR HEIGHT LOCK & INDEPENDENT SCROLL SYNC
+  // ==========================================================================
+  function syncCrtHeights() {
+    if (!crt1MonitorFrame || !crt2MonitorFrame) return;
+
+    if (window.innerWidth < 992) {
+      crt2MonitorFrame.style.height = "";
+      crt2MonitorFrame.style.maxHeight = "520px";
+      return;
+    }
+
+    // Get true rendered height of CRT 1 (left side)
+    const h1 = crt1MonitorFrame.offsetHeight;
+    if (h1 > 280) {
+      crt2MonitorFrame.style.height = `${h1}px`;
+      crt2MonitorFrame.style.maxHeight = `${h1}px`;
+    }
+  }
+
+  window.addEventListener("resize", () => {
+    syncCrtHeights();
+  });
+
+  if (window.ResizeObserver && crt1MonitorFrame) {
+    const crtResizeObserver = new ResizeObserver(() => {
+      syncCrtHeights();
+    });
+    crtResizeObserver.observe(crt1MonitorFrame);
   }
 
   teamSelect.addEventListener("change", (e) => {
-    sfx.blip();
     currentTeam = e.target.value;
+    const selectedIdx = TEAMS.findIndex(t => t.id === currentTeam);
+    sfx.teamSelectLock(currentTeam, selectedIdx);
     const selectedObj = TEAMS.find(t => t.id === currentTeam);
     if (selectedObj) {
       teamBadge.textContent = selectedObj.label;
@@ -1126,6 +2411,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mailEntries = document.querySelectorAll(".mail-entry-item");
 
   function displayEmail(emailId) {
+    if (!mailSender) return;
     const data = EMAILS_DATA.find(e => e.id === emailId);
     if (!data) return;
 
@@ -1140,9 +2426,9 @@ document.addEventListener("DOMContentLoaded", () => {
     mailBody.textContent = data.body;
 
     if (data.isPhishing) {
-      mailActionCard.style.display = "flex";
+      if (mailActionCard) mailActionCard.style.display = "flex";
     } else {
-      mailActionCard.style.display = "none";
+      if (mailActionCard) mailActionCard.style.display = "none";
     }
   }
 
@@ -1157,14 +2443,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
   // 9. POS 2: ROBOT BARISTA LOGIC
   // ==========================================================================
-  const robotStepsList = document.getElementById("robotStepsList");
-  const robotAvatar = document.getElementById("robotAvatar");
-  const robotStatusText = document.getElementById("robotStatusText");
-  const robotConsole = document.getElementById("robotConsole");
-  const btnRunRobot = document.getElementById("btnRunRobot");
-  const btnResetSteps = document.getElementById("btnResetSteps");
 
   function renderRobotSteps() {
+    if (!robotStepsList) return;
     robotStepsList.innerHTML = robotSteps.map((step, idx) => `
       <div class="pixel-step-card" data-index="${idx}">
         <div class="pixel-step-num">${idx + 1}</div>
@@ -1217,10 +2498,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let isSuccess = true;
     let errorLog = "";
 
-    const ICON_ROBOT_CHIP = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 16.5V21m3.75-18v1.5m0 16.5V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V5.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 19.5Z" /></svg>`;
-    const ICON_ROBOT_SUCCESS = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`;
-    const ICON_ROBOT_CRASH = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>`;
-
     if (posTaruhCangkir > posBubuk || posTaruhCangkir > posTuangAir) {
       isSuccess = false;
       errorLog = "[FATAL_CRASH]: Robot menuangkan bubuk/air panas saat cangkir BELUM ada di tatakan! Lantai basah kuyup!";
@@ -1250,27 +2527,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  btnRunRobot.addEventListener("click", simulateRobotRun);
-  btnResetSteps.addEventListener("click", () => {
-    sfx.blip();
-    const ICON_ROBOT_CHIP = `<svg class="h-icon h-icon-hero" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 16.5V21m3.75-18v1.5m0 16.5V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V5.25a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 5.25v13.5A2.25 2.25 0 0 0 6.75 19.5Z" /></svg>`;
-    robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
-    robotAvatar.innerHTML = ICON_ROBOT_CHIP;
-    robotStatusText.textContent = "WAITING_SEQUENCE";
-    robotStatusText.style.color = "var(--pixel-yellow)";
-    robotConsole.textContent = "> Sistem di-reset. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.";
-    renderRobotSteps();
-  });
+  if (btnRunRobot) btnRunRobot.addEventListener("click", simulateRobotRun);
+  if (btnResetSteps) {
+    btnResetSteps.addEventListener("click", () => {
+      sfx.blip();
+      robotSteps = JSON.parse(JSON.stringify(INITIAL_STEPS));
+      if (robotAvatar) robotAvatar.innerHTML = ICON_ROBOT_CHIP;
+      if (robotStatusText) {
+        robotStatusText.textContent = "WAITING_SEQUENCE";
+        robotStatusText.style.color = "var(--pixel-yellow)";
+      }
+      if (robotConsole) robotConsole.textContent = "> Sistem di-reset. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.";
+      renderRobotSteps();
+    });
+  }
 
   // ==========================================================================
   // 10. POS 3: DIGITAL VAULTS LOGIC
   // ==========================================================================
-  const vaultsGrid = document.getElementById("vaultsGrid");
-  const btnResetVaults = document.getElementById("btnResetVaults");
-
-  const ICON_ARCHIVE = `<svg class="h-icon h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" /></svg>`;
 
   function renderVaults() {
+    if (!vaultsGrid) return;
     vaultsGrid.innerHTML = VAULTS_DATA.map(v => {
       const isEliminated = eliminatedVaults.has(v.id);
       return `
@@ -1314,16 +2591,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const card = e.target.closest(".pixel-vault-cell");
         const id = parseInt(card.dataset.id);
         const vault = VAULTS_DATA.find(v => v.id === id);
-        alert(`ARSIP METADATA [${vault.label}]:\n- Ukuran File: ${vault.size} MB\n- Hari Pembuatan: ${vault.day}\n- Format: ${vault.type}\n- Keterangan: ${vault.desc}`);
+        showCyberAlert(
+          `ARSIP METADATA // ${vault.label}`,
+          `• Ukuran File: ${vault.size} MB\n• Hari Pembuatan: ${vault.day}\n• Format File: ${vault.type}\n• Keterangan Bukti: ${vault.desc}`,
+          "info"
+        );
       });
     });
   }
 
-  btnResetVaults.addEventListener("click", () => {
-    sfx.blip();
-    eliminatedVaults.clear();
-    renderVaults();
-  });
+  if (btnResetVaults) {
+    btnResetVaults.addEventListener("click", () => {
+      sfx.blip();
+      eliminatedVaults.clear();
+      renderVaults();
+    });
+  }
 
   // ==========================================================================
   // 11. LEADERBOARD & CENTRAL ADMIN ENGINE
@@ -1352,7 +2635,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     teamStats.sort((a, b) => b.totalCombined - a.totalCombined);
 
-    leaderboardTbody.innerHTML = teamStats.map((st, idx) => {
+    const leaderboardRowsHtml = teamStats.map((st, idx) => {
       let badge = `<span class="rank-badge">${idx + 1}</span>`;
       if (idx === 0) badge = `<span class="rank-badge rank-1">#1</span>`;
       if (idx === 1) badge = `<span class="rank-badge rank-2">#2</span>`;
@@ -1373,9 +2656,21 @@ document.addEventListener("DOMContentLoaded", () => {
         </tr>
       `;
     }).join("");
+
+    if (leaderboardTbody) leaderboardTbody.innerHTML = leaderboardRowsHtml;
+    if (hubLeaderboardTbody) hubLeaderboardTbody.innerHTML = leaderboardRowsHtml;
   }
 
+  // Real-time synchronization across browser tabs (Instant offline multi-tab sync!)
+  window.addEventListener("storage", (e) => {
+    if (e.key === "adhigana_submissions") {
+      renderLeaderboard();
+      renderVerifikasiTable();
+    }
+  });
+
   function renderVerifikasiTable() {
+    if (!verifikasiTbody) return;
     const subs = getSubmissions();
     if (subs.length === 0) {
       verifikasiTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #94a3b8; padding: 12px;">Belum ada data submit dari pos mana pun.</td></tr>`;
@@ -1423,36 +2718,42 @@ document.addEventListener("DOMContentLoaded", () => {
           target.totalScore = target.webScore + (newScore * 5);
           saveSubmissions(subs, target);
           sfx.coinStart();
-          alert(`SUKSES: Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil disimpan!`);
+          showCyberAlert(
+            "INPUT NILAI BERHASIL",
+            `Nilai kertas untuk ${target.teamName} (Pos ${target.pos}) berhasil disimpan ke sistem rekap!`,
+            "success"
+          );
         }
       });
     });
   }
 
   // Export CSV
-  btnExportCSV.addEventListener("click", () => {
-    sfx.coinStart();
-    const subs = getSubmissions();
-    if (subs.length === 0) {
-      alert("Belum ada data submit untuk diekspor!");
-      return;
-    }
+  if (btnExportCSV) {
+    btnExportCSV.addEventListener("click", () => {
+      sfx.coinStart();
+      const subs = getSubmissions();
+      if (subs.length === 0) {
+        showCyberAlert("DATA KOSONG", "Belum ada data submit penilaian untuk diekspor!", "warning");
+        return;
+      }
 
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "Timestamp,Nama Kelompok,Pos,Kode Unik,Skor Web,Skor Kertas (1-5),Total Poin Pos\n";
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Timestamp,Nama Kelompok,Pos,Kode Unik,Skor Web,Skor Kertas (1-5),Total Poin Pos\n";
 
-    subs.forEach(s => {
-      csvContent += `${s.time || ''},${s.teamName},Pos ${s.pos},${s.code},${s.webScore},${s.paperScore || 0},${s.totalScore || 0}\n`;
+      subs.forEach(s => {
+        csvContent += `${s.time || ''},${s.teamName},Pos ${s.pos},${s.code},${s.webScore},${s.paperScore || 0},${s.totalScore || 0}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `rekap_studi_kasus_adhigana_2026_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `rekap_studi_kasus_adhigana_2026_${new Date().toISOString().slice(0,10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
+  }
 
   // Export JSON (Clean backup for multi-laptop sync)
   if (btnExportJSON) {
@@ -1532,10 +2833,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
           saveSubmissions(merged);
           sfx.victoryFanfare();
-          alert(`SUKSES SINKRONISASI DATA!\n- Data baru: ${addedCount}\n- Data diperbarui: ${updatedCount}\n\nTotal penilaian di rekap: ${merged.length}`);
+          showCyberAlert(
+            "SINKRONISASI SELESAI",
+            `Sinkronisasi data penilaian berhasil!\n• Data baru: ${addedCount}\n• Data diperbarui: ${updatedCount}\n\nTotal penilaian di rekap: ${merged.length}`,
+            "success"
+          );
         } catch (err) {
           sfx.glitchBoom();
-          alert("GAGAL MENGIMPOR DATA: " + err.message);
+          showCyberAlert("GAGAL IMPOR DATA", "Terjadi kesalahan saat memproses file JSON:\n" + err.message, "danger");
         }
         importFileInput.value = "";
       };
@@ -1544,17 +2849,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Hard Reset Protection (Requires typing text)
-  btnResetAllData.addEventListener("click", () => {
-    sfx.glitchBoom();
-    const confirmInput = prompt("PERINGATAN KERAS!\nSeluruh data penilaian dan rekap di laptop ini akan DIHAPUS PERMANEN!\n\nUntuk mengonfirmasi, ketik teks 'HAPUS2026' di bawah ini:");
-    if (confirmInput === "HAPUS2026") {
-      localStorage.removeItem("adhigana_submissions");
-      saveSubmissions([]);
-      alert("Seluruh data penilaian telah di-reset bersih.");
-    } else if (confirmInput !== null) {
-      alert("Konfirmasi dibatalkan: Teks konfirmasi tidak sesuai.");
-    }
-  });
+  if (btnResetAllData) {
+    btnResetAllData.addEventListener("click", () => {
+      sfx.glitchBoom();
+      showCyberPrompt(
+        "PERINGATAN KERAS!",
+        "Seluruh data penilaian dan rekap di laptop ini akan DIHAPUS PERMANEN!\n\nUntuk mengonfirmasi, ketik teks 'HAPUS2026' di bawah ini:",
+        "Ketik 'HAPUS2026'...",
+        (confirmInput) => {
+          if (confirmInput === "HAPUS2026") {
+            localStorage.removeItem("adhigana_submissions");
+            saveSubmissions([]);
+            showCyberAlert("DATA DIBERSIHKAN", "Seluruh data penilaian dan rekap telah di-reset bersih.", "success");
+          } else {
+            showCyberAlert("AKSES DIBATALKAN", "Konfirmasi dibatalkan: Teks konfirmasi tidak sesuai.", "warning");
+          }
+        },
+        "danger"
+      );
+    });
+  }
 
   // ==========================================================================
   // PIN PROTECTION MODAL ENGINE (Default PIN: 2026)
@@ -1564,92 +2878,135 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openProtectedModal(modalType) {
     if (isPanitiaUnlocked) {
-      if (modalType === "rubrik") rubrikModal.classList.add("open");
-      else if (modalType === "admin") {
+      if (modalType === "rubrik" && rubrikModal) rubrikModal.classList.add("open");
+      else if (modalType === "admin" && adminModal) {
         renderLeaderboard();
         renderVerifikasiTable();
         adminModal.classList.add("open");
       }
     } else {
       targetPendingModal = modalType;
-      pinInput.value = "";
-      pinErrorMsg.style.display = "none";
-      pinModal.classList.add("open");
-      setTimeout(() => pinInput.focus(), 150);
+      if (pinInput) pinInput.value = "";
+      if (pinErrorMsg) pinErrorMsg.style.display = "none";
+      if (pinModal) {
+        pinModal.classList.add("open");
+        setTimeout(() => { if (pinInput) pinInput.focus(); }, 150);
+      }
     }
   }
 
-  btnSubmitPin.addEventListener("click", () => {
-    if (pinInput.value === "2026") {
-      isPanitiaUnlocked = true;
-      pinModal.classList.remove("open");
-      sfx.coinStart();
-      if (targetPendingModal === "rubrik") {
-        rubrikModal.classList.add("open");
-      } else if (targetPendingModal === "admin") {
-        renderLeaderboard();
-        renderVerifikasiTable();
-        adminModal.classList.add("open");
+  if (btnSubmitPin) {
+    btnSubmitPin.addEventListener("click", () => {
+      if (pinInput && pinInput.value === "2026") {
+        isPanitiaUnlocked = true;
+        if (pinModal) pinModal.classList.remove("open");
+        sfx.coinStart();
+        if (targetPendingModal === "rubrik" && rubrikModal) {
+          rubrikModal.classList.add("open");
+        } else if (targetPendingModal === "admin" && adminModal) {
+          renderLeaderboard();
+          renderVerifikasiTable();
+          adminModal.classList.add("open");
+        }
+      } else {
+        sfx.glitchBoom();
+        if (pinErrorMsg) pinErrorMsg.style.display = "block";
+        if (pinInput) {
+          pinInput.value = "";
+          pinInput.focus();
+        }
       }
-    } else {
-      sfx.glitchBoom();
-      pinErrorMsg.style.display = "block";
-      pinInput.value = "";
-      pinInput.focus();
-    }
-  });
+    });
+  }
 
-  pinInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") btnSubmitPin.click();
-  });
+  if (pinInput) {
+    pinInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && btnSubmitPin) btnSubmitPin.click();
+    });
+  }
 
-  btnClosePinModal.addEventListener("click", () => {
-    sfx.blip();
-    pinModal.classList.remove("open");
-  });
-  pinModal.addEventListener("click", (e) => {
-    if (e.target === pinModal) pinModal.classList.remove("open");
-  });
+  if (btnClosePinModal) {
+    btnClosePinModal.addEventListener("click", () => {
+      sfx.blip();
+      if (pinModal) pinModal.classList.remove("open");
+    });
+  }
+  if (pinModal) {
+    pinModal.addEventListener("click", (e) => {
+      if (e.target === pinModal) pinModal.classList.remove("open");
+    });
+  }
 
   // Protected Modal open buttons
-  btnOpenRubrik.addEventListener("click", () => {
-    sfx.blip();
-    openProtectedModal("rubrik");
-  });
-  btnCloseRubrik.addEventListener("click", () => {
-    sfx.blip();
-    rubrikModal.classList.remove("open");
-  });
-  rubrikModal.addEventListener("click", (e) => {
-    if (e.target === rubrikModal) rubrikModal.classList.remove("open");
-  });
+  if (btnOpenRubrik) {
+    btnOpenRubrik.addEventListener("click", () => {
+      sfx.blip();
+      openProtectedModal("rubrik");
+    });
+  }
+  if (btnCloseRubrik) {
+    btnCloseRubrik.addEventListener("click", () => {
+      sfx.blip();
+      if (rubrikModal) rubrikModal.classList.remove("open");
+    });
+  }
+  if (rubrikModal) {
+    rubrikModal.addEventListener("click", (e) => {
+      if (e.target === rubrikModal) rubrikModal.classList.remove("open");
+    });
+  }
 
-  btnOpenAdmin.addEventListener("click", () => {
-    sfx.blip();
-    openProtectedModal("admin");
-  });
-  btnCloseAdmin.addEventListener("click", () => {
-    sfx.blip();
-    adminModal.classList.remove("open");
-  });
-  adminModal.addEventListener("click", (e) => {
-    if (e.target === adminModal) adminModal.classList.remove("open");
-  });
+  if (btnOpenAdmin) {
+    btnOpenAdmin.addEventListener("click", () => {
+      sfx.blip();
+      openProtectedModal("admin");
+    });
+  }
+  const btnHubOpenAdmin = document.getElementById("btnHubOpenAdmin");
+  if (btnHubOpenAdmin) {
+    btnHubOpenAdmin.addEventListener("click", () => {
+      sfx.blip();
+      openProtectedModal("admin");
+    });
+  }
+  if (btnCloseAdmin) {
+    btnCloseAdmin.addEventListener("click", () => {
+      sfx.blip();
+      if (adminModal) adminModal.classList.remove("open");
+    });
+  }
+  if (adminModal) {
+    adminModal.addEventListener("click", (e) => {
+      if (e.target === adminModal) adminModal.classList.remove("open");
+    });
+  }
 
   // Station Bar Event Handlers
   if (btnSwitchTeamBar) {
     btnSwitchTeamBar.addEventListener("click", () => {
       sfx.blip();
-      showTeamSelectScreen(currentPos);
+      showCyberConfirm(
+        "⇄ GANTI KELOMPOK",
+        "Pilih kelompok baru untuk pos ini? Sesi saat ini akan di-reset bersih untuk kelompok baru.",
+        () => {
+          resetGroupSession(currentPos);
+          showTeamSelectScreen(currentPos);
+        },
+        "info"
+      );
     });
   }
 
   if (btnReturnToHubBar) {
     btnReturnToHubBar.addEventListener("click", () => {
-      sfx.blip();
-      if (confirm("Kembali ke Menu Portal Utama (Keluar dari Pos Ini)?")) {
-        window.location.hash = "#/adhigana";
-      }
+      showCyberConfirm(
+        "🚪 KELUAR KE MENU PORTAL",
+        "Apakah Anda yakin ingin keluar dari pos ini dan kembali ke Menu Portal Utama?",
+        () => {
+          window.location.hash = "#/adhigana";
+        },
+        "info"
+      );
     });
   }
 
@@ -1736,9 +3093,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // 12. BOOTSTRAP & INITIAL ROUTE EXECUTION
   // ==========================================================================
   setPhase(1);
-  displayEmail(1);
-  renderRobotSteps();
-  renderVaults();
+  if (mailSender) displayEmail(1);
+  if (robotStepsList) renderRobotSteps();
+  if (vaultsGrid) renderVaults();
   renderLeaderboard();
   initFirebaseDatabase();
 

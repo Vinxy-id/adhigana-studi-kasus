@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS 02 // ROBOT BARISTA GLITCH - ADHIGANA 2026</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- SCREEN 2: TEAM SELECTION -->
+  <div id="teamSelectOverlay" class="team-select-overlay hidden">
+    <div class="team-select-card">
+      <div class="team-select-header">
+        <div class="team-select-logo">
+          <img src="assets/swirl_logo.png" alt="Adhigana">
+        </div>
+        <div>
+          <div class="team-select-event-label">ADHIGANA 2026 // DIGITAL FRONTIER</div>
+          <h2 class="team-select-title">KAMU DARI TIM MANA?</h2>
+          <div id="teamSelectPosLabel" class="team-select-pos-label">POS 02: ROBOT BARISTA GLITCH</div>
+        </div>
+      </div>
+      <div class="team-select-prompt">
+        <span class="team-select-prompt-cursor">&gt;_</span>
+        Pilih kelompok yang sedang berada di pos ini (arahkan kursor untuk membuka dek kartu):
+      </div>
+      <div class="team-select-grid" id="teamSelectGrid">
+        <!-- Populated by JS -->
+      </div>
+      <div class="team-select-footer">
+        <span class="team-select-footer-txt">[ADHIGANA INFORMATIKA 2026] // SISTEM PENILAIAN DIGITAL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOT LOADING SCREEN (Langkah 3: Loading) -->
+  <div id="bootLoadingOverlay" class="boot-loading-overlay hidden">
+    <div class="boot-terminal">
+      <div class="boot-terminal-header">
+        <span class="boot-blink">&gt;</span> ADHIGANA SECURE MAINFRAME // AUTHENTICATING...
+      </div>
+      <div id="bootLines" class="boot-lines"></div>
+      <div class="boot-progress-wrap">
+        <div class="boot-progress-label" id="bootProgressLabel">LOADING... 0%</div>
+        <div class="boot-progress-track">
+          <div class="boot-progress-bar" id="bootProgressBar" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="boot-team-confirm" id="bootTeamConfirm">
+        KELOMPOK: <span id="bootTeamName" style="color: #fff; font-weight: 900;">---</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 1: WELCOME IN POS OVERLAY -->
+  <div id="introCutsceneOverlay" class="intro-cutscene-overlay hidden">
+    <div class="intro-cutscene-card">
+      <div class="intro-terminal-header">
+        <span id="introMissionTag" class="intro-mission-tag">WELCOME TO POS 02 // DIGITAL FRONTIER</span>
+        <span id="introRouteUrl" class="intro-route-url">adhigana/pos2</span>
+      </div>
+
+      <div class="intro-title-area">
+        <div class="intro-reactor-icon">
+          <img src="assets/swirl_logo.png" alt="Reactor Core">
+        </div>
+        <div class="intro-title-text">
+          <h2 id="introPosTitle">WELCOME IN POS 2: ROBOT BARISTA GLITCH</h2>
+          <p id="introPosSubtitle">ALGORITHMIC THINKING &amp; SEQUENCE LOGIC</p>
+        </div>
+      </div>
+
+      <div class="intro-terminal-console">
+        <div id="introConsoleLines">
+          <div>&gt; [SYS_BOOT]: INITIALIZING ADHIGANA SECURE MAINFRAME... OK</div>
+          <div>&gt; [POS_STATION]: TERKONEKSI KE TERMINAL: <span id="introRouteText" style="color: var(--pixel-yellow);">adhigana/pos2</span></div>
+          <div>&gt; [THREAT_STATUS]: <span style="color: var(--pixel-yellow); font-weight: 800;">LOGIC SEQUENCE CORRUPTED</span></div>
+          <div>&gt; [OBJECTIVE]: <span id="introObjectiveText" style="color: #fff;">Perbaiki 6 instruksi langkah robot peracik kopi yang terbalik sebelum cairan panas tumpah.</span></div>
+          <div>&gt; [DURASI]: <span style="color: var(--pixel-cyan); font-weight: 800;">2 MENIT (120 DETIK) PENYELESAIAN MISI</span></div>
+          <div>&gt; [FORMAT]: <span style="color: var(--pixel-green); font-weight: 800;">PILIHAN GANDA DENGAN POIN (TOTAL 100 POIN)</span></div>
+          <div>&gt; [READY]: Klik tombol di bawah untuk memilih kelompokmu dan memulai misi!</div>
+        </div>
+      </div>
+
+      <div class="intro-actions-bar">
+        <a href="index.html" class="pixel-btn" style="padding: 8px 16px; font-size: 0.75rem; background: #0f1624; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+          <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" /></svg>
+          <span>MENU PORTAL</span>
+        </a>
+
+        <a href="video_tutorial_pos.html" target="_blank" class="pixel-btn pixel-btn-yellow" style="padding: 8px 14px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;" title="Tonton Video Tutorial Panitia Pos">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+          <span>VIDEO TUTORIAL</span>
+        </a>
+
+        <button id="btnEnterConsole" class="pixel-btn pixel-btn-red" style="padding: 10px 24px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;">
+          <span>PILIH KELOMPOKMU (LANJUT)</span>
+          <svg class="h-icon-sm" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" /></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION CONTAINER -->
+  <div class="app-container">
+
+    <!-- HEADER TOOLBAR -->
+    <header class="official-banner-wrapper">
+      <div class="header-left-cluster">
+        <a href="index.html" id="brandLogoHome" class="swirl-emblem-core" title="Kembali ke Menu Utama">
+          <img src="assets/swirl_logo.png" alt="Adhigana Swirl Emblem">
+        </a>
+        <div class="header-titles">
+          <div class="header-tag-pill">
+            <svg class="h-icon-sm" style="color: var(--pixel-yellow);" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg>
+            <span>FAKULTAS SAINS &amp; TEKNOLOGI</span>
+            <span>•</span>
+            <span>HMP INFORMATIKA UBHI</span>
+          </div>
+          <h1>DIGITAL FRONTIER <span class="badge-frontier-mecha">THE LOGIC ESCAPE</span></h1>
+          <p class="header-slogan">"Bukan Cuma Belajar Teknologi, Tapi Bertumbuh Menghadapi Masa Depan Digital"</p>
+        </div>
+      </div>
+
+      <div class="header-toolbar">
+        <div class="team-selector-card team-status-locked" title="Sesi Terkunci untuk Kelompok Ini">
+          <svg class="h-icon-sm" style="color: var(--pixel-yellow);" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+          <span style="font-family: var(--font-pixel); font-size: 0.72rem; color: #94a3b8; font-weight: 800;">KELOMPOK AKTIF:</span>
+          <select id="teamSelect" class="team-selector-select" style="display: none;">
+            <option value="meta" data-color="#b05cfb">1. META (UNGU)</option>
+            <option value="gemini" data-color="#00ff88">2. GEMINI (HIJAU)</option>
+            <option value="copilot" data-color="#fcee0a">3. COPILOT (KUNING)</option>
+            <option value="deepseek" data-color="#2cd4e0">4. DEEPSEEK (BIRU)</option>
+            <option value="claude" data-color="#ff758f">5. CLAUDE (ORANGE)</option>
+          </select>
+          <span id="teamBadge" style="font-family: var(--font-pixel); font-size: 0.8rem; font-weight: 900; color: #b05cfb; letter-spacing: 0.5px;">[TEAM META]</span>
+        </div>
+
+        <div id="cloudStatusBadge" class="cloud-status-badge offline" title="Status Cloud Database">
+          <span class="status-dot"></span>
+          <span id="cloudStatusText">LOCAL DB</span>
+        </div>
+
+        <button id="btnAudioToggle" class="pixel-btn-icon" title="Audio (Chiptune Sound FX)">
+          <span id="audioIcon">
+            <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.21-1.61.572-2.327.234-.847 1.058-1.354 1.938-1.354h2.24Z" /></svg>
+          </span>
+        </button>
+
+        <button id="btnFullscreen" class="pixel-btn-icon" title="Layar Penuh (Fullscreen)">
+          <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+        </button>
+
+        <a href="lembar_jawaban_peserta.html" target="_blank" class="pixel-btn pixel-btn-icon" title="Cetak Lembar Jawaban Kertas Peserta" style="text-decoration: none;">
+          <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" /></svg>
+        </a>
+
+        <button id="btnOpenTutorial" class="pixel-btn pixel-btn-cyan" style="padding: 6px 12px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px;" title="Panduan &amp; Tutorial Misi Pos">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" /></svg>
+          <span class="btn-open-tutorial-text">PANDUAN POS</span>
+        </button>
+
+        <button id="btnOpenRubrik" class="pixel-btn pixel-btn-yellow" style="padding: 6px 12px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px;" title="Kunci Jawaban Pos">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" /></svg>
+          <span class="btn-open-rubrik-text">KUNCI POS</span>
+        </button>
+
+        <button id="btnOpenAdmin" class="pixel-btn pixel-btn-red" style="padding: 6px 12px; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 6px;" title="Leaderboard &amp; Rekap Admin">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.504-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.004-3.75V6.75a2.25 2.25 0 0 0-2.25-2.25h-1.5a2.25 2.25 0 0 0-2.25 2.25v4.875c0 .621.504 1.125 1.125 1.125h3.75c.621 0 1.125-.504 1.125-1.125Zm5.625-2.625h-1.875V6.75h1.875A2.625 2.625 0 0 1 21 9.375v.75a2.625 2.625 0 0 1-2.625 2.625ZM3.75 12.75h1.875V6.75H3.75A2.625 2.625 0 0 0 1.125 9.375v.75a2.625 2.625 0 0 0 2.625 2.625Z" /></svg>
+          <span class="btn-open-admin-text">LEADERBOARD</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- POS WORKSPACE SCREEN -->
+    <div id="activePosWorkArea">
+
+      <!-- STATION BAR -->
+      <div id="singlePosStationBar" class="single-pos-station-bar">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <span class="station-badge-lock">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
+            KONSOL POS AKTIF - TERKUNCI
+          </span>
+          <span id="stationTitleMain" class="station-title-main">POS 2: ROBOT BARISTA GLITCH (LOGIKA ALGORITMA)</span>
+          <span id="stationRoutePill" class="station-route-pill">adhigana/pos2</span>
+        </div>
+        <div style="display: none;">
+          <button id="btnSwitchTeamBar"></button>
+        </div>
+      </div>
+
+      <!-- MISSION ALERT BANNER (2-MINUTE COUNTDOWN) -->
+      <div id="glitchAlertBanner" class="glitch-alert-banner" style="display: none; margin-top: 14px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <svg class="h-icon-lg" style="color: var(--mecha-red-bright);" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" /></svg>
+          <div class="glitch-alert-text">
+            <strong>[MISI AKTIF // HITUNG MUNDUR 2 MENIT]:</strong> Amati bukti investigasi di monitor CRT 1 dan tentukan jawaban pilihan ganda di monitor CRT 2 sebelum waktu habis!
+          </div>
+        </div>
+        <button id="btnDismissGlitch" class="pixel-btn pixel-btn-red" style="padding: 4px 12px; font-size: 0.72rem;">
+          MENGERTI
+        </button>
+      </div>
+
+      <!-- ENERGY GAUGE & DUAL-TIMER CONSOLE -->
+      <section class="energy-timer-console" style="margin-top: 14px;">
+        <div class="energy-phase-info">
+          <div id="phaseBadge" class="pixel-tag-phase">
+            <span>●</span>
+            <span id="phaseBadgeText">MISI POS: 2 MENIT</span>
+          </div>
+          <h3 id="phaseTitle" class="phase-headline">Penyelesaian Studi Kasus</h3>
+          <p id="phaseInstruction" class="phase-subtext">Amati bukti investigasi di monitor kiri dan tentukan jawaban pilihan ganda sebelum waktu 2 menit habis.</p>
+        </div>
+
+        <div class="hud-gauge-center">
+          <div class="hud-timer-numbers">
+            <div id="timerClock" class="pixel-clock-display">02:00</div>
+            <div id="hudPercentBadge" class="hud-percent-badge">100%</div>
+          </div>
+          <div id="energySegmentedBar" class="energy-segmented-bar" title="Energy Segment Timer">
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+            <div class="energy-block active"></div>
+          </div>
+        </div>
+
+        <div class="timer-control-cluster">
+          <button id="btnStartTimer" class="pixel-btn" title="Mulai Misi (2 Menit)">
+            <svg class="h-icon-sm" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" /></svg>
+            <span>MULAI (2 MIN)</span>
+          </button>
+          <button id="btnPauseTimer" class="pixel-btn-icon" style="display: none;" title="Jeda Waktu">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" /></svg>
+          </button>
+          <button id="btnResetTimer" class="pixel-btn-icon" title="Reset Waktu Pos">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- MAIN GAME ARENA (CRT 1 & CRT 2) -->
+      <main class="game-arena-grid" style="margin-top: 16px;">
+
+        <!-- LEFT: CRT 1 (INVESTIGATION FEED & ROBOT SIMULATOR) -->
+        <section id="crt1MonitorFrame" class="crt-monitor-frame crt-monitor-left">
+          <div class="crt-monitor-tab">
+            <span id="crtMonitorTag">...CRT 1: CASE INVESTIGATION FEED</span>
+            <span id="casePosTag" style="color: var(--pixel-yellow);">POS 02 / 04</span>
+          </div>
+
+          <div class="crt-screen-surface">
+            <div>
+              <h2 id="caseHeading" style="font-family: var(--font-pixel); font-size: 1.15rem; color: #fff; margin-bottom: 6px;">
+                Pos 2: Perbaikan Algoritma Robot Barista (Logic Sequence)
+              </h2>
+              <div id="caseStory" class="case-brief-pixel">
+                Sebuah robot peracik kopi otomatis di stan kantin kampus mengalami kegagalan fungsi logika! Urutan langkah menyeduh kopi berantakan karena glitch firmware. Bantu operator menyusun ulang 6 baris logika sebelum cairan panas tumpah!
+              </div>
+            </div>
+
+            <!-- POS 2 CONTAINER: ROBOT BARISTA SIMULATOR -->
+            <div id="pos2Container" class="pos-container">
+              <div class="robot-sim-arena">
+                <div class="robot-display-head">
+                  <div id="robotAvatar" class="pixel-robot-avatar">
+                    <svg class="h-icon-hero" style="width: 40px; height: 40px;" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9a.75.75 0 0 1 .75.75v9a.75.75 0 0 1-.75.75h-9a.75.75 0 0 1-.75-.75v-9a.75.75 0 0 1 .75-.75Z" /></svg>
+                  </div>
+                  <div class="robot-head-text">
+                    <div style="font-family: var(--font-pixel); font-size: 0.88rem; font-weight: 800; color: #fff;">
+                      BARISTA_BOT v1.0 STATUS: <span id="robotStatusText" style="color: var(--pixel-yellow);">WAITING_SEQUENCE</span>
+                    </div>
+                    <div id="robotConsole" class="robot-console-box">&gt; Sistem siap. Susun 6 baris logika di bawah, lalu tekan tombol TEST EXECUTION.</div>
+                  </div>
+                </div>
+
+                <div id="robotStepsList" class="robot-steps-container">
+                  <!-- Populated via JS -->
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px;">
+                  <button id="btnResetSteps" class="pixel-btn-icon" title="Acak / Reset Urutan">
+                    <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+                  </button>
+                  <button id="btnRunRobot" class="pixel-btn pixel-btn-red" style="display: inline-flex; align-items: center; gap: 6px;">
+                    <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg>
+                    <span>UJI EKSEKUSI ROBOT</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- RIGHT: CRT 2 (MISSION CHALLENGES & QUESTIONS) -->
+        <aside id="crt2MonitorFrame" class="crt-monitor-frame crt-monitor-right">
+          <div class="crt-monitor-tab" style="background: #181204; border-color: #3b2c05; color: var(--pixel-yellow);">
+            <span>...CRT 2: MISSION CHALLENGES</span>
+            <span id="challengePosLabel">TANTANGAN POS 02</span>
+          </div>
+
+          <div class="crt-screen-surface crt-screen-scrollable">
+            <div id="challengeBox" class="challenge-crt-box">
+              <div style="border-bottom: 1px solid #1a2a40; padding-bottom: 8px; font-family: var(--font-pixel); font-size: 0.78rem; color: var(--pixel-cyan);">
+                TARGET STUDI KASUS KELOMPOK (PILIHAN GANDA — 100 POIN)
+              </div>
+
+              <!-- Dynamic Multiple Choice Questions Rendered via JS -->
+              <div id="questionsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Populated by JS -->
+              </div>
+
+              <!-- MCQ Submit & Result Actions Panel -->
+              <div id="mcqActionsArea" class="mcq-actions-panel">
+                <button id="btnSubmitMcq" class="pixel-btn pixel-btn-yellow" style="padding: 10px 16px; font-size: 0.82rem; display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;">
+                  <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z" /></svg>
+                  <span>⚡ SUBMIT JAWABAN RESMI</span>
+                </button>
+
+                <div id="mcqResultBox" class="mcq-result-banner" style="display: none;">
+                  <div class="mcq-result-header">
+                    <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                    <span>JAWABAN TERVERIFIKASI &amp; TERKUNCI!</span>
+                  </div>
+                  <div style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-pixel);">SKOR DIPEROLEH:</div>
+                  <div id="mcqScoreDisplay" class="mcq-result-score-val">100 / 100</div>
+                  <div class="mcq-result-code-box">
+                    <span style="font-size: 0.68rem; color: #cbd5e1; font-family: var(--font-pixel);">KODE UNIK LEMBAR KERTAS PESERTA:</span>
+                    <span id="mcqCodeDisplay" class="mcq-result-code-val">META-P2-9021</span>
+                  </div>
+                  <button id="btnNextGroupRotation" class="pixel-btn pixel-btn-red" style="margin-top: 6px; padding: 10px 14px; font-size: 0.8rem; width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
+                    <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                    <span>SELESAI // ROTASI KELOMPOK BERIKUTNYA</span>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </aside>
+
+      </main>
+    </div>
+
+    <!-- MODAL 1: KUNCI JAWABAN & RUBRIK POS -->
+    <div id="rubrikModal" class="modal-overlay">
+      <div class="modal-content-card">
+        <div class="modal-header-pixel" style="border-color: var(--pixel-yellow); color: var(--pixel-yellow);">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" /></svg>
+            <span>KUNCI JAWABAN &amp; RUBRIK PENILAIAN PANITIA POS 2</span>
+          </span>
+          <button id="btnCloseRubrik" class="pixel-btn-icon" style="width: 32px; height: 32px;">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="modal-body-pixel">
+          <div style="background: #040810; border: 2px solid var(--pixel-green); padding: 14px;">
+            <div style="font-family: var(--font-pixel); font-size: 0.85rem; font-weight: 800; color: var(--pixel-green); margin-bottom: 6px;">
+              [KUNCI JAWABAN &amp; ANALISIS LOGIS]
+            </div>
+            <div id="modalKunciJawaban" style="font-size: 0.82rem; line-height: 1.6; color: #e2e8f0;"></div>
+          </div>
+
+          <div style="background: #060c18; border: 2px solid var(--pixel-cyan); padding: 14px;">
+            <div style="font-family: var(--font-pixel); font-size: 0.85rem; font-weight: 800; color: var(--pixel-cyan); margin-bottom: 6px;">
+              [LOKASI &amp; TEKS PETUNJUK FISIK POS INI]
+            </div>
+            <div id="modalPhysicalClues" style="font-family: var(--font-pixel); font-size: 0.78rem; line-height: 1.5; color: #cbd5e1;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: ADMIN PUSAT & LIVE LEADERBOARD -->
+    <div id="adminModal" class="modal-overlay">
+      <div class="modal-content-card" style="max-width: 960px;">
+        <div class="modal-header-pixel" style="border-color: var(--mecha-red-bright); color: var(--mecha-red-bright);">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.504-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.004-3.75V6.75a2.25 2.25 0 0 0-2.25-2.25h-1.5a2.25 2.25 0 0 0-2.25 2.25v4.875c0 .621.504 1.125 1.125 1.125h3.75c.621 0 1.125-.504 1.125-1.125Zm5.625-2.625h-1.875V6.75h1.875A2.625 2.625 0 0 1 21 9.375v.75a2.625 2.625 0 0 1-2.625 2.625ZM3.75 12.75h1.875V6.75H3.75A2.625 2.625 0 0 0 1.125 9.375v.75a2.625 2.625 0 0 0 2.625 2.625Z" /></svg>
+            <span>PUSAT KONTROL ADMIN &amp; LIVE LEADERBOARD</span>
+          </span>
+          <button id="btnCloseAdmin" class="pixel-btn-icon" style="width: 32px; height: 32px;">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div class="modal-body-pixel">
+          <div>
+            <div style="font-family: var(--font-pixel); font-size: 0.9rem; font-weight: 900; color: var(--pixel-yellow); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+              <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" /></svg>
+              <span>KLASEMEN SEMENTARA (WEB + KERTAS)</span>
+            </div>
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>RANK</th>
+                  <th>KELOMPOK</th>
+                  <th>POIN SISTEM WEB</th>
+                  <th>NILAI KERTAS (JURI)</th>
+                  <th>TOTAL SKOR AKHIR</th>
+                  <th>STATUS SELESAI</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboardTbody">
+                <!-- Live data from JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top: 10px;">
+            <div style="font-family: var(--font-pixel); font-size: 0.9rem; font-weight: 900; color: var(--pixel-cyan); margin-bottom: 8px;">
+              INPUT NILAI LEMBAR KERTAS FISIK (SKOR 1-5):
+            </div>
+            <div style="max-height: 220px; overflow-y: auto;">
+              <table class="verifikasi-table">
+                <thead>
+                  <tr>
+                    <th>WAKTU</th>
+                    <th>KELOMPOK</th>
+                    <th>POS</th>
+                    <th>KODE LEMBAR</th>
+                    <th>SKOR WEB</th>
+                    <th>NILAI KERTAS</th>
+                    <th>AKSI</th>
+                  </tr>
+                </thead>
+                <tbody id="verifikasiTbody">
+                  <!-- Live data from JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: PIN OTENTIKASI KHUSUS PANITIA -->
+    <div id="pinModal" class="modal-overlay">
+      <div class="modal-content-card" style="max-width: 440px; text-align: center;">
+        <div class="modal-header-pixel" style="border-color: var(--pixel-yellow); color: var(--pixel-yellow);">
+          <span style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+            <span>AKSES KHUSUS PANITIA POS</span>
+          </span>
+          <button id="btnClosePinModal" class="pixel-btn-icon" style="width: 32px; height: 32px;">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div class="modal-body-pixel" style="gap: 16px; align-items: center;">
+          <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;">
+            Area ini terproteksi untuk mencegah kebocoran kunci &amp; manipulasi nilai oleh peserta. Silakan masukkan PIN panitia:
+          </p>
+          <input type="password" id="pinInput" maxlength="6" placeholder="PIN (4 DIGIT)..." style="background: #040810; border: 2px solid var(--pixel-yellow); color: #fff; font-family: var(--font-pixel); font-size: 1.5rem; letter-spacing: 8px; text-align: center; padding: 10px 14px; width: 100%; max-width: 260px; outline: none; border-radius: 2px;">
+          <div id="pinErrorMsg" style="color: var(--mecha-red-bright); font-family: var(--font-pixel); font-size: 0.78rem; display: none;">
+            [ACCESS DENIED]: PIN Salah! Kunci pos tetap terproteksi.
+          </div>
+          <button id="btnSubmitPin" class="pixel-btn pixel-btn-yellow" style="width: 100%; max-width: 260px; padding: 10px 20px;">
+            BUKA AKSES
+          </button>
+          <div style="font-family: var(--font-pixel); font-size: 0.7rem; color: #64748b; margin-top: 4px;">
+            Default PIN Panitia: <code>2026</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 4: CYBER ALERT & CONFIRM DIALOG -->
+    <div id="cyberDialogModal" class="modal-overlay" style="z-index: 10000;">
+      <div id="cyberDialogCard" class="modal-content-card cyber-dialog-card" style="max-width: 480px;">
+        <div id="cyberDialogHeader" class="modal-header-pixel">
+          <span id="cyberDialogTitleWrapper" style="display: inline-flex; align-items: center; gap: 8px;">
+            <svg id="cyberDialogIcon" class="h-icon" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"></svg>
+            <span id="cyberDialogTitle">NOTIFIKASI SISTEM</span>
+          </span>
+          <button id="btnCloseCyberDialog" class="pixel-btn-icon" style="width: 32px; height: 32px;">
+            <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+        <div class="modal-body-pixel" style="gap: 16px;">
+          <div id="cyberDialogMessage" class="cyber-dialog-message"></div>
+          <input type="text" id="cyberDialogInput" class="cyber-dialog-input" autocomplete="off" />
+          <div id="cyberDialogActions" class="cyber-dialog-actions">
+            <button id="btnCyberDialogCancel" class="pixel-btn" style="background: #111a2e; border-color: #334155; display: none;">BATAL</button>
+            <button id="btnCyberDialogConfirm" class="pixel-btn pixel-btn-cyan">MENGERTI</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CYBERPUNK SPOTLIGHT TOUR OVERLAY (INTRO.JS STYLE) -->
+    <div id="cyberTourOverlay" class="cyber-tour-overlay" style="display: none;"></div>
+    <div id="cyberTourSpotlight" class="cyber-tour-spotlight" style="display: none;">
+      <span class="spotlight-reticle reticle-tl"></span>
+      <span class="spotlight-reticle reticle-tr"></span>
+      <span class="spotlight-reticle reticle-bl"></span>
+      <span class="spotlight-reticle reticle-br"></span>
+    </div>
+    <div id="cyberTourTooltip" class="cyber-tour-tooltip" style="display: none;">
+      <div class="tour-tooltip-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span id="tourStepBadge" class="tour-step-badge">STEP 1 / 4</span>
+          <span id="tourStepTitle" class="tour-step-title">TERMINAL BUKTI</span>
+        </div>
+        <button id="btnCloseTour" class="pixel-btn-icon" style="width: 26px; height: 26px;" title="Tutup Panduan (Esc)">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+
+      <div class="tour-tooltip-body">
+        <div id="tourStepBodyText" class="tour-step-body-text"></div>
+        <div id="tourStepCallout" class="tutorial-callout-box tip-cyan"></div>
+      </div>
+
+      <div class="tour-tooltip-footer">
+        <div class="tour-dots-row" id="tourDotsRow">
+          <span class="tour-dot active" data-step="0" title="Langkah 1"></span>
+          <span class="tour-dot" data-step="1" title="Langkah 2"></span>
+          <span class="tour-dot" data-step="2" title="Langkah 3"></span>
+          <span class="tour-dot" data-step="3" title="Langkah 4"></span>
+        </div>
+
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <button id="btnSkipTour" class="pixel-btn" style="background: #0d1527; border-color: #1e293b; font-size: 0.72rem; padding: 5px 10px; color: #94a3b8;">
+            LEWATI
+          </button>
+          <button id="btnPrevTourStep" class="pixel-btn" style="background: #111d33; border-color: #334155; font-size: 0.74rem; padding: 5px 10px;" disabled>
+            ◀
+          </button>
+          <button id="btnNextTourStep" class="pixel-btn pixel-btn-cyan" style="font-size: 0.74rem; padding: 5px 12px;">
+            LANJUT ▶
+          </button>
+          <button id="btnStartMissionFromTour" class="pixel-btn pixel-btn-green" style="font-size: 0.76rem; padding: 6px 14px; display: none; font-weight: 800;">
+            🚀 MULAI MISI!
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Firebase App & Firestore SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

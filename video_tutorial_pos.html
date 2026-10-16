@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIDEO TUTORIAL // PANDUAN PANITIA POS - ADHIGANA 2026</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Custom Styling for Video Tutorial Player */
+    .video-tutorial-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px 80px;
+    }
+
+    .video-header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .video-title-box h1 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .video-title-box p {
+      font-size: 0.85rem;
+      color: var(--pixel-cyan);
+      font-family: var(--font-pixel);
+      margin-top: 4px;
+    }
+
+    /* Video Player Frame */
+    .video-player-frame {
+      background: #06090e;
+      border: 2px solid #ff1a4a;
+      box-shadow: 0 0 25px rgba(255, 26, 74, 0.35), inset 0 0 15px rgba(0,0,0,0.8);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 9;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    @media (max-width: 768px) {
+      .video-player-frame {
+        aspect-ratio: auto;
+        min-height: 480px;
+      }
+    }
+
+    /* Video Screen / Canvas Area */
+    .video-viewport {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at center, #111a29 0%, #06090f 100%);
+    }
+
+    /* CRT scanlines effect overlay */
+    .video-crt-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+      background-size: 100% 3px, 6px 100%;
+      z-index: 10;
+      opacity: 0.6;
+    }
+
+    /* Top HUD in video */
+    .video-hud-top {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      font-family: var(--font-pixel);
+      font-size: 0.78rem;
+    }
+
+    .video-hud-badge {
+      background: rgba(255, 26, 74, 0.2);
+      border: 1px solid #ff1a4a;
+      color: #ff6b8b;
+      padding: 4px 10px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .video-rec-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff1a4a;
+      animation: recPulse 1.2s infinite;
+    }
+
+    @keyframes recPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.85); }
+    }
+
+    .video-hud-time {
+      color: var(--pixel-cyan);
+      background: rgba(8, 13, 20, 0.8);
+      border: 1px solid #1a2a40;
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* Scene Container */
+    .scene-stage {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 36px 64px;
+      opacity: 0;
+      transform: scale(0.97);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      pointer-events: none;
+      box-sizing: border-box;
+    }
+
+    .scene-stage.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    /* Scene Specific Components */
+    .scene-hero-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(44, 212, 224, 0.5);
+    }
+
+    .scene-hero-subtitle {
+      font-size: 1rem;
+      color: var(--pixel-yellow);
+      font-family: var(--font-pixel);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .scene-content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      width: 100%;
+      max-width: 960px;
+    }
+
+    .scene-card {
+      background: rgba(14, 23, 36, 0.9);
+      border: 1px solid #1f3352;
+      border-radius: 6px;
+      padding: 16px;
+      position: relative;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .scene-card-highlight {
+      border-color: #ff1a4a;
+      box-shadow: 0 0 15px rgba(255, 26, 74, 0.25);
+    }
+
+    .scene-card-cyan {
+      border-color: #2cd4e0;
+      box-shadow: 0 0 15px rgba(44, 212, 224, 0.25);
+    }
+
+    .scene-card-yellow {
+      border-color: #fcee0a;
+      box-shadow: 0 0 15px rgba(252, 238, 10, 0.2);
+    }
+
+    .scene-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-family: var(--font-pixel);
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .scene-step-num {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ff1a4a;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+    }
+
+    .scene-step-text {
+      font-size: 0.88rem;
+      color: #cbd5e1;
+      line-height: 1.5;
+    }
+
+    .scene-step-badge {
+      display: inline-block;
+      font-family: var(--font-pixel);
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 3px;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+
+    /* Interactive Mockup Visuals inside Video */
+    .mockup-dual-monitor {
+      display: flex;
+      gap: 16px;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 768px) {
+      .mockup-dual-monitor {
+        flex-direction: column;
+      }
+    }
+
+    .mockup-crt {
+      flex: 1;
+      background: #080f1a;
+      border: 1px solid #1a2a40;
+      border-radius: 6px;
+      padding: 12px;
+      position: relative;
+    }
+
+    .mockup-crt-header {
+      font-family: var(--font-pixel);
+      font-size: 0.72rem;
+      color: var(--pixel-cyan);
+      border-bottom: 1px solid #1a2a40;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .mockup-option-item {
+      background: #0e1724;
+      border: 1px solid #1b283d;
+      padding: 8px 12px;
+      margin-bottom: 6px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mockup-option-item.selected {
+      border-color: #2cd4e0;
+      background: rgba(44, 212, 224, 0.15);
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .mockup-code-card {
+      background: linear-gradient(135deg, #1f0b12 0%, #0d1726 100%);
+      border: 2px dashed #ff1a4a;
+      padding: 16px 24px;
+      border-radius: 8px;
+      text-align: center;
+      margin: 10px auto;
+      max-width: 450px;
+      animation: pulseGlow 2s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 10px rgba(255, 26, 74, 0.3); }
+      to { box-shadow: 0 0 25px rgba(255, 26, 74, 0.7); }
+    }
+
+    .mockup-code-val {
+      font-family: var(--font-pixel);
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ff1a4a;
+      letter-spacing: 4px;
+      margin: 6px 0;
+      text-shadow: 0 0 10px rgba(255, 26, 74, 0.8);
+    }
+
+    /* Subtitles / Karaoke Bar */
+    .video-subtitles-bar {
+      position: absolute;
+      bottom: 68px;
+      left: 20px;
+      right: 20px;
+      background: rgba(6, 10, 16, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid #1f3352;
+      border-radius: 6px;
+      padding: 10px 18px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #fff;
+      line-height: 1.5;
+      z-index: 25;
+      transition: all 0.3s ease;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .video-voice-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      height: 16px;
+    }
+
+    .video-voice-bar {
+      width: 3px;
+      height: 100%;
+      background: var(--pixel-cyan);
+      border-radius: 2px;
+      animation: soundWave 0.8s infinite ease-in-out;
+    }
+
+    .video-voice-bar:nth-child(2) { animation-delay: 0.15s; }
+    .video-voice-bar:nth-child(3) { animation-delay: 0.3s; }
+    .video-voice-bar:nth-child(4) { animation-delay: 0.45s; }
+
+    @keyframes soundWave {
+      0%, 100% { height: 4px; }
+      50% { height: 16px; }
+    }
+
+    /* Bottom Control Bar */
+    .video-controls-bar {
+      height: 60px;
+      background: #080d15;
+      border-top: 1px solid #1a2a40;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
+      gap: 14px;
+      z-index: 30;
+      position: relative;
+    }
+
+    /* Progress Scrubber Bar */
+    .video-progress-container {
+      position: absolute;
+      top: -6px;
+      left: 0;
+      right: 0;
+      height: 6px;
+      background: #111a28;
+      cursor: pointer;
+      transition: height 0.15s ease;
+    }
+
+    .video-progress-container:hover {
+      height: 10px;
+      top: -10px;
+    }
+
+    .video-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ff1a4a, #2cd4e0);
+      position: relative;
+    }
+
+    .video-progress-handle {
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 6px rgba(44, 212, 224, 0.8);
+      display: none;
+    }
+
+    .video-progress-container:hover .video-progress-handle {
+      display: block;
+    }
+
+    .video-btn {
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      border-radius: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .video-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .video-btn.active {
+      color: var(--pixel-cyan);
+    }
+
+    .video-btn-play {
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      background: #ff1a4a;
+      border-radius: 50%;
+    }
+
+    .video-btn-play:hover {
+      background: #ff3366;
+      color: #fff;
+      transform: scale(1.05);
+    }
+
+    .video-time-display {
+      font-family: var(--font-pixel);
+      font-size: 0.78rem;
+      color: #cbd5e1;
+      min-width: 90px;
+    }
+
+    .video-speed-select {
+      background: #0f1826;
+      border: 1px solid #1a2a40;
+      color: #cbd5e1;
+      font-family: var(--font-pixel);
+      font-size: 0.75rem;
+      padding: 4px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Chapter Chips Carousel */
+    .chapter-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .chapter-chip {
+      background: #0a101b;
+      border: 1px solid #1a2a40;
+      border-radius: 6px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .chapter-chip:hover {
+      border-color: var(--pixel-cyan);
+      background: #0f1828;
+    }
+
+    .chapter-chip.active {
+      border-color: #ff1a4a;
+      background: rgba(255, 26, 74, 0.12);
+      box-shadow: 0 0 10px rgba(255, 26, 74, 0.3);
+    }
+
+    .chapter-chip-num {
+      font-family: var(--font-pixel);
+      font-size: 0.7rem;
+      color: #ff1a4a;
+      font-weight: bold;
+    }
+
+    .chapter-chip.active .chapter-chip-num {
+      color: #2cd4e0;
+    }
+
+    .chapter-chip-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #fff;
+      margin-top: 2px;
+      line-height: 1.3;
+    }
+
+    .chapter-chip-time {
+      font-family: var(--font-pixel);
+      font-size: 0.7rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Script & Checklist Drawer */
+    .tutorial-panels-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .tutorial-panels-wrap {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel-box {
+      background: #0a101b;
+      border: 1px solid #1a2a40;
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .panel-box-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1a2a40;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+
+    .panel-box-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+    }
+
+    .checklist-icon {
+      color: var(--pixel-green);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .teleprompter-box {
+      max-height: 380px;
+      overflow-y: auto;
+      padding-right: 10px;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: #cbd5e1;
+    }
+
+    .teleprompter-line {
+      padding: 8px 12px;
+      border-left: 2px solid transparent;
+      margin-bottom: 8px;
+      border-radius: 0 4px 4px 0;
+      transition: all 0.2s;
+    }
+
+    .teleprompter-line.active {
+      background: rgba(44, 212, 224, 0.1);
+      border-left-color: var(--pixel-cyan);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Screen recording banner */
+    .record-helper-banner {
+      background: rgba(252, 238, 10, 0.08);
+      border: 1px dashed var(--pixel-yellow);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="video-tutorial-container">
+    
+    <!-- TOP NAVIGATION -->
+    <div class="video-header-nav">
+      <div class="video-title-box">
+        <h1>
+          <span style="color: #ff1a4a;">▶</span>
+          VIDEO TUTORIAL &amp; SIMULASI OPERASIONAL POS
+        </h1>
+        <p>// PANDUAN LENGKAP PANITIA PENJAGA POS // ADHIGANA 2026</p>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center;">
+        <a href="index.html" class="pixel-btn" style="padding: 8px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
+          <span>KEMBALI KE PORTAL UTAMA</span>
+        </a>
+        <button id="btnToggleRecord" class="pixel-btn pixel-btn-red" style="padding: 8px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;" title="Rekam &amp; Download Video Tutorial (WebM)">
+          <span class="video-rec-dot" style="display: inline-block;"></span>
+          <span id="btnRecordText">REKAM VIDEO (WEBM)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- MAIN 16:9 VIDEO PLAYER FRAME -->
+    <div class="video-player-frame" id="videoFrame">
+      
+      <!-- VIEWPORT (VIDEO DISPLAY) -->
+      <div class="video-viewport" id="videoViewport">
+        <div class="video-crt-overlay"></div>
+
+        <!-- HUD TOP OVERLAY -->
+        <div class="video-hud-top">
+          <div class="video-hud-badge">
+            <span class="video-rec-dot"></span>
+            <span>TUTORIAL PANITIA POS // HD 1080P</span>
+          </div>
+          <div id="videoHudChapter" style="color: var(--pixel-yellow);">
+            BAB 1/7: PENGENALAN &amp; MISI
+          </div>
+          <div class="video-hud-time" id="videoHudTime">
+            00:00 / 04:45
+          </div>
+        </div>
+
+        <!-- ================= SCENE 1: INTRO & MISI ================= -->
+        <div class="scene-stage active" id="scene1" data-duration="38">
+          <div style="display: flex; justify-content: center; margin-bottom: 12px;">
+            <img src="assets/swirl_logo.png" alt="Logo" style="width: 72px; height: 72px; animation: floatAnim 3s infinite ease-in-out;">
+          </div>
+          <div class="scene-hero-title">PANDUAN PANITIA POS</div>
+          <div class="scene-hero-subtitle">// DIGITAL FRONTIER: THE LOGIC ESCAPE — ADHIGANA 2026 //</div>
+          
+          <div class="scene-content-grid" style="max-width: 840px;">
+            <div class="scene-card scene-card-highlight">
+              <div class="scene-card-header">
+                <span class="scene-step-num">1</span>
+                <span>TUGAS UTAMA PANITIA</span>
+              </div>
+              <div class="scene-step-text">
+                Menjaga ritme pengerjaan <strong>2 Menit (120 Detik)</strong> per kelompok, mengawasi tanpa memberi bocoran, dan mencatat <strong>KODE UNIK</strong> ke lembar fisik.
+              </div>
+              <span class="scene-step-badge" style="background: rgba(255,26,74,0.2); color: #ff6b8b;">DURASI MISI: 2 MENIT</span>
+            </div>
+
+            <div class="scene-card scene-card-cyan">
+              <div class="scene-card-header">
+                <span class="scene-step-num" style="background: #2cd4e0; color: #080d14;">2</span>
+                <span>FORMAT SOAL &amp; POIN</span>
+              </div>
+              <div class="scene-step-text">
+                Masing-masing pos memiliki <strong>2 Soal Pilihan Ganda</strong> (@ 50 Poin = Total 100 Poin) + skor penalaran di lembar jawaban fisik yang dinilai juri pusat.
+              </div>
+              <span class="scene-step-badge" style="background: rgba(44,212,224,0.2); color: #7ee8f6;">TOTAL: 100 POIN RESMI</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SCENE 2: PERSIAPAN LAPTOP ================= -->
+        <div class="scene-stage" id="scene2" data-duration="42">
+          <div class="scene-hero-title" style="color: var(--pixel-cyan);">PERSIAPAN SEBELUM ACARA</div>
+          <div class="scene-hero-subtitle">// SETUP LAPTOP &amp; PERLENGKAPAN STAND POS //</div>
+
+          <div class="scene-content-grid" style="max-width: 900px;">
+            <div class="scene-card">
+              <div class="scene-card-header">
+                <span class="scene-step-num">1</span>
+                <span>BUKA FILE POS MASING-MASING</span>
+              </div>
+              <div class="scene-step-text">
+                Di laptop Pos 1 buka <code>pos1.html</code>, Pos 2 buka <code>pos2.html</code>, Pos 3 buka <code>pos3.html</code>, Pos 4 buka <code>pos4.html</code>. Cukup <strong>double-click</strong> tanpa install apa pun!
+              </div>
+            </div>
+
+            <div class="scene-card">
+              <div class="scene-card-header">
+                <span class="scene-step-num">2</span>
+                <span>AKTIFKAN FULLSCREEN</span>
+              </div>
+              <div class="scene-step-text">
+                Klik tombol <strong>Fullscreen</strong> di pojok kanan atas browser atau tekan <strong>F11</strong> agar monitor bernuansa Cyber Terminal penuh tanpa bilah browser.
+              </div>
+            </div>
+
+            <div class="scene-card scene-card-yellow">
+              <div class="scene-card-header">
+                <span class="scene-step-num" style="background: #fcee0a; color: #080d14;">3</span>
+                <span>SIAPKAN LEMBAR JAWABAN KERTAS</span>
+              </div>
+              <div class="scene-step-text">
+                Siapkan tumpukan <code>lembar_jawaban_peserta.html</code> cetak dan pulpen. Pastikan meja pos rapi dan timer audio terdengar jelas.
+              </div>
+            </div>
+
+            <div class="scene-card scene-card-highlight">
+              <div class="scene-card-header">
+                <span class="scene-step-num">4</span>
+                <span>PIN AKSES PANITIA: 2026</span>
+              </div>
+              <div class="scene-step-text">
+                Tombol <strong>"KUNCI POS"</strong> dan <strong>"LEADERBOARD"</strong> dilindungi PIN keamanan panitia: <strong style="color: #ff1a4a; font-size: 1.1rem; letter-spacing: 2px;">2026</strong>.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SCENE 3: KELOMPOK TIBA ================= -->
+        <div class="scene-stage" id="scene3" data-duration="40">
+          <div class="scene-hero-title" style="color: var(--pixel-yellow);">SAAT KELOMPOK TIBA</div>
+          <div class="scene-hero-subtitle">// 3 LAYAR PERTAMA: SAMBUTAN &amp; PEMILIHAN TIM //</div>
+
+          <div class="scene-content-grid" style="max-width: 900px;">
+            <div class="scene-card">
+              <div class="scene-card-header">
+                <span class="scene-step-num">A</span>
+                <span>LAYAR 1: SAMBUTAN POS</span>
+              </div>
+              <div class="scene-step-text">
+                Sambut kelompok mahasiswa baru: <em>"Selamat datang di Pos [X]!"</em>. Bacakan misi singkat, lalu klik tombol merah: <strong>"PILIH KELOMPOKMU (LANJUT) →"</strong>.
+              </div>
+            </div>
+
+            <div class="scene-card scene-card-cyan">
+              <div class="scene-card-header">
+                <span class="scene-step-num" style="background: #2cd4e0; color: #080d14;">B</span>
+                <span>LAYAR 2: PILIH IDENTITAS TIM</span>
+              </div>
+              <div class="scene-step-text">
+                Tanyakan nama kelompok mereka. Klik salah satu dari 5 kartu AI: <strong>META, GEMINI, COPILOT, DEEPSEEK,</strong> atau <strong>CLAUDE</strong>.
+              </div>
+            </div>
+
+            <div class="scene-card">
+              <div class="scene-card-header">
+                <span class="scene-step-num">C</span>
+                <span>LAYAR 3: TERMINAL BOOTING</span>
+              </div>
+              <div class="scene-step-text">
+                Sistem akan memuat otentikasi kelompok selama ~1.8 detik secara otomatis. Panitia dan peserta langsung masuk ke arena studi kasus!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SCENE 4: INVESTIGASI & PENGERJAAN ================= -->
+        <div class="scene-stage" id="scene4" data-duration="52">
+          <div class="scene-hero-title" style="color: #2cd4e0;">ARENA STUDI KASUS (2 MENIT)</div>
+          <div class="scene-hero-subtitle">// DUAL MONITOR CRT: BUKTI &amp; SOAL PILIHAN GANDA //</div>
+
+          <div class="mockup-dual-monitor">
+            <!-- CRT Kiri -->
+            <div class="mockup-crt">
+              <div class="mockup-crt-header">
+                <span>CRT 1 // BUKTI SIMULATOR INTERAKTIF</span>
+                <span style="color: var(--pixel-yellow);">INTERACTIVE</span>
+              </div>
+              <div style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.5;">
+                <p>🔎 Berisi simulator kasus (misal: kotak masuk email palsu di Pos 1, simulator barista di Pos 2, log brankas di Pos 3, kode Python di Pos 4).</p>
+                <div style="background: #0d1726; border: 1px dashed #2cd4e0; padding: 8px; border-radius: 4px; margin-top: 8px; font-family: var(--font-pixel); font-size: 0.75rem;">
+                  &gt; [PETUNJUK]: Biarkan peserta mengklik dan mengamati bukti secara mandiri!
+                </div>
+              </div>
+            </div>
+
+            <!-- CRT Kanan -->
+            <div class="mockup-crt" style="border-color: #ff1a4a;">
+              <div class="mockup-crt-header" style="color: #ff6b8b;">
+                <span>CRT 2 // 2 SOAL PILIHAN GANDA</span>
+                <span style="color: var(--pixel-green);">100 POIN</span>
+              </div>
+              <div class="mockup-option-item">
+                <span style="font-family: var(--font-pixel); color: var(--pixel-cyan);">[A]</span> Opsi Jawaban Pertama
+              </div>
+              <div class="mockup-option-item selected">
+                <span style="font-family: var(--font-pixel); color: var(--pixel-yellow);">[B]</span> Opsi Jawaban Terpilih (Kunci) ✓
+              </div>
+              <div class="mockup-option-item">
+                <span style="font-family: var(--font-pixel); color: var(--pixel-cyan);">[C]</span> Opsi Jawaban Ketiga
+              </div>
+              <div style="font-size: 0.74rem; color: #94a3b8; margin-top: 6px;">
+                * CRT 2 memiliki scroll mandiri halus. Tiap soal bernilai 50 poin.
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 10px; font-family: var(--font-pixel); font-size: 0.82rem; color: var(--pixel-yellow); text-align: center;">
+            ⏱️ TIMER HITUNG MUNDUR 120 DETIK (2 MENIT) AKAN BERBUNYI KEDIP MERAH DI SISA 30 DETIK!
+          </div>
+        </div>
+
+        <!-- ================= SCENE 5: SUBMIT & KODE UNIK ================= -->
+        <div class="scene-stage" id="scene5" data-duration="48">
+          <div class="scene-hero-title" style="color: #ff1a4a;">SUBMIT &amp; SALIN KODE UNIK</div>
+          <div class="scene-hero-subtitle">// TAHAP PALING KRUSIAL BAGI PANITIA POS //</div>
+
+          <div class="mockup-code-card">
+            <div style="font-family: var(--font-pixel); font-size: 0.78rem; color: #cbd5e1;">
+              // HASIL SKOR INSTAN // ADHIGANA VERIFIED
+            </div>
+            <div class="mockup-code-val" id="demoCodeText">META-P1-9021</div>
+            <div style="font-size: 0.85rem; color: var(--pixel-green); font-weight: bold;">
+              STATUS: TERSIMPAN &amp; TERKUNCI (100 POIN)
+            </div>
+          </div>
+
+          <div class="scene-content-grid" style="max-width: 860px; margin-top: 10px;">
+            <div class="scene-card scene-card-highlight">
+              <div class="scene-card-header">
+                <span class="scene-step-num">!</span>
+                <span>WAJIB TULIS KODE KE LEMBAR FISIK</span>
+              </div>
+              <div class="scene-step-text">
+                Salin <strong>KODE UNIK</strong> yang muncul di layar monitor ke <strong>kotak pojok kanan atas lembar jawaban kertas peserta</strong> menggunakan pulpen panitia!
+              </div>
+            </div>
+
+            <div class="scene-card scene-card-cyan">
+              <div class="scene-card-header">
+                <span class="scene-step-num" style="background: #2cd4e0; color: #080d14;">✓</span>
+                <span>FUNGSI KODE UNIK</span>
+              </div>
+              <div class="scene-step-text">
+                Kode ini adalah bukti sah bahwa kelompok tersebut benar-benar telah menuntaskan pos dan untuk mencocokkan nilai di sistem saat penjurian akhir.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SCENE 6: ROTASI & KUNCI RAHASIA ================= -->
+        <div class="scene-stage" id="scene6" data-duration="42">
+          <div class="scene-hero-title" style="color: var(--pixel-yellow);">ROTASI &amp; FITUR RAHASIA</div>
+          <div class="scene-hero-subtitle">// RESET KELOMPOK BERIKUTNYA &amp; AKSES KUNCI JAWABAN //</div>
+
+          <div class="scene-content-grid" style="max-width: 900px;">
+            <div class="scene-card scene-card-cyan">
+              <div class="scene-card-header">
+                <span class="scene-step-num" style="background: #2cd4e0; color: #080d14;">1</span>
+                <span>KLIK "ROTASI KELOMPOK"</span>
+              </div>
+              <div class="scene-step-text">
+                Setelah kode unik disalin ke kertas, klik tombol <strong>"🔄 SELESAI // ROTASI KELOMPOK"</strong>. Sistem otomatis reset bersih ke Layar 1 siap untuk kelompok selanjutnya.
+              </div>
+            </div>
+
+            <div class="scene-card scene-card-yellow">
+              <div class="scene-card-header">
+                <span class="scene-step-num" style="background: #fcee0a; color: #080d14;">2</span>
+                <span>TOMBOL "🔑 KUNCI POS"</span>
+              </div>
+              <div class="scene-step-text">
+                Jika peserta bingung atau panitia butuh memastikan jawaban, klik tombol <strong>"KUNCI POS"</strong> di pojok kanan atas dan masukkan PIN <strong>2026</strong>.
+              </div>
+            </div>
+
+            <div class="scene-card">
+              <div class="scene-card-header">
+                <span class="scene-step-num">3</span>
+                <span>TIDAK BOLEH MEMBERI BOCORAN</span>
+              </div>
+              <div class="scene-step-text">
+                Panitia hanya boleh memberi arahan jika peserta benar-benar macet teknis, tetapi dilarang membocorkan opsi jawaban sebelum submit!
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= SCENE 7: SINKRONISASI & SELESAI ================= -->
+        <div class="scene-stage" id="scene7" data-duration="43">
+          <div style="font-size: 3rem; margin-bottom: 8px;">🏆</div>
+          <div class="scene-hero-title" style="color: var(--pixel-green);">SINKRONISASI &amp; SELESAI</div>
+          <div class="scene-hero-subtitle">// LIVE LEADERBOARD &amp; BACKUP OFFLINE //</div>
+
+          <div class="scene-content-grid" style="max-width: 880px;">
+            <div class="scene-card scene-card-cyan">
+              <div class="scene-card-header">
+                <span style="color: var(--pixel-cyan);">⚡ ONLINE SYNC (CLOUD)</span>
+              </div>
+              <div class="scene-step-text">
+                Jika laptop terhubung WiFi, nilai otomatis masuk ke Firestore dan live di layar proyektor pusat (<code>index.html</code>) secara realtime!
+              </div>
+            </div>
+
+            <div class="scene-card scene-card-highlight">
+              <div class="scene-card-header">
+                <span style="color: #ff6b8b;">💾 OFFLINE BACKUP (JSON)</span>
+              </div>
+              <div class="scene-step-text">
+                Jika tanpa internet, data tetap aman di laptop. Di akhir acara, panitia pos cukup klik "Leaderboard" → <strong>"EKSPOR JSON"</strong> ke flashdisk pusat.
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 16px; font-weight: 900; font-size: 1.15rem; color: #fff; text-shadow: 0 0 10px rgba(0,255,136,0.5);">
+            SELAMAT BERTUGAS PANITIA ADHIGANA 2026! JAGA INTEGRITAS &amp; SEMANGAT! 🚀
+          </div>
+        </div>
+
+        <!-- SUBTITLES & KARAOKE VOICE TEXT -->
+        <div class="video-subtitles-bar" id="videoSubtitles">
+          <div class="video-voice-indicator">
+            <span class="video-voice-bar"></span>
+            <span class="video-voice-bar"></span>
+            <span class="video-voice-bar"></span>
+            <span class="video-voice-bar"></span>
+          </div>
+          <span id="subtitleText">Memuat narasi video tutorial panitia pos...</span>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM VIDEO CONTROLS -->
+      <div class="video-controls-bar">
+        <!-- Scrubber -->
+        <div class="video-progress-container" id="videoProgressContainer" title="Klik / Geser untuk melompat">
+          <div class="video-progress-fill" id="videoProgressFill">
+            <div class="video-progress-handle"></div>
+          </div>
+        </div>
+
+        <!-- Controls Left -->
+        <button class="video-btn video-btn-play" id="btnPlayPause" title="Play / Pause (Spasi)">
+          <svg id="iconPlay" class="h-icon-sm" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clip-rule="evenodd" /></svg>
+          <svg id="iconPause" class="h-icon-sm hidden" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0v-12a.75.75 0 0 1 .75-.75Zm9 0a.75.75 0 0 1 .75.75v12a.75.75 0 0 1-1.5 0v-12a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" /></svg>
+        </button>
+
+        <button class="video-btn" id="btnPrevScene" title="Bab Sebelumnya">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061A1.125 1.125 0 0 1 21 8.689v8.122ZM11.25 16.811c0 .864-.933 1.406-1.683.977l-7.108-4.061a1.125 1.125 0 0 1 0-1.954l7.108-4.061a1.125 1.125 0 0 1 1.683.977v8.122Z" /></svg>
+        </button>
+
+        <button class="video-btn" id="btnNextScene" title="Bab Selanjutnya">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061A1.125 1.125 0 0 1 3 16.811V8.69ZM12.75 8.689c0-.864.933-1.406 1.683-.977l7.108 4.061a1.125 1.125 0 0 1 0 1.954l-7.108 4.061a1.125 1.125 0 0 1-1.683-.977V8.69Z" /></svg>
+        </button>
+
+        <div class="video-time-display">
+          <span id="timeCurrent">00:00</span> / <span id="timeTotal">04:45</span>
+        </div>
+
+        <button class="video-btn" id="btnAudioVoice" title="Audio Suara Narasi (TTS / Mute)">
+          <svg id="iconVoiceOn" class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.21-1.61.572-2.327.234-.847 1.058-1.354 1.938-1.354h2.24Z" /></svg>
+          <svg id="iconVoiceOff" class="h-icon-sm hidden" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 9.75 19.5 12m0 0 2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-3.75 4.72-4.72a.75.75 0 0 1 1.28.53v3.871m0 4.15v7.859a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.21-1.61.572-2.327.234-.847 1.058-1.354 1.938-1.354h2.24M3 3l18 18" /></svg>
+        </button>
+
+        <select class="video-speed-select" id="speedSelect" title="Kecepatan Putar Video">
+          <option value="1">1.0x (Normal)</option>
+          <option value="1.25">1.25x</option>
+          <option value="1.5">1.5x (Cepat)</option>
+        </select>
+
+        <div style="flex: 1;"></div>
+
+        <!-- Controls Right -->
+        <button class="video-btn" id="btnRestartVideo" title="Mulai Ulang dari Awal">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" /></svg>
+        </button>
+
+        <button class="video-btn" id="btnFullscreenVideo" title="Mode Layar Penuh (F)">
+          <svg class="h-icon-sm" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" /></svg>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- CHAPTER NAVIGATION CHIPS -->
+    <div class="chapter-nav-grid" id="chapterChips">
+      <div class="chapter-chip active" data-scene="0">
+        <div class="chapter-chip-num">BAB 1</div>
+        <div class="chapter-chip-title">Intro &amp; Misi Pos</div>
+        <div class="chapter-chip-time">00:00 - 00:38</div>
+      </div>
+      <div class="chapter-chip" data-scene="1">
+        <div class="chapter-chip-num">BAB 2</div>
+        <div class="chapter-chip-title">Persiapan Laptop</div>
+        <div class="chapter-chip-time">00:38 - 01:20</div>
+      </div>
+      <div class="chapter-chip" data-scene="2">
+        <div class="chapter-chip-num">BAB 3</div>
+        <div class="chapter-chip-title">Kelompok Tiba</div>
+        <div class="chapter-chip-time">01:20 - 02:00</div>
+      </div>
+      <div class="chapter-chip" data-scene="3">
+        <div class="chapter-chip-num">BAB 4</div>
+        <div class="chapter-chip-title">Investigasi &amp; Soal</div>
+        <div class="chapter-chip-time">02:00 - 02:52</div>
+      </div>
+      <div class="chapter-chip" data-scene="4">
+        <div class="chapter-chip-num">BAB 5</div>
+        <div class="chapter-chip-title">Submit &amp; Kode Unik</div>
+        <div class="chapter-chip-time">02:52 - 03:40</div>
+      </div>
+      <div class="chapter-chip" data-scene="5">
+        <div class="chapter-chip-num">BAB 6</div>
+        <div class="chapter-chip-title">Rotasi &amp; Kunci Pos</div>
+        <div class="chapter-chip-time">03:40 - 04:22</div>
+      </div>
+      <div class="chapter-chip" data-scene="6">
+        <div class="chapter-chip-num">BAB 7</div>
+        <div class="chapter-chip-title">Sync &amp; Selesai</div>
+        <div class="chapter-chip-time">04:22 - 04:45</div>
+      </div>
+    </div>
+
+    <!-- RECORD HELPER BANNER -->
+    <div class="record-helper-banner">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.4rem;">💡</span>
+        <div style="font-size: 0.85rem; color: #cbd5e1;">
+          <strong style="color: var(--pixel-yellow);">Tips Panitia:</strong> Kamu bisa menekan tombol merah <strong>"REKAM VIDEO (WEBM)"</strong> di pojok kanan atas untuk mengekspor tutorial ini menjadi file rekaman video nyata yang bisa dibagikan langsung ke grup WhatsApp panitia!
+        </div>
+      </div>
+      <a href="lembar_jawaban_peserta.html" target="_blank" class="pixel-btn pixel-btn-cyan" style="padding: 6px 12px; font-size: 0.75rem; text-decoration: none;">
+        <span>PRINT LEMBAR KERTAS PESERTA</span>
+      </a>
+    </div>
+
+    <!-- SCRIPT & CHECKLIST DETAILS -->
+    <div class="tutorial-panels-wrap">
+      
+      <!-- CHECKLIST OPERASIONAL HARI H -->
+      <div class="panel-box">
+        <div class="panel-box-header">
+          <div class="panel-box-title">
+            <span style="color: var(--pixel-green);">📋</span>
+            <span>CHECKLIST CEPAT PANITIA POS (H-DAY)</span>
+          </div>
+          <span style="font-family: var(--font-pixel); font-size: 0.72rem; color: var(--pixel-yellow);">SOP WAJIB</span>
+        </div>
+
+        <div class="checklist-item">
+          <span class="checklist-icon">✔</span>
+          <div>
+            <strong>Pastikan Baterai Laptop Terisi Penuh:</strong> Colokkan charger laptop di masing-masing meja pos agar layar tidak mati di tengah permainan.
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <span class="checklist-icon">✔</span>
+          <div>
+            <strong>Buka File Pos yang Benar:</strong> Buka <code>pos1.html</code>, <code>pos2.html</code>, <code>pos3.html</code>, atau <code>pos4.html</code> sesuai pos penugasan. Tekan <strong>F11</strong> untuk layar penuh.
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <span class="checklist-icon">✔</span>
+          <div>
+            <strong>Siapkan Lembar Kertas &amp; Pulpen:</strong> Sediakan minimal 5-10 lembar cetak <code>lembar_jawaban_peserta.html</code> dan pulpen panitia.
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <span class="checklist-icon">✔</span>
+          <div>
+            <strong>Ingat PIN Rahasia Panitia (2026):</strong> Digunakan untuk membuka modal <em>"KUNCI POS"</em> dan rekapitulasi nilai.
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <span class="checklist-icon">✔</span>
+          <div>
+            <strong>Pantau Durasi 2 Menit (120 Detik):</strong> Beri peringatan saat sisa 30 detik agar peserta segera mendiskusikan opsi final.
+          </div>
+        </div>
+
+        <div class="checklist-item">
+          <span class="checklist-icon">✔</span>
+          <div>
+            <strong>KRUSIAL: Salin Kode Unik ke Kertas:</strong> Setelah submit di web, catat kode unik (misal: <code>META-P1-9021</code>) ke kotak kertas peserta sebelum mereka rotasi!
+          </div>
+        </div>
+      </div>
+
+      <!-- TELEPROMPTER / NASKAH NARASI SUARA LENGKAP -->
+      <div class="panel-box">
+        <div class="panel-box-header">
+          <div class="panel-box-title">
+            <span style="color: var(--pixel-cyan);">🎙️</span>
+            <span>NASKAH SUARA &amp; TELEPROMPTER (VOICEOVER)</span>
+          </div>
+          <span style="font-family: var(--font-pixel); font-size: 0.72rem; color: #94a3b8;">AUTO-SYNC</span>
+        </div>
+
+        <div class="teleprompter-box" id="teleprompterBox">
+          <div class="teleprompter-line" id="tpl0">
+            <strong>[BAB 1: 00:00]</strong> Halo rekan-rekan panitia Adhigana 2026! Video ini adalah panduan resmi cara mengoperasikan stasiun pos studi kasus Digital Frontier. Tugas utama kalian adalah menjaga ritme waktu 2 menit per kelompok, mendampingi mereka saat berdiskusi, dan mencatat Kode Unik hasil pengerjaan ke lembar kertas fisik.
+          </div>
+          <div class="teleprompter-line" id="tpl1">
+            <strong>[BAB 2: 00:38]</strong> Sebelum acara dimulai, pastikan laptop di tiap pos sudah membuka file HTML yang sesuai: pos satu membuka pos1.html, pos dua pos2.html, pos tiga pos3.html, dan pos empat pos4.html. Tekan tombol Fullscreen atau tombol F11 pada keyboard. Ingat, PIN rahasia untuk membuka Kunci Pos dan Leaderboard adalah dua nol dua enam (2026).
+          </div>
+          <div class="teleprompter-line" id="tpl2">
+            <strong>[BAB 3: 01:20]</strong> Saat kelompok mahasiswa baru tiba di pos kalian, sambut mereka dengan semangat! Di Layar 1, bacakan misi singkat lalu klik tombol merah 'PILIH KELOMPOKMU'. Di Layar 2, tanyakan identitas tim mereka: Meta, Gemini, Copilot, Deepseek, atau Claude. Setelah diklik, sistem akan melakukan otentikasi booting selama satu koma delapan detik.
+          </div>
+          <div class="teleprompter-line" id="tpl3">
+            <strong>[BAB 4: 02:00]</strong> Sekarang kelompok masuk ke arena investigasi dengan timer hitung mundur dua menit atau seratus dua puluh detik! Monitor kiri atau CRT 1 menampilkan simulator bukti kasus. Monitor kanan atau CRT 2 menampilkan dua soal pilihan ganda berbobot masing-masing lima puluh poin. Arahkan peserta memilih opsi jawaban terbaik di layar monitor.
+          </div>
+          <div class="teleprompter-line" id="tpl4">
+            <strong>[BAB 5: 02:52]</strong> Ini tahap paling krusial! Setelah peserta memilih opsi, klik tombol 'SUBMIT JAWABAN RESMI'. Sistem langsung menampilkan skor instan dan menghasilkan KODE UNIK resmi. Panitia wajib menyalin kode unik ini ke kotak pojok kanan atas lembar jawaban kertas peserta dengan pulpen!
+          </div>
+          <div class="teleprompter-line" id="tpl5">
+            <strong>[BAB 6: 03:40]</strong> Setelah kode unik tercatat rapi di lembar fisik, klik tombol 'SELESAI ROTASI KELOMPOK' untuk mereset sistem ke Layar 1 bagi kelompok berikutnya. Jika peserta bingung atau panitia membutuhkan panduan kunci jawaban, gunakan tombol 'KUNCI POS' di kanan atas dengan memasukkan PIN dua nol dua enam.
+          </div>
+          <div class="teleprompter-line" id="tpl6">
+            <strong>[BAB 7: 04:22]</strong> Semua nilai otomatis tersinkronisasi ke Live Leaderboard pusat jika terkoneksi internet. Jika offline tanpa jaringan, jangan khawatir! Di akhir sesi kalian cukup klik tombol Leaderboard lalu 'EKSPOR JSON' untuk diserahkan ke panitia pusat. Selamat bertugas dan sukseskan Adhigana 2026!
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    /* ==========================================================================
+       VIDEO TUTORIAL PLAYER ENGINE - ADHIGANA 2026
+       ========================================================================== */
+
+    const scenesData = [
+      {
+        id: "scene1",
+        title: "BAB 1: PENGENALAN & MISI POS",
+        duration: 38,
+        narration: "Halo rekan-rekan panitia Adhigana 2026! Video ini adalah panduan resmi cara mengoperasikan stasiun pos studi kasus Digital Frontier. Tugas utama kalian adalah menjaga ritme waktu 2 menit per kelompok, mendampingi mereka saat berdiskusi, dan mencatat Kode Unik hasil pengerjaan ke lembar kertas fisik.",
+        subtitles: [
+          { time: 0, text: "Halo rekan-rekan panitia Adhigana 2026!" },
+          { time: 4, text: "Video ini adalah panduan resmi operasional pos studi kasus Digital Frontier." },
+          { time: 10, text: "Tugas utama kalian adalah menjaga ritme pengerjaan 2 Menit (120 Detik) per kelompok." },
+          { time: 19, text: "Format misi: 2 Soal Pilihan Ganda (@ 50 Poin = Total 100 Poin resmi)." },
+          { time: 27, text: "Serta mencatat KODE UNIK hasil pengerjaan ke lembar jawaban fisik peserta!" }
+        ]
+      },
+      {
+        id: "scene2",
+        title: "BAB 2: PERSIAPAN LAPTOP & PERLENGKAPAN",
+        duration: 42,
+        narration: "Sebelum acara dimulai, pastikan laptop di tiap pos sudah membuka file HTML yang sesuai: pos satu membuka pos1.html, pos dua pos2.html, pos tiga pos3.html, dan pos empat pos4.html. Tekan tombol Fullscreen atau tombol F11 pada keyboard. Ingat, PIN rahasia untuk membuka Kunci Pos dan Leaderboard adalah dua nol dua enam.",
+        subtitles: [
+          { time: 0, text: "Langkah Persiapan: Buka file pos sesuai nomor penugasan di laptop." },
+          { time: 7, text: "Pos 1: pos1.html | Pos 2: pos2.html | Pos 3: pos3.html | Pos 4: pos4.html." },
+          { time: 15, text: "Aktifkan Fullscreen dengan tombol F11 untuk pengalaman Cyber Arcade penuh." },
+          { time: 24, text: "Siapkan lembar kertas fisik lembar_jawaban_peserta.html dan pulpen di meja pos." },
+          { time: 33, text: "PIN Akses Rahasia Panitia: 2026 untuk melihat Kunci Pos dan Leaderboard." }
+        ]
+      },
+      {
+        id: "scene3",
+        title: "BAB 3: ALUR SAAT KELOMPOK TIBA",
+        duration: 40,
+        narration: "Saat kelompok mahasiswa baru tiba di pos kalian, sambut mereka dengan semangat! Di Layar 1, bacakan misi singkat lalu klik tombol merah 'PILIH KELOMPOKMU'. Di Layar 2, tanyakan identitas tim mereka: Meta, Gemini, Copilot, Deepseek, atau Claude. Setelah diklik, sistem akan melakukan otentikasi booting selama satu koma delapan detik.",
+        subtitles: [
+          { time: 0, text: "Saat kelompok tiba di pos, sambut mereka dengan ramah & tegas." },
+          { time: 6, text: "Layar 1 (Welcome in Pos): Klik tombol 'PILIH KELOMPOKMU (LANJUT) →'." },
+          { time: 14, text: "Layar 2 (Pilih Tim): Tanyakan kelompok mereka: Meta, Gemini, Copilot, Deepseek, Claude." },
+          { time: 24, text: "Layar 3 (Booting): Sistem melakukan otentikasi terminal selama ~1.8 detik." },
+          { time: 33, text: "Setelah itu, arena studi kasus akan langsung terbuka secara otomatis!" }
+        ]
+      },
+      {
+        id: "scene4",
+        title: "BAB 4: ARENA INVESTIGASI & SOAL (2 MENIT)",
+        duration: 52,
+        narration: "Sekarang kelompok masuk ke arena investigasi dengan timer hitung mundur dua menit atau seratus dua puluh detik! Monitor kiri atau CRT 1 menampilkan simulator bukti kasus. Monitor kanan atau CRT 2 menampilkan dua soal pilihan ganda berbobot masing-masing lima puluh poin. Arahkan peserta memilih opsi jawaban terbaik di layar monitor.",
+        subtitles: [
+          { time: 0, text: "Arena Studi Kasus: Timer 2 Menit (120 Detik) otomatis berjalan mundur!" },
+          { time: 8, text: "Monitor Kiri (CRT 1): Bukti simulator kasus interaktif (email, mesin, brankas, kode)." },
+          { time: 19, text: "Monitor Kanan (CRT 2): 2 Soal Pilihan Ganda (@ 50 Poin = Total 100 Poin)." },
+          { time: 30, text: "Peserta berdiskusi, menentukan jawaban di web dan merumuskan alasan di kertas." },
+          { time: 42, text: "Timer akan berkedip merah saat waktu tersisa 30 detik terakhir!" }
+        ]
+      },
+      {
+        id: "scene5",
+        title: "BAB 5: SUBMIT & SALIN KODE UNIK (KRUSIAL)",
+        duration: 48,
+        narration: "Ini tahap paling krusial! Setelah peserta memilih opsi, klik tombol 'SUBMIT JAWABAN RESMI'. Sistem langsung menampilkan skor instan dan menghasilkan KODE UNIK resmi. Panitia wajib menyalin kode unik ini ke kotak pojok kanan atas lembar jawaban kertas peserta dengan pulpen!",
+        subtitles: [
+          { time: 0, text: "Tahap Krusial: Klik tombol 'SUBMIT JAWABAN RESMI'." },
+          { time: 7, text: "Sistem menerbitkan Skor Instan dan KODE UNIK (misal: META-P1-9021)." },
+          { time: 18, text: "WAJIB: Panitia menyalin Kode Unik ke kotak pojok kanan atas lembar kertas peserta!" },
+          { time: 30, text: "Kode ini menjadi bukti sah sinkronisasi antara pengerjaan web dan verifikasi juri." },
+          { time: 40, text: "Amankan lembar kertas peserta untuk diserahkan ke pos pusat." }
+        ]
+      },
+      {
+        id: "scene6",
+        title: "BAB 6: ROTASI & FITUR RAHASIA PANITIA",
+        duration: 42,
+        narration: "Setelah kode unik tercatat rapi di lembar fisik, klik tombol 'SELESAI ROTASI KELOMPOK' untuk mereset sistem ke Layar 1 bagi kelompok berikutnya. Jika peserta bingung atau panitia membutuhkan panduan kunci jawaban, gunakan tombol 'KUNCI POS' di kanan atas dengan memasukkan PIN dua nol dua enam.",
+        subtitles: [
+          { time: 0, text: "Klik tombol '🔄 SELESAI // ROTASI KELOMPOK' untuk reset sistem ke Layar 1." },
+          { time: 9, text: "Sistem kembali bersih dan siap menyambut kelompok peserta selanjutnya." },
+          { time: 18, text: "Fitur Rahasia: Klik tombol '🔑 KUNCI POS' jika butuh memeriksa kunci jawaban resmi." },
+          { time: 28, text: "Masukkan PIN '2026' untuk melihat pembahasan logis dan lokasi petunjuk." },
+          { time: 36, text: "Ingat: Dilarang memberi bocoran jawaban sebelum peserta submit!" }
+        ]
+      },
+      {
+        id: "scene7",
+        title: "BAB 7: SINKRONISASI LEADERBOARD & SELESAI",
+        duration: 43,
+        narration: "Semua nilai otomatis tersinkronisasi ke Live Leaderboard pusat jika terkoneksi internet. Jika offline tanpa jaringan, jangan khawatir! Di akhir sesi kalian cukup klik tombol Leaderboard lalu 'EKSPOR JSON' untuk diserahkan ke panitia pusat. Selamat bertugas dan sukseskan Adhigana 2026!",
+        subtitles: [
+          { time: 0, text: "Sinkronisasi Realtime: Nilai otomatis terkirim ke Live Leaderboard proyektor pusat." },
+          { time: 10, text: "Jika Offline Tanpa WiFi: Nilai tersimpan 100% aman di Web Storage lokal browser." },
+          { time: 20, text: "Di akhir acara: Buka Leaderboard → Klik 'EKSPOR JSON' untuk backup data ke admin." },
+          { time: 31, text: "Selamat bertugas rekan-rekan panitia! Sukseskan Adhigana 2026!" }
+        ]
+      }
+    ];
+
+    // Compute cumulative timings
+    let totalDuration = 0;
+    scenesData.forEach(scene => {
+      scene.startTime = totalDuration;
+      totalDuration += scene.duration;
+      scene.endTime = totalDuration;
+    });
+
+    let currentSceneIndex = 0;
+    let isPlaying = false;
+    let playbackSpeed = 1;
+    let isVoiceMuted = false;
+    let playbackInterval = null;
+    let elapsedCurrentScene = 0;
+    let currentSubtitleIndex = 0;
+
+    // Web Audio Synthesizer (Zero Dependencies)
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq, type, dur, gainVal = 0.08) {
+      if (isVoiceMuted) return;
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch (e) {}
+    }
+
+    // TTS Voiceover Engine
+    let activeUtterance = null;
+    function speakText(text) {
+      if (isVoiceMuted || !('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'id-ID';
+      utter.rate = playbackSpeed;
+      utter.pitch = 1.0;
+      
+      // Try to select Indonesian voice if available
+      const voices = window.speechSynthesis.getVoices();
+      const idVoice = voices.find(v => v.lang.startsWith('id') || v.lang.includes('Indonesian'));
+      if (idVoice) utter.voice = idVoice;
+
+      activeUtterance = utter;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function stopVoice() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    // UI Elements
+    const sceneElements = scenesData.map(s => document.getElementById(s.id));
+    const subtitleTextEl = document.getElementById("subtitleText");
+    const videoHudChapter = document.getElementById("videoHudChapter");
+    const videoHudTime = document.getElementById("videoHudTime");
+    const timeCurrentEl = document.getElementById("timeCurrent");
+    const timeTotalEl = document.getElementById("timeTotal");
+    const videoProgressFill = document.getElementById("videoProgressFill");
+    const btnPlayPause = document.getElementById("btnPlayPause");
+    const iconPlay = document.getElementById("iconPlay");
+    const iconPause = document.getElementById("iconPause");
+    const btnPrevScene = document.getElementById("btnPrevScene");
+    const btnNextScene = document.getElementById("btnNextScene");
+    const btnRestartVideo = document.getElementById("btnRestartVideo");
+    const btnAudioVoice = document.getElementById("btnAudioVoice");
+    const iconVoiceOn = document.getElementById("iconVoiceOn");
+    const iconVoiceOff = document.getElementById("iconVoiceOff");
+    const speedSelect = document.getElementById("speedSelect");
+    const btnFullscreenVideo = document.getElementById("btnFullscreenVideo");
+    const videoProgressContainer = document.getElementById("videoProgressContainer");
+    const chapterChips = document.querySelectorAll(".chapter-chip");
+
+    // Format Seconds to MM:SS
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = Math.floor(sec % 60);
+      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    timeTotalEl.textContent = formatTime(totalDuration);
+
+    // Switch Scene
+    function goToScene(index, autoPlay = true) {
+      if (index < 0) index = 0;
+      if (index >= scenesData.length) {
+        pauseVideo();
+        index = scenesData.length - 1;
+        elapsedCurrentScene = scenesData[index].duration;
+        updateUI();
+        return;
+      }
+
+      currentSceneIndex = index;
+      elapsedCurrentScene = 0;
+      currentSubtitleIndex = 0;
+      stopVoice();
+
+      // Update scene classes
+      sceneElements.forEach((el, i) => {
+        if (i === currentSceneIndex) {
+          el.classList.add("active");
+        } else {
+          el.classList.remove("active");
+        }
+      });
+
+      // Update chapter chips
+      chapterChips.forEach((chip, i) => {
+        if (i === currentSceneIndex) {
+          chip.classList.add("active");
+          chip.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+        } else {
+          chip.classList.remove("active");
+        }
+      });
+
+      // Update Teleprompter
+      for (let i = 0; i < scenesData.length; i++) {
+        const tpl = document.getElementById("tpl" + i);
+        if (tpl) {
+          if (i === currentSceneIndex) {
+            tpl.classList.add("active");
+            tpl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          } else {
+            tpl.classList.remove("active");
+          }
+        }
+      }
+
+      playTone(520, 'sine', 0.12, 0.05);
+
+      if (autoPlay && isPlaying) {
+        speakText(scenesData[currentSceneIndex].narration);
+      }
+
+      updateUI();
+    }
+
+    function updateUI() {
+      const currentScene = scenesData[currentSceneIndex];
+      const overallElapsed = currentScene.startTime + elapsedCurrentScene;
+      
+      timeCurrentEl.textContent = formatTime(overallElapsed);
+      videoHudTime.textContent = `${formatTime(overallElapsed)} / ${formatTime(totalDuration)}`;
+      videoHudChapter.textContent = currentScene.title;
+
+      const progressPercent = Math.min(100, (overallElapsed / totalDuration) * 100);
+      videoProgressFill.style.width = progressPercent + "%";
+
+      // Find current subtitle
+      const subs = currentScene.subtitles;
+      let activeSub = subs[0].text;
+      for (let i = 0; i < subs.length; i++) {
+        if (elapsedCurrentScene >= subs[i].time) {
+          activeSub = subs[i].text;
+        }
+      }
+      subtitleTextEl.textContent = activeSub;
+    }
+
+    function tick() {
+      elapsedCurrentScene += 0.2 * playbackSpeed;
+      const currentScene = scenesData[currentSceneIndex];
+
+      if (elapsedCurrentScene >= currentScene.duration) {
+        if (currentSceneIndex < scenesData.length - 1) {
+          goToScene(currentSceneIndex + 1, true);
+        } else {
+          pauseVideo();
+          elapsedCurrentScene = currentScene.duration;
+          updateUI();
+          return;
+        }
+      } else {
+        updateUI();
+      }
+    }
+
+    function playVideo() {
+      initAudio();
+      isPlaying = true;
+      iconPlay.classList.add("hidden");
+      iconPause.classList.remove("hidden");
+      
+      if (playbackInterval) clearInterval(playbackInterval);
+      playbackInterval = setInterval(tick, 200);
+
+      speakText(scenesData[currentSceneIndex].narration);
+    }
+
+    function pauseVideo() {
+      isPlaying = false;
+      iconPlay.classList.remove("hidden");
+      iconPause.classList.add("hidden");
+      if (playbackInterval) {
+        clearInterval(playbackInterval);
+        playbackInterval = null;
+      }
+      stopVoice();
+    }
+
+    function togglePlay() {
+      if (isPlaying) {
+        pauseVideo();
+      } else {
+        // If reached end, restart
+        if (currentSceneIndex === scenesData.length - 1 && elapsedCurrentScene >= scenesData[currentSceneIndex].duration) {
+          goToScene(0, true);
+        }
+        playVideo();
+      }
+    }
+
+    // Play/Pause button
+    btnPlayPause.addEventListener("click", togglePlay);
+
+    // Prev / Next button
+    btnPrevScene.addEventListener("click", () => {
+      goToScene(currentSceneIndex - 1, isPlaying);
+    });
+
+    btnNextScene.addEventListener("click", () => {
+      goToScene(currentSceneIndex + 1, isPlaying);
+    });
+
+    // Restart button
+    btnRestartVideo.addEventListener("click", () => {
+      goToScene(0, isPlaying);
+    });
+
+    // Audio Voice Toggle
+    btnAudioVoice.addEventListener("click", () => {
+      isVoiceMuted = !isVoiceMuted;
+      if (isVoiceMuted) {
+        iconVoiceOn.classList.add("hidden");
+        iconVoiceOff.classList.remove("hidden");
+        btnAudioVoice.classList.remove("active");
+        stopVoice();
+      } else {
+        iconVoiceOn.classList.remove("hidden");
+        iconVoiceOff.classList.add("hidden");
+        btnAudioVoice.classList.add("active");
+        if (isPlaying) {
+          speakText(scenesData[currentSceneIndex].narration);
+        }
+      }
+    });
+
+    // Speed Select
+    speedSelect.addEventListener("change", (e) => {
+      playbackSpeed = parseFloat(e.target.value);
+      if (isPlaying) {
+        speakText(scenesData[currentSceneIndex].narration);
+      }
+    });
+
+    // Fullscreen Toggle
+    btnFullscreenVideo.addEventListener("click", () => {
+      const frame = document.getElementById("videoFrame");
+      if (!document.fullscreenElement) {
+        if (frame.requestFullscreen) {
+          frame.requestFullscreen();
+        } else if (frame.webkitRequestFullscreen) {
+          frame.webkitRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    });
+
+    // Click on Chapter Chip
+    chapterChips.forEach(chip => {
+      chip.addEventListener("click", () => {
+        const targetScene = parseInt(chip.getAttribute("data-scene"));
+        goToScene(targetScene, isPlaying);
+      });
+    });
+
+    // Scrubber click
+    videoProgressContainer.addEventListener("click", (e) => {
+      const rect = videoProgressContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const pct = Math.max(0, Math.min(1, clickX / rect.width));
+      const targetTotalSec = pct * totalDuration;
+
+      // Find which scene contains targetTotalSec
+      for (let i = 0; i < scenesData.length; i++) {
+        if (targetTotalSec >= scenesData[i].startTime && targetTotalSec < scenesData[i].endTime) {
+          currentSceneIndex = i;
+          elapsedCurrentScene = targetTotalSec - scenesData[i].startTime;
+          goToScene(i, isPlaying);
+          break;
+        }
+      }
+    });
+
+    // Keyboard Shortcuts
+    window.addEventListener("keydown", (e) => {
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      if (e.code === "Space") {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.code === "ArrowRight") {
+        goToScene(currentSceneIndex + 1, isPlaying);
+      } else if (e.code === "ArrowLeft") {
+        goToScene(currentSceneIndex - 1, isPlaying);
+      } else if (e.key === "f" || e.key === "F") {
+        btnFullscreenVideo.click();
+      } else if (e.key === "m" || e.key === "M") {
+        btnAudioVoice.click();
+      }
+    });
+
+    // Screen Recording Feature (WebM Export via Canvas or DisplayMedia)
+    const btnToggleRecord = document.getElementById("btnToggleRecord");
+    const btnRecordText = document.getElementById("btnRecordText");
+    let mediaRecorder = null;
+    let recordedChunks = [];
+    let isRecording = false;
+
+    btnToggleRecord.addEventListener("click", async () => {
+      if (!isRecording) {
+        try {
+          // Ask for screen capture
+          const stream = await navigator.mediaDevices.getDisplayMedia({
+            video: { displaySurface: "browser" },
+            audio: true
+          });
+
+          recordedChunks = [];
+          mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) recordedChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.style.display = "none";
+            a.href = url;
+            a.download = "TUTORIAL_PANITIA_POS_ADHIGANA_2026.webm";
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+              document.body.removeChild(a);
+              window.URL.revokeObjectURL(url);
+            }, 100);
+
+            isRecording = false;
+            btnRecordText.textContent = "REKAM VIDEO (WEBM)";
+            btnToggleRecord.classList.remove("pixel-btn-cyan");
+            btnToggleRecord.classList.add("pixel-btn-red");
+            stream.getTracks().forEach(track => track.stop());
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          btnRecordText.textContent = "⏹ STOP & DOWNLOAD";
+          btnToggleRecord.classList.remove("pixel-btn-red");
+          btnToggleRecord.classList.add("pixel-btn-cyan");
+
+          // Auto start video from beginning
+          goToScene(0, false);
+          playVideo();
+
+        } catch (err) {
+          alert("Perekaman dibatalkan atau browser memerlukan izin layar. Kamu tetap dapat menyimak tutorial secara langsung di halaman ini!");
+        }
+      } else {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+          mediaRecorder.stop();
+        }
+      }
+    });
+
+    // Auto preload voices
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    // Initialize UI on load
+    goToScene(0, false);
+  </script>
+</body>
+</html>
