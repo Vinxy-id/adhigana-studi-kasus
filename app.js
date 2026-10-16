@@ -12,8 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // ==========================================================================
 
   const TEAMS = [
-    { id: "meta", name: "Meta", ip: "Nanda", color: "#b05cfb", label: "[TEAM META]" },
-    { id: "gemini", name: "Gemini", ip: "Tania", color: "#00ff88", label: "[TEAM GEMINI]" },
+    { id: "meta", name: "Meta", ip: "Tania", color: "#b05cfb", label: "[TEAM META]" },
+    { id: "gemini", name: "Gemini", ip: "Dina", color: "#00ff88", label: "[TEAM GEMINI]" },
     { id: "copilot", name: "Copilot", ip: "Melly", color: "#fcee0a", label: "[TEAM COPILOT]" },
     { id: "deepseek", name: "Deepseek", ip: "Daffa", color: "#2cd4e0", label: "[TEAM DEEPSEEK]" },
     { id: "claude", name: "Claude", ip: "Sonya", color: "#ff758f", label: "[TEAM CLAUDE]" }
@@ -829,7 +829,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (cyberDialogInput) {
       cyberDialogInput.style.display = "none";
-      cyberDialogInput.value = "";
     }
     cyberDialogConfirmCallback = null;
     cyberDialogCancelCallback = null;
@@ -904,8 +903,9 @@ document.addEventListener("DOMContentLoaded", () => {
       btnCyberDialogConfirm.textContent = "KONFIRMASI";
     }
 
-    cyberDialogConfirmCallback = () => {
-      const val = cyberDialogInput ? cyberDialogInput.value.trim() : "";
+    cyberDialogConfirmCallback = (passedVal) => {
+      const raw = (typeof passedVal === "string") ? passedVal : (cyberDialogInput ? cyberDialogInput.value : "");
+      const val = (raw || "").trim();
       if (onConfirm) onConfirm(val);
     };
     cyberDialogCancelCallback = onCancel;
@@ -954,9 +954,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnCyberDialogConfirm) {
     btnCyberDialogConfirm.addEventListener("click", () => {
       sfx.blip();
+      const inputVal = cyberDialogInput ? cyberDialogInput.value : "";
       const confirmCb = cyberDialogConfirmCallback;
       closeCyberDialog();
-      if (confirmCb) confirmCb();
+      if (confirmCb) confirmCb(inputVal);
     });
   }
 
@@ -1641,7 +1642,7 @@ document.addEventListener("DOMContentLoaded", () => {
           </div>
           <div class="team-card-bottom">
             <span class="team-card-name">${t.name.toUpperCase()}</span>
-            <span class="team-card-ip">PJ: ${t.ip}</span>
+            <span class="team-card-ip">IP: ${t.ip}</span>
           </div>
         </div>
       `;
@@ -2854,15 +2855,21 @@ document.addEventListener("DOMContentLoaded", () => {
       sfx.glitchBoom();
       showCyberPrompt(
         "PERINGATAN KERAS!",
-        "Seluruh data penilaian dan rekap di laptop ini akan DIHAPUS PERMANEN!\n\nUntuk mengonfirmasi, ketik teks 'HAPUS2026' di bawah ini:",
-        "Ketik 'HAPUS2026'...",
+        "Seluruh data penilaian dan rekap di laptop ini akan DIHAPUS PERMANEN!\n\nUntuk konfirmasi, ketik: HAPUS2026\n(Bisa huruf besar/kecil, tanpa perlu tanda petik)",
+        "HAPUS2026",
         (confirmInput) => {
-          if (confirmInput === "HAPUS2026") {
+          const clean = (confirmInput || "")
+            .trim()
+            .replace(/['"`]/g, "")
+            .replace(/\s+/g, "")
+            .toUpperCase();
+
+          if (clean === "HAPUS2026" || clean === "HAPUS") {
             localStorage.removeItem("adhigana_submissions");
             saveSubmissions([]);
             showCyberAlert("DATA DIBERSIHKAN", "Seluruh data penilaian dan rekap telah di-reset bersih.", "success");
           } else {
-            showCyberAlert("AKSES DIBATALKAN", "Konfirmasi dibatalkan: Teks konfirmasi tidak sesuai.", "warning");
+            showCyberAlert("AKSES DIBATALKAN", "Konfirmasi dibatalkan: Teks konfirmasi tidak sesuai. Ketik HAPUS2026.", "warning");
           }
         },
         "danger"

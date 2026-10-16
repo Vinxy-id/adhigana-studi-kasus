@@ -35,4 +35,14 @@ yarn-error.log*
 crop_assets.ps1
 assets/media_*
 
-.vercel
+# Video, Audio, and Walkthrough Media (Excluded from repo)
+*.mp4
+*.webm
+*.wav
+*.mp3
+video_tutorial_*
+VIDEO_TUTORIAL_*
+Demo_Panduan_*
+Docs/
+scripts/
+temp_ref_inspect/

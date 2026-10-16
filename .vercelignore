@@ -1,0 +1,11 @@
+# Ignore all heavy video media, audio, and video tutorial generator files
+*.mp4
+*.webm
+*.wav
+*.mp3
+video_tutorial_*
+VIDEO_TUTORIAL_*
+Demo_Panduan_*
+Docs/
+scripts/
+temp_ref_inspect/
