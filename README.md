@@ -75,6 +75,7 @@ Sistem telah dipisahkan menjadi file mandiri per stasiun pos agar sangat praktis
 ---
 
 ## 🔑 Fitur Akses Panitia (Default PIN: `2026`)
-- **"🔑 KUNCI POS":** Melihat kunci jawaban, analisis logis, dan lokasi petunjuk fisik pos aktif.
-- **"📊 LEADERBOARD":** Rekap nilai total (Web + Kertas Fisik 1-5), input nilai kertas juri, ekspor CSV/JSON, dan reset data.
-- **Cetak Lembar Kertas:** Buka `lembar_jawaban_peserta.html` untuk print lembar fisik siap pakai.
+- **"🔑 KUNCI POS":** Melihat kunci jawaban, analisis logis, dan lokasi petunjuk fisik pos aktif (PIN: `2026`).
+- **"📊 LEADERBOARD":** Rekap nilai total realtime, monitoring skor kelompok, ekspor CSV/JSON, dan reset data (PIN: `2026`).
+- **"🎯 TUTORIAL PER POS":** Buka `video_tutorial_pos.html` dengan parameter `?pos=1`, `?pos=2`, `?pos=3`, `?pos=4` untuk panduan khusus stasiun pos & simulator interaktif.
+- **Sistem 100% Digital:** Pengerjaan, penilaian berbobot otomatis (100 Poin), dan sinkronisasi realtime ke central leaderboard tanpa memerlukan lembar kertas fisik.

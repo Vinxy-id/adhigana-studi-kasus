@@ -40,8 +40,9 @@ assets/media_*
 *.webm
 *.wav
 *.mp3
-video_tutorial_*
-VIDEO_TUTORIAL_*
+video_tutorial_*.mp4
+video_tutorial_*.webm
+VIDEO_TUTORIAL_POS_SCRIPT.md
 Demo_Panduan_*
 Docs/
 scripts/

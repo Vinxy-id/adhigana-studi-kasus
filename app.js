@@ -99,12 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           {
             step: 3,
-            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            title: "KODE UNIK VERIFIKASI & DIGITAL SYNC",
             body: `Setelah mengklik tombol submit:
             <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
               <li>Sistem akan menerbitkan <strong>Kode Unik Verifikasi</strong> (contoh: <code>META-P1-9F2B</code>).</li>
-              <li>Salin kode unik dan alasan jawaban kelompokmu ke <strong>Lembar Kertas Jawaban Fisik</strong> yang tersedia di meja pos.</li>
-              <li>Juri / panitia pos akan memeriksa lembar fisik dan menginput nilai penalaran akhir ke sistem leaderboard.</li>
+              <li>Skor resmi <strong>100 Poin</strong> langsung tersimpan di sistem terminal pos.</li>
+              <li>Nilai otomatis tersinkronisasi realtime ke <strong>Live Leaderboard Pusat</strong> (<code>index.html</code>).</li>
             </ul>`,
             callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini dalam posisi STANDBY (belum berkurang). Klik tombol di bawah ketika tim sudah siap!",
             calloutType: "tip-green"
@@ -191,12 +191,12 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           {
             step: 3,
-            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            title: "KODE UNIK VERIFIKASI & DIGITAL SYNC",
             body: `Setelah submit di monitor kanan:
             <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
               <li>Sistem akan mengunci jawaban dan memunculkan <strong>Kode Unik Verifikasi</strong> (contoh: <code>GEMINI-P2-4C1A</code>).</li>
-              <li>Catat kode unik tersebut pada <strong>Lembar Kertas Jawaban Fisik</strong> dan tuliskan penjelasan logika kelompokmu.</li>
-              <li>Tunjukkan lembar kertas ke panitia pos untuk mendapatkan stempel dan penilaian penalaran juri.</li>
+              <li>Skor resmi <strong>100 Poin</strong> langsung tersimpan di sistem terminal pos.</li>
+              <li>Nilai otomatis tersinkronisasi realtime ke <strong>Live Leaderboard Pusat</strong>.</li>
             </ul>`,
             callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk memulai hitung mundur!",
             calloutType: "tip-green"
@@ -289,12 +289,12 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           {
             step: 3,
-            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            title: "KODE UNIK VERIFIKASI & DIGITAL SYNC",
             body: `Setelah submit di monitor kanan:
             <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
               <li>Sistem akan menerbitkan <strong>Kode Unik Verifikasi</strong> (contoh: <code>COPILOT-P3-7E59</code>).</li>
-              <li>Salin kode unik dan tuliskan alur eliminasi 8 brankas pada <strong>Lembar Kertas Jawaban Fisik</strong> kelompok.</li>
-              <li>Serahkan ke juri pos untuk verifikasi kode dan penginputan nilai penalaran.</li>
+              <li>Skor resmi <strong>100 Poin</strong> langsung tersimpan di sistem terminal pos.</li>
+              <li>Nilai otomatis tersinkronisasi realtime ke <strong>Live Leaderboard Pusat</strong>.</li>
             </ul>`,
             callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk mulai beraksi!",
             calloutType: "tip-green"
@@ -381,14 +381,14 @@ document.addEventListener("DOMContentLoaded", () => {
           },
           {
             step: 3,
-            title: "KODE UNIK VERIFIKASI & LEMBAR FISIK",
+            title: "KODE UNIK VERIFIKASI & DIGITAL SYNC",
             body: `Setelah submit di monitor kanan:
             <ul style="margin: 8px 0 0 16px; line-height: 1.6;">
               <li>Sistem akan mengunci jawaban dan mencetak <strong>Kode Unik Verifikasi</strong> (contoh: <code>DEEPSEEK-P4-3D8E</code>).</li>
-              <li>Salin kode unik dan tuliskan argumen solusi etika teknologi pada <strong>Lembar Kertas Jawaban Fisik</strong> tim.</li>
-              <li>Juri pos akan memvalidasi kode dan memberi penilaian pada rubrik lembar kertas.</li>
+              <li>Skor resmi <strong>100 Poin</strong> langsung tersimpan di sistem terminal pos.</li>
+              <li>Nilai otomatis tersinkronisasi realtime ke <strong>Live Leaderboard Pusat</strong>.</li>
             </ul>`,
-            callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk memulai misi!",
+            callout: "🚀 <strong>Waktu Misi: 2 MENIT (120 Detik)</strong>. Timer saat ini STANDBY. Tekan tombol di bawah untuk mulai beraksi!",
             calloutType: "tip-green"
           }
         ]
@@ -1030,10 +1030,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         target: ".header-toolbar",
         placement: "bottom",
-        title: "KONTROL AUDIO, LEMBAR & ADMIN",
+        title: "KONTROL AUDIO, TUTORIAL & ADMIN",
         body: `Gunakan tombol di toolbar atas:<br>
-        • <strong>Ikon Kertas:</strong> Cetak Lembar Kertas Jawaban Fisik untuk peserta.<br>
-        • <strong>KUNCI POS:</strong> Lihat rubrik penilaian juri.<br>
+        • <strong>TUTORIAL POS:</strong> Buka panduan video & tutorial per pos terintegrasi.<br>
+        • <strong>KUNCI POS:</strong> Lihat rubrik penilaian & analisis kunci jawaban (PIN Rahasia Panitia).<br>
         • <strong>LEADERBOARD:</strong> Kelola data rekapitulasi nilai.`,
         callout: "✨ <strong>Siap Digunakan:</strong> Klik tombol Buka Pos pada kartu untuk memulai!",
         calloutType: "tip-green"
@@ -1075,11 +1075,11 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         target: "#btnSubmitMcq",
         placement: "left",
-        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        title: "SUBMIT & SINKRONISASI LEADERBOARD",
         body: `Langkah terakhir penyelesaian studi kasus:<br>
         • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk mengunci jawaban.<br>
         • Sistem akan mencetak <strong>KODE UNIK VERIFIKASI</strong> (misal: <code>META-P1-9F2B</code>).<br>
-        • <strong>Salin kode unik dan argumen tim</strong> ke Lembar Kertas Jawaban Fisik di meja pos!`,
+        • Skor 100 poin langsung tersimpan di sistem dan tersinkronisasi otomatis ke Live Leaderboard!`,
         callout: "🚀 <strong>Siap Bertanding?</strong> Klik tombol di bawah untuk langsung memulai countdown 2 menit!",
         calloutType: "tip-green"
       }
@@ -1119,10 +1119,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         target: "#btnSubmitMcq",
         placement: "left",
-        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        title: "SUBMIT & SINKRONISASI LEADERBOARD",
         body: `Kunci evaluasi misi kelompok:<br>
         • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk mencetak <strong>KODE UNIK VERIFIKASI</strong> (misal: <code>GEMINI-P2-4C1A</code>).<br>
-        • Salin kode unik dan tuliskan penjelasan logika pada Lembar Kertas Fisik untuk dinilai juri pos!`,
+        • Skor resmi 100 poin langsung tersimpan di sistem dan tersinkronisasi otomatis ke Live Leaderboard!`,
         callout: "🚀 <strong>Mulai Misi!</strong> Klik tombol di bawah untuk langsung mengaktifkan timer 2 menit!",
         calloutType: "tip-green"
       }
@@ -1162,10 +1162,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         target: "#btnSubmitMcq",
         placement: "left",
-        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        title: "SUBMIT & SINKRONISASI LEADERBOARD",
         body: `Penerbitan kode verifikasi pos:<br>
         • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk mengunci skor dan memunculkan <strong>KODE UNIK</strong> (misal: <code>COPILOT-P3-7E59</code>).<br>
-        • Catat kode dan alur eliminasi 8 brankas pada Lembar Kertas Jawaban Fisik di meja!`,
+        • Skor resmi 100 poin langsung tersimpan di sistem dan tersinkronisasi otomatis ke Live Leaderboard!`,
         callout: "🚀 <strong>Siap Beraksi?</strong> Klik tombol di bawah untuk langsung memulai hitung mundur 2 menit!",
         calloutType: "tip-green"
       }
@@ -1206,10 +1206,10 @@ document.addEventListener("DOMContentLoaded", () => {
       {
         target: "#btnSubmitMcq",
         placement: "left",
-        title: "SUBMIT & KODE UNIK LEMBAR FISIK",
+        title: "SUBMIT & SINKRONISASI LEADERBOARD",
         body: `Kunci nilai pos etika AI:<br>
         • Klik <strong>[SUBMIT JAWABAN RESMI]</strong> untuk menerbitkan <strong>KODE UNIK VERIFIKASI</strong> (misal: <code>DEEPSEEK-P4-3D8E</code>).<br>
-        • Salin kode unik dan tuliskan solusi etika teknologi tim ke Lembar Kertas Jawaban Fisik!`,
+        • Skor resmi 100 poin langsung tersimpan di sistem dan tersinkronisasi otomatis ke Live Leaderboard!`,
         callout: "🚀 <strong>Mulai Investigasi!</strong> Klik tombol di bawah untuk menyalakan countdown timer 2 menit!",
         calloutType: "tip-green"
       }
@@ -1482,18 +1482,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Firebase Configuration
-  // Masukkan API Key dari Firebase Console Anda di bawah ini untuk mengaktifkan sinkronisasi cloud real-time
+  // Firebase Configuration (Adhigana 2026 Production Project)
   const firebaseConfig = {
-    apiKey: "AIzaSy_GANTI_DENGAN_FIREBASE_APIKEY_ANDA",
-    authDomain: "adhigana-studi-kasus.firebaseapp.com",
-    projectId: "adhigana-studi-kasus",
-    storageBucket: "adhigana-studi-kasus.appspot.com",
-    messagingSenderId: "100000000000",
-    appId: "1:100000000000:web:abcdef1234567890"
+    apiKey: "AIzaSyDoS_AZoA-ux11_U0jlJROb0zPY46DAsiY",
+    authDomain: "adhigana-8d271.firebaseapp.com",
+    projectId: "adhigana-8d271",
+    storageBucket: "adhigana-8d271.firebasestorage.app",
+    messagingSenderId: "601613357058",
+    appId: "1:601613357058:web:57a251222a4f0b50b6171b",
+    measurementId: "G-VYFW5XHGBV"
   };
 
   let db = null;
+  let auth = null;
   let isCloudActive = false;
 
   function initFirebaseDatabase() {
@@ -1503,6 +1504,18 @@ document.addEventListener("DOMContentLoaded", () => {
           firebase.initializeApp(firebaseConfig);
         }
         db = firebase.firestore();
+
+        // Inisialisasi Firebase Authentication
+        if (typeof firebase.auth === "function") {
+          auth = firebase.auth();
+          auth.onAuthStateChanged((user) => {
+            if (user) {
+              console.log(">> [FIREBASE AUTH]: Logged in as", user.email);
+            } else {
+              console.log(">> [FIREBASE AUTH]: Kiosk / Guest Mode");
+            }
+          });
+        }
 
         // Aktifkan Offline Persistence (IndexedDB Cache Browser)
         db.enablePersistence({ synchronizeTabs: true }).catch(err => {
@@ -1522,6 +1535,23 @@ document.addEventListener("DOMContentLoaded", () => {
       updateCloudStatus("offline");
     }
   }
+
+  // Helper Firebase Auth untuk Panitia / Admin
+  window.firebaseAuth = {
+    signIn: (email, password) => {
+      if (!auth) return Promise.reject(new Error("Firebase Auth belum aktif"));
+      return auth.signInWithEmailAndPassword(email, password);
+    },
+    signUp: (email, password) => {
+      if (!auth) return Promise.reject(new Error("Firebase Auth belum aktif"));
+      return auth.createUserWithEmailAndPassword(email, password);
+    },
+    signOut: () => {
+      if (!auth) return Promise.resolve();
+      return auth.signOut();
+    },
+    getUser: () => auth ? auth.currentUser : null
+  };
 
   // Real-time listener for live sync across laptops
   function initRealtimeCloudListener() {

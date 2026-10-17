@@ -1,0 +1,194 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Event: Adhigana Informatika 2026 - "Digital Frontier"
+    // Architecture: 4 Pos Kiosks (pos1-pos4) + 1 Central Dashboard (index.html)
+    // Mode: Unauthenticated shared event kiosks with offline IndexedDB fallback
+    //
+    // Collection: submissions
+    // Document ID: submissionId (e.g., 'meta_pos1', 'META-P1-0922-K89', or generated ID)
+    // Fields:
+    //   - id: string (required, 3-64 chars, immutable, must match document submissionId)
+    //   - team / teamId: string (required at least one, enum: 'meta'|'gemini'|'copilot'|'deepseek'|'claude', immutable)
+    //   - teamName: string (optional, 1-50 chars)
+    //   - pos / posId: int or string (required at least one, pos 1..4, immutable)
+    //   - webScore: number (optional/app-native, 0..100)
+    //   - paperScore: number (optional/app-native, 0..5, scored by judges)
+    //   - totalScore: number (optional/app-native, 0..125)
+    //   - score: number (optional/spec, 0..125)
+    //   - points: number (optional/spec, 0..125)
+    //   - time: string (optional, 1-50 chars, e.g. '09:30')
+    //   - timestamp: timestamp|string|number (optional, ISO or epoch or Firestore timestamp)
+    //   - code / uniqueCode: string (optional, 4-64 chars, e.g. 'META-P1-0922-K89', immutable)
+    //   - answers: map or list (optional, size <= 20)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Common Helper Functions
+    // ===============================================================
+
+    // Check if client has Firebase Authentication
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Validate that only allowed fields exist in the document
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate required fields exist in request resource
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate string length within [minLen, maxLen]
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+             request.resource.data[field].size() >= minLen &&
+             request.resource.data[field].size() <= maxLen;
+    }
+
+    // Validate optional string field
+    function isValidOptionalString(field, minLen, maxLen) {
+      return !(field in request.resource.data) ||
+             (request.resource.data[field] is string &&
+              request.resource.data[field].size() >= minLen &&
+              request.resource.data[field].size() <= maxLen);
+    }
+
+    // Validate numeric range (supports int or float)
+    function isValidNumberRange(val, minVal, maxVal) {
+      return (val is int || val is float) && val >= minVal && val <= maxVal;
+    }
+
+    // ===============================================================
+    // Domain Validator Functions (Submissions)
+    // ===============================================================
+
+    // Validate team identifier against the 5 official teams
+    function isValidTeamValue(teamVal) {
+      return teamVal is string &&
+             teamVal in ['meta', 'gemini', 'copilot', 'deepseek', 'claude'];
+    }
+
+    // Validate pos station (int 1..4 or string representation)
+    function isValidPosValue(posVal) {
+      return (posVal is int && posVal >= 1 && posVal <= 4) ||
+             (posVal is string && posVal in ['1', '2', '3', '4', 'pos1', 'pos2', 'pos3', 'pos4']);
+    }
+
+    // Validate score values (webScore, paperScore, totalScore, score, points)
+    function areScoresValid(data) {
+      return (!('webScore' in data) || isValidNumberRange(data.webScore, 0, 100)) &&
+             (!('paperScore' in data) || isValidNumberRange(data.paperScore, 0, 5)) &&
+             (!('totalScore' in data) || isValidNumberRange(data.totalScore, 0, 125)) &&
+             (!('score' in data) || isValidNumberRange(data.score, 0, 125)) &&
+             (!('points' in data) || isValidNumberRange(data.points, 0, 125));
+    }
+
+    // Validate timestamp / time fields
+    function areTimestampsValid(data) {
+      return (!('time' in data) || (data.time is string && data.time.size() >= 1 && data.time.size() <= 50)) &&
+             (!('timestamp' in data) || (
+               (data.timestamp is timestamp) ||
+               (data.timestamp is string && data.timestamp.size() >= 1 && data.timestamp.size() <= 50) ||
+               (data.timestamp is int && data.timestamp >= 0)
+             ));
+    }
+
+    // Validate verification code fields
+    function areCodesValid(data) {
+      return (!('code' in data) || (data.code is string && data.code.size() >= 4 && data.code.size() <= 64)) &&
+             (!('uniqueCode' in data) || (data.uniqueCode is string && data.uniqueCode.size() >= 4 && data.uniqueCode.size() <= 64));
+    }
+
+    // Validate answers payload (prevents resource exhaustion)
+    function areAnswersValid(data) {
+      return !('answers' in data) ||
+             (data.answers is map && data.answers.size() <= 20) ||
+             (data.answers is list && data.answers.size() <= 20);
+    }
+
+    // Master Domain Validator for Submissions (called in BOTH create and update)
+    function isValidSubmission(data, submissionId) {
+      return hasOnlyAllowedFields([
+               'id', 'team', 'teamId', 'teamName',
+               'pos', 'posId', 'score', 'points',
+               'webScore', 'paperScore', 'totalScore',
+               'time', 'timestamp', 'code', 'uniqueCode', 'answers'
+             ]) &&
+             // Document ID integrity and bounds
+             data.id is string &&
+             data.id == submissionId &&
+             data.id.size() >= 3 &&
+             data.id.size() <= 64 &&
+             // Team validation (at least one of team or teamId must be present)
+             (('team' in data) || ('teamId' in data)) &&
+             (!('team' in data) || isValidTeamValue(data.team)) &&
+             (!('teamId' in data) || isValidTeamValue(data.teamId)) &&
+             (!('teamName' in data) || (data.teamName is string && data.teamName.size() >= 1 && data.teamName.size() <= 50)) &&
+             // Pos validation (at least one of pos or posId must be present)
+             (('pos' in data) || ('posId' in data)) &&
+             (!('pos' in data) || isValidPosValue(data.pos)) &&
+             (!('posId' in data) || isValidPosValue(data.posId)) &&
+             // Score presence and range checks (at least one score field must exist)
+             (('webScore' in data) || ('score' in data) || ('totalScore' in data) || ('points' in data)) &&
+             areScoresValid(data) &&
+             // Time, code, and answers validation
+             areTimestampsValid(data) &&
+             areCodesValid(data) &&
+             areAnswersValid(data);
+    }
+
+    // Immutable field integrity check for submission updates
+    function isSubmissionUpdateValid(submissionId) {
+      return request.resource.data.id == resource.data.id &&
+             request.resource.data.id == submissionId &&
+             (!('team' in resource.data) || request.resource.data.team == resource.data.team) &&
+             (!('teamId' in resource.data) || request.resource.data.teamId == resource.data.teamId) &&
+             (!('pos' in resource.data) || request.resource.data.pos == resource.data.pos) &&
+             (!('posId' in resource.data) || request.resource.data.posId == resource.data.posId) &&
+             (!('code' in resource.data) || request.resource.data.code == resource.data.code) &&
+             (!('uniqueCode' in resource.data) || request.resource.data.uniqueCode == resource.data.uniqueCode);
+    }
+
+    // ===============================================================
+    // Root Match & Collection Rules
+    // ===============================================================
+
+    // Default Deny: Close all paths by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Submissions collection used by Pos 1..4 stations and central leaderboard
+    match /submissions/{submissionId} {
+      // Allow read for real-time live synchronization across shared pos laptops and main display
+      allow read: if true;
+
+      // Allow creating a valid submission with bounded ID and payload
+      allow create: if submissionId is string &&
+                       submissionId.size() >= 3 &&
+                       submissionId.size() <= 64 &&
+                       isValidSubmission(request.resource.data, submissionId);
+
+      // Allow updating existing submission (e.g. adding paperScore by judges), preserving immutable fields
+      allow update: if submissionId is string &&
+                       submissionId.size() >= 3 &&
+                       submissionId.size() <= 64 &&
+                       isValidSubmission(request.resource.data, submissionId) &&
+                       isSubmissionUpdateValid(submissionId);
+
+      // Prevent accidental or malicious deletion of competition scoring logs
+      allow delete: if false;
+    }
+  }
+}
