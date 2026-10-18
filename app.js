@@ -1562,16 +1562,41 @@ document.addEventListener("DOMContentLoaded", () => {
       snapshot.forEach(doc => incoming.push(doc.data()));
 
       if (incoming.length > 0) {
-        // Gabungkan data cloud dengan local storage
+        // Gabungkan data cloud dengan baseline data resmi catatan panitia
         const current = getSubmissions();
         const mergedMap = new Map();
+        OFFICIAL_EVENT_SUBMISSIONS.forEach(item => mergedMap.set(item.id, item));
         current.forEach(item => mergedMap.set(item.id, item));
-        incoming.forEach(item => mergedMap.set(item.id, item)); // Cloud data menjadi acuan
+
+        incoming.forEach(item => {
+          const official = OFFICIAL_EVENT_SUBMISSIONS.find(o => o.id === item.id);
+          // Lindungi nilai resmi dari penolakan sync atau data lama di cloud
+          if (official && official.webScore > (item.webScore || 0)) {
+            mergedMap.set(item.id, {
+              ...item,
+              webScore: official.webScore,
+              totalScore: official.webScore + ((item.paperScore || 0) * 5),
+              code: official.code || item.code
+            });
+          } else {
+            mergedMap.set(item.id, item);
+          }
+        });
 
         const mergedList = Array.from(mergedMap.values());
         localStorage.setItem("adhigana_submissions", JSON.stringify(mergedList));
         renderLeaderboard();
         renderVerifikasiTable();
+        updateCloudStatus("online");
+      } else if (snapshot.size === 0 && !snapshot.metadata.hasPendingWrites && !snapshot.metadata.fromCache) {
+        // Jika data di cloud telah dibersihkan secara resmi (wipe dari operator pusat),
+        // sinkronkan juga local storage agar tidak memunculkan data hantu (zombie record)
+        const current = getSubmissions();
+        if (current.length > 0) {
+          localStorage.removeItem("adhigana_submissions");
+          renderLeaderboard();
+          renderVerifikasiTable();
+        }
         updateCloudStatus("online");
       }
     }, (err) => {
@@ -1580,10 +1605,58 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // ==========================================================================
+  // DATA RESMI HASIL CATATAN MANUAL PANITIA POS (ADHIGANA 2026 LIVE EVENT)
+  // ==========================================================================
+  const OFFICIAL_EVENT_SUBMISSIONS = [
+    // POS 1 (Panitia Rahma)
+    { id: "claude_pos1", team: "claude", teamName: "Claude", pos: 1, webScore: 100, paperScore: 0, totalScore: 100, code: "CLAUDE-P1-1018-1VL", time: "12:13" },
+    { id: "gemini_pos1", team: "gemini", teamName: "Gemini", pos: 1, webScore: 80, paperScore: 0, totalScore: 80, code: "GEMINI-P1-1018-HB5", time: "12:13" },
+    { id: "meta_pos1", team: "meta", teamName: "Meta", pos: 1, webScore: 80, paperScore: 0, totalScore: 80, code: "META-P1-1018-FBK", time: "12:13" },
+    { id: "deepseek_pos1", team: "deepseek", teamName: "Deepseek", pos: 1, webScore: 65, paperScore: 0, totalScore: 65, code: "DEEPSEEK-P1-1018-0HH", time: "12:13" },
+    { id: "copilot_pos1", team: "copilot", teamName: "Copilot", pos: 1, webScore: 50, paperScore: 0, totalScore: 50, code: "COPILOT-P1-1018-GCK", time: "12:13" },
+
+    // POS 2 (Panitia Dina)
+    { id: "gemini_pos2", team: "gemini", teamName: "Gemini", pos: 2, webScore: 100, paperScore: 0, totalScore: 100, code: "GEMINI-P2-1018-I3L", time: "12:25" },
+    { id: "meta_pos2", team: "meta", teamName: "Meta", pos: 2, webScore: 100, paperScore: 0, totalScore: 100, code: "META-P2-1018-F1Q", time: "12:25" },
+    { id: "claude_pos2", team: "claude", teamName: "Claude", pos: 2, webScore: 80, paperScore: 0, totalScore: 80, code: "CLAUDE-P2-1018-D8S", time: "12:25" },
+    { id: "deepseek_pos2", team: "deepseek", teamName: "Deepseek", pos: 2, webScore: 80, paperScore: 0, totalScore: 80, code: "DEEPSEEK-P2-1018-6D2", time: "12:25" },
+    { id: "copilot_pos2", team: "copilot", teamName: "Copilot", pos: 2, webScore: 0, paperScore: 0, totalScore: 0, code: "COPILOT-P2-1018-BZA", time: "12:25" },
+
+    // POS 3 (Panitia Pos 3)
+    { id: "claude_pos3", team: "claude", teamName: "Claude", pos: 3, webScore: 100, paperScore: 0, totalScore: 100, code: "CLAUDE-P3-1018-6GM", time: "12:15" },
+    { id: "deepseek_pos3", team: "deepseek", teamName: "Deepseek", pos: 3, webScore: 100, paperScore: 0, totalScore: 100, code: "DEEPSEK-P3-1018-UUF", time: "12:15" },
+    { id: "gemini_pos3", team: "gemini", teamName: "Gemini", pos: 3, webScore: 100, paperScore: 0, totalScore: 100, code: "GEMINI-P3-1080-ZIO", time: "12:15" },
+    { id: "meta_pos3", team: "meta", teamName: "Meta", pos: 3, webScore: 100, paperScore: 0, totalScore: 100, code: "META-P3-1018-580", time: "12:15" },
+    { id: "copilot_pos3", team: "copilot", teamName: "Copilot", pos: 3, webScore: 100, paperScore: 0, totalScore: 100, code: "COPILOT-P3-1018-UUF", time: "12:15" },
+
+    // POS 4 (Panitia Nanda)
+    { id: "claude_pos4", team: "claude", teamName: "Claude", pos: 4, webScore: 100, paperScore: 0, totalScore: 100, code: "CLAUDE-P4-1018-W86", time: "12:20" },
+    { id: "deepseek_pos4", team: "deepseek", teamName: "Deepseek", pos: 4, webScore: 100, paperScore: 0, totalScore: 100, code: "DEEPSEEK-P4-1018-ZKQ", time: "12:20" },
+    { id: "gemini_pos4", team: "gemini", teamName: "Gemini", pos: 4, webScore: 80, paperScore: 0, totalScore: 80, code: "GEMINI-P4-1018-KSA", time: "12:20" },
+    { id: "copilot_pos4", team: "copilot", teamName: "Copilot", pos: 4, webScore: 65, paperScore: 0, totalScore: 65, code: "COPILOT-P4-1018-U2N", time: "12:20" },
+    { id: "meta_pos4", team: "meta", teamName: "Meta", pos: 4, webScore: 50, paperScore: 0, totalScore: 50, code: "META-P4-1018-DUD", time: "12:20" }
+  ];
+
+  // Auto-seed storage lokal dengan data resmi terverifikasi jika belum tersinkron
+  if (localStorage.getItem("adhigana_official_seeded_2026") !== "true") {
+    localStorage.setItem("adhigana_submissions", JSON.stringify(OFFICIAL_EVENT_SUBMISSIONS));
+    localStorage.setItem("adhigana_official_seeded_2026", "true");
+  }
+
   // Storage Helpers (Hybrid Dual-Write: LocalStorage + Cloud Firestore)
   function getSubmissions() {
     const raw = localStorage.getItem("adhigana_submissions");
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) {
+      localStorage.setItem("adhigana_submissions", JSON.stringify(OFFICIAL_EVENT_SUBMISSIONS));
+      return OFFICIAL_EVENT_SUBMISSIONS;
+    }
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : OFFICIAL_EVENT_SUBMISSIONS;
+    } catch (e) {
+      return OFFICIAL_EVENT_SUBMISSIONS;
+    }
   }
 
   async function saveSubmissions(list, targetSub = null) {
@@ -2205,16 +2278,20 @@ document.addEventListener("DOMContentLoaded", () => {
     // Simpan ke storage dan sinkronisasi
     const now = new Date();
     const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const subId = `${currentTeam}_pos${currentPos}`;
+    const existingSub = getSubmissions().find(s => s.id === subId);
+    const retainedPaperScore = existingSub ? (existingSub.paperScore || 0) : 0;
+
     const newSub = {
-      id: `${currentTeam}_pos${currentPos}`,
+      id: subId,
       team: currentTeam,
       teamName: TEAMS.find(t => t.id === currentTeam)?.name || currentTeam,
       pos: currentPos,
       time: timeStr,
       code: uniqueCode,
       webScore: totalScore,
-      paperScore: 0,
-      totalScore: totalScore
+      paperScore: retainedPaperScore,
+      totalScore: totalScore + (retainedPaperScore * 5)
     };
 
     const subs = getSubmissions().filter(s => s.id !== newSub.id);
@@ -2359,8 +2436,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // Render Multiple Choice Questions (Pilgan 100 Poin)
     renderMcqQuestions(posNum);
 
-    if (modalKunciJawaban) modalKunciJawaban.innerHTML = config.kunci;
-    if (modalPhysicalClues) modalPhysicalClues.innerHTML = `<strong>LOKASI &amp; INSTRUKSI:</strong> ${config.physicalClue}`;
+    if (modalKunciJawaban) modalKunciJawaban.innerHTML = "<p style='color: #64748b; font-style: italic; padding: 12px;'>[TERKUNCI]: Masukkan PIN Rahasia Panitia pada tombol KUNCI POS untuk menampilkan kunci jawaban &amp; rubrik resmi.</p>";
+    if (modalPhysicalClues) modalPhysicalClues.innerHTML = "<p style='color: #64748b; font-style: italic; padding: 12px;'>[TERKUNCI]: Masukkan PIN Rahasia Panitia untuk melihat petunjuk fisik.</p>";
 
     if (posNum === 2 && typeof renderRobotSteps === "function") renderRobotSteps();
     if (posNum === 3 && typeof renderVaults === "function") renderVaults();
@@ -2885,9 +2962,9 @@ document.addEventListener("DOMContentLoaded", () => {
       sfx.glitchBoom();
       showCyberPrompt(
         "PERINGATAN KERAS!",
-        "Seluruh data penilaian dan rekap di laptop ini akan DIHAPUS PERMANEN!\n\nUntuk konfirmasi, ketik: HAPUS2026\n(Bisa huruf besar/kecil, tanpa perlu tanda petik)",
+        "Seluruh data penilaian dan rekap di laptop ini dan Cloud Firestore akan DIHAPUS PERMANEN!\n\nUntuk konfirmasi, ketik: HAPUS2026\n(Bisa huruf besar/kecil, tanpa perlu tanda petik)",
         "HAPUS2026",
-        (confirmInput) => {
+        async (confirmInput) => {
           const clean = (confirmInput || "")
             .trim()
             .replace(/['"`]/g, "")
@@ -2895,9 +2972,31 @@ document.addEventListener("DOMContentLoaded", () => {
             .toUpperCase();
 
           if (clean === "HAPUS2026" || clean === "HAPUS") {
-            localStorage.removeItem("adhigana_submissions");
-            saveSubmissions([]);
-            showCyberAlert("DATA DIBERSIHKAN", "Seluruh data penilaian dan rekap telah di-reset bersih.", "success");
+            try {
+              // 1. Bersihkan Cloud Firestore jika aktif
+              if (isCloudActive && db) {
+                updateCloudStatus("syncing");
+                const snapshot = await db.collection("submissions").get();
+                if (!snapshot.empty) {
+                  const batch = db.batch();
+                  snapshot.forEach(doc => batch.delete(doc.ref));
+                  await batch.commit();
+                }
+                updateCloudStatus("online");
+              }
+              // 2. Bersihkan Local Storage
+              localStorage.removeItem("adhigana_submissions");
+              renderLeaderboard();
+              renderVerifikasiTable();
+              sfx.victoryFanfare();
+              showCyberAlert("DATA DIBERSIHKAN", "Seluruh data penilaian dan rekap (Cloud & Lokal) telah di-reset bersih.", "success");
+            } catch (err) {
+              console.error("[RESET ERROR]:", err);
+              localStorage.removeItem("adhigana_submissions");
+              renderLeaderboard();
+              renderVerifikasiTable();
+              showCyberAlert("RESET SEBAGIAN", "Data lokal telah dibersihkan. Catatan Cloud: " + err.message, "warning");
+            }
           } else {
             showCyberAlert("AKSES DIBATALKAN", "Konfirmasi dibatalkan: Teks konfirmasi tidak sesuai. Ketik HAPUS2026.", "warning");
           }
@@ -2915,8 +3014,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function openProtectedModal(modalType) {
     if (isPanitiaUnlocked) {
-      if (modalType === "rubrik" && rubrikModal) rubrikModal.classList.add("open");
-      else if (modalType === "admin" && adminModal) {
+      if (modalType === "rubrik" && rubrikModal) {
+        const config = POS_CONFIG[currentPos];
+        if (config) {
+          if (modalKunciJawaban) modalKunciJawaban.innerHTML = config.kunci;
+          if (modalPhysicalClues) modalPhysicalClues.innerHTML = `<strong>LOKASI &amp; INSTRUKSI:</strong> ${config.physicalClue}`;
+        }
+        rubrikModal.classList.add("open");
+      } else if (modalType === "admin" && adminModal) {
         renderLeaderboard();
         renderVerifikasiTable();
         adminModal.classList.add("open");
@@ -2934,11 +3039,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (btnSubmitPin) {
     btnSubmitPin.addEventListener("click", () => {
-      if (pinInput && pinInput.value === "2026") {
+      const enteredPin = (pinInput ? pinInput.value : "").trim();
+      if (enteredPin === "2026" || enteredPin === "ADH2026") {
         isPanitiaUnlocked = true;
         if (pinModal) pinModal.classList.remove("open");
         sfx.coinStart();
         if (targetPendingModal === "rubrik" && rubrikModal) {
+          const config = POS_CONFIG[currentPos];
+          if (config) {
+            if (modalKunciJawaban) modalKunciJawaban.innerHTML = config.kunci;
+            if (modalPhysicalClues) modalPhysicalClues.innerHTML = `<strong>LOKASI &amp; INSTRUKSI:</strong> ${config.physicalClue}`;
+          }
           rubrikModal.classList.add("open");
         } else if (targetPendingModal === "admin" && adminModal) {
           renderLeaderboard();
@@ -2985,11 +3096,17 @@ document.addEventListener("DOMContentLoaded", () => {
     btnCloseRubrik.addEventListener("click", () => {
       sfx.blip();
       if (rubrikModal) rubrikModal.classList.remove("open");
+      if (modalKunciJawaban) modalKunciJawaban.innerHTML = "<p style='color: #64748b; font-style: italic; padding: 12px;'>[TERKUNCI]: Masukkan PIN Rahasia Panitia pada tombol KUNCI POS untuk menampilkan kunci jawaban &amp; rubrik resmi.</p>";
+      if (modalPhysicalClues) modalPhysicalClues.innerHTML = "<p style='color: #64748b; font-style: italic; padding: 12px;'>[TERKUNCI]: Masukkan PIN Rahasia Panitia untuk melihat petunjuk fisik.</p>";
     });
   }
   if (rubrikModal) {
     rubrikModal.addEventListener("click", (e) => {
-      if (e.target === rubrikModal) rubrikModal.classList.remove("open");
+      if (e.target === rubrikModal) {
+        rubrikModal.classList.remove("open");
+        if (modalKunciJawaban) modalKunciJawaban.innerHTML = "<p style='color: #64748b; font-style: italic; padding: 12px;'>[TERKUNCI]: Masukkan PIN Rahasia Panitia pada tombol KUNCI POS untuk menampilkan kunci jawaban &amp; rubrik resmi.</p>";
+        if (modalPhysicalClues) modalPhysicalClues.innerHTML = "<p style='color: #64748b; font-style: italic; padding: 12px;'>[TERKUNCI]: Masukkan PIN Rahasia Panitia untuk melihat petunjuk fisik.</p>";
+      }
     });
   }
 

@@ -1,0 +1,222 @@
+[
+  {
+    "id": "claude_pos1",
+    "team": "claude",
+    "teamName": "Claude",
+    "pos": 1,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "CLAUDE-P1-1018-1VL",
+    "time": "12:13"
+  },
+  {
+    "id": "gemini_pos1",
+    "team": "gemini",
+    "teamName": "Gemini",
+    "pos": 1,
+    "webScore": 80,
+    "paperScore": 0,
+    "totalScore": 80,
+    "code": "GEMINI-P1-1018-HB5",
+    "time": "12:13"
+  },
+  {
+    "id": "meta_pos1",
+    "team": "meta",
+    "teamName": "Meta",
+    "pos": 1,
+    "webScore": 80,
+    "paperScore": 0,
+    "totalScore": 80,
+    "code": "META-P1-1018-FBK",
+    "time": "12:13"
+  },
+  {
+    "id": "deepseek_pos1",
+    "team": "deepseek",
+    "teamName": "Deepseek",
+    "pos": 1,
+    "webScore": 65,
+    "paperScore": 0,
+    "totalScore": 65,
+    "code": "DEEPSEEK-P1-1018-0HH",
+    "time": "12:13"
+  },
+  {
+    "id": "copilot_pos1",
+    "team": "copilot",
+    "teamName": "Copilot",
+    "pos": 1,
+    "webScore": 50,
+    "paperScore": 0,
+    "totalScore": 50,
+    "code": "COPILOT-P1-1018-GCK",
+    "time": "12:13"
+  },
+  {
+    "id": "gemini_pos2",
+    "team": "gemini",
+    "teamName": "Gemini",
+    "pos": 2,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "GEMINI-P2-1018-I3L",
+    "time": "12:25"
+  },
+  {
+    "id": "meta_pos2",
+    "team": "meta",
+    "teamName": "Meta",
+    "pos": 2,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "META-P2-1018-F1Q",
+    "time": "12:25"
+  },
+  {
+    "id": "claude_pos2",
+    "team": "claude",
+    "teamName": "Claude",
+    "pos": 2,
+    "webScore": 80,
+    "paperScore": 0,
+    "totalScore": 80,
+    "code": "CLAUDE-P2-1018-D8S",
+    "time": "12:25"
+  },
+  {
+    "id": "deepseek_pos2",
+    "team": "deepseek",
+    "teamName": "Deepseek",
+    "pos": 2,
+    "webScore": 80,
+    "paperScore": 0,
+    "totalScore": 80,
+    "code": "DEEPSEEK-P2-1018-6D2",
+    "time": "12:25"
+  },
+  {
+    "id": "copilot_pos2",
+    "team": "copilot",
+    "teamName": "Copilot",
+    "pos": 2,
+    "webScore": 0,
+    "paperScore": 0,
+    "totalScore": 0,
+    "code": "COPILOT-P2-1018-BZA",
+    "time": "12:25"
+  },
+  {
+    "id": "claude_pos3",
+    "team": "claude",
+    "teamName": "Claude",
+    "pos": 3,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "CLAUDE-P3-1018-6GM",
+    "time": "12:15"
+  },
+  {
+    "id": "deepseek_pos3",
+    "team": "deepseek",
+    "teamName": "Deepseek",
+    "pos": 3,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "DEEPSEK-P3-1018-UUF",
+    "time": "12:15"
+  },
+  {
+    "id": "gemini_pos3",
+    "team": "gemini",
+    "teamName": "Gemini",
+    "pos": 3,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "GEMINI-P3-1080-ZIO",
+    "time": "12:15"
+  },
+  {
+    "id": "meta_pos3",
+    "team": "meta",
+    "teamName": "Meta",
+    "pos": 3,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "META-P3-1018-580",
+    "time": "12:15"
+  },
+  {
+    "id": "copilot_pos3",
+    "team": "copilot",
+    "teamName": "Copilot",
+    "pos": 3,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "COPILOT-P3-1018-UUF",
+    "time": "12:15"
+  },
+  {
+    "id": "claude_pos4",
+    "team": "claude",
+    "teamName": "Claude",
+    "pos": 4,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "CLAUDE-P4-1018-W86",
+    "time": "12:20"
+  },
+  {
+    "id": "deepseek_pos4",
+    "team": "deepseek",
+    "teamName": "Deepseek",
+    "pos": 4,
+    "webScore": 100,
+    "paperScore": 0,
+    "totalScore": 100,
+    "code": "DEEPSEEK-P4-1018-ZKQ",
+    "time": "12:20"
+  },
+  {
+    "id": "gemini_pos4",
+    "team": "gemini",
+    "teamName": "Gemini",
+    "pos": 4,
+    "webScore": 80,
+    "paperScore": 0,
+    "totalScore": 80,
+    "code": "GEMINI-P4-1018-KSA",
+    "time": "12:20"
+  },
+  {
+    "id": "copilot_pos4",
+    "team": "copilot",
+    "teamName": "Copilot",
+    "pos": 4,
+    "webScore": 65,
+    "paperScore": 0,
+    "totalScore": 65,
+    "code": "COPILOT-P4-1018-U2N",
+    "time": "12:20"
+  },
+  {
+    "id": "meta_pos4",
+    "team": "meta",
+    "teamName": "Meta",
+    "pos": 4,
+    "webScore": 50,
+    "paperScore": 0,
+    "totalScore": 50,
+    "code": "META-P4-1018-DUD",
+    "time": "12:20"
+  }
+]

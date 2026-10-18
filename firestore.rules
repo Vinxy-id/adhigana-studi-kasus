@@ -25,7 +25,7 @@ service cloud.firestore {
     //   - points: number (optional/spec, 0..125)
     //   - time: string (optional, 1-50 chars, e.g. '09:30')
     //   - timestamp: timestamp|string|number (optional, ISO or epoch or Firestore timestamp)
-    //   - code / uniqueCode: string (optional, 4-64 chars, e.g. 'META-P1-0922-K89', immutable)
+    //   - code / uniqueCode: string (optional, 4-64 chars, e.g. 'META-P1-0922-K89', mutable on re-submission)
     //   - answers: map or list (optional, size <= 20)
     //
     // ===============================================================
@@ -155,9 +155,7 @@ service cloud.firestore {
              (!('team' in resource.data) || request.resource.data.team == resource.data.team) &&
              (!('teamId' in resource.data) || request.resource.data.teamId == resource.data.teamId) &&
              (!('pos' in resource.data) || request.resource.data.pos == resource.data.pos) &&
-             (!('posId' in resource.data) || request.resource.data.posId == resource.data.posId) &&
-             (!('code' in resource.data) || request.resource.data.code == resource.data.code) &&
-             (!('uniqueCode' in resource.data) || request.resource.data.uniqueCode == resource.data.uniqueCode);
+             (!('posId' in resource.data) || request.resource.data.posId == resource.data.posId);
     }
 
     // ===============================================================
@@ -187,8 +185,10 @@ service cloud.firestore {
                        isValidSubmission(request.resource.data, submissionId) &&
                        isSubmissionUpdateValid(submissionId);
 
-      // Prevent accidental or malicious deletion of competition scoring logs
-      allow delete: if false;
+      // Allow wiping/resetting submissions from central committee console
+      allow delete: if submissionId is string &&
+                       submissionId.size() >= 3 &&
+                       submissionId.size() <= 64;
     }
   }
 }

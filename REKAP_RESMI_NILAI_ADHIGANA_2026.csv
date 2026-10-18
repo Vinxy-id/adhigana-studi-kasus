@@ -1,0 +1,29 @@
+Timestamp,Nama Kelompok,Pos,Kode Verifikasi,Skor Web MCQ,Skor Kertas Juri,Total Poin Pos
+12:13,Claude,Pos 1,CLAUDE-P1-1018-1VL,100,0,100
+12:13,Gemini,Pos 1,GEMINI-P1-1018-HB5,80,0,80
+12:13,Meta,Pos 1,META-P1-1018-FBK,80,0,80
+12:13,Deepseek,Pos 1,DEEPSEEK-P1-1018-0HH,65,0,65
+12:13,Copilot,Pos 1,COPILOT-P1-1018-GCK,50,0,50
+12:25,Gemini,Pos 2,GEMINI-P2-1018-I3L,100,0,100
+12:25,Meta,Pos 2,META-P2-1018-F1Q,100,0,100
+12:25,Claude,Pos 2,CLAUDE-P2-1018-D8S,80,0,80
+12:25,Deepseek,Pos 2,DEEPSEEK-P2-1018-6D2,80,0,80
+12:25,Copilot,Pos 2,COPILOT-P2-1018-BZA,0,0,0
+12:15,Claude,Pos 3,CLAUDE-P3-1018-6GM,100,0,100
+12:15,Deepseek,Pos 3,DEEPSEK-P3-1018-UUF,100,0,100
+12:15,Gemini,Pos 3,GEMINI-P3-1080-ZIO,100,0,100
+12:15,Meta,Pos 3,META-P3-1018-580,100,0,100
+12:15,Copilot,Pos 3,COPILOT-P3-1018-UUF,100,0,100
+12:20,Claude,Pos 4,CLAUDE-P4-1018-W86,100,0,100
+12:20,Deepseek,Pos 4,DEEPSEEK-P4-1018-ZKQ,100,0,100
+12:20,Gemini,Pos 4,GEMINI-P4-1018-KSA,80,0,80
+12:20,Copilot,Pos 4,COPILOT-P4-1018-U2N,65,0,65
+12:20,Meta,Pos 4,META-P4-1018-DUD,50,0,50
+
+KLASEMEN AKHIR KELOMPOK (HASIL CATATAN MANUAL PANITIA POS)
+Peringkat,Nama Kelompok,Total Nilai Web,Total Nilai Kertas,Total Poin Akhir,Status Pos
+Juara 1,Claude,380,0,380,4/4 Pos Selesai
+Juara 2,Gemini,360,0,360,4/4 Pos Selesai
+Juara 3,Deepseek,345,0,345,4/4 Pos Selesai
+Juara 4,Meta,330,0,330,4/4 Pos Selesai
+Juara 5,Copilot,215,0,215,4/4 Pos Selesai
